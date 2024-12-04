@@ -1,0 +1,15 @@
+[package]
+name = "vr_game"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+# Compile this crate to a dynamic C library so it can be used by godot.
+crate-type = ["cdylib"]
+
+[dependencies]
+
+[dependencies.godot]
+git = "https://github.com/godot-rust/gdext"
+branch = "master"
+features = ["experimental-wasm", "lazy-function-tables"]

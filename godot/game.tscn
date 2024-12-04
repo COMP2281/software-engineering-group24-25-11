@@ -1,0 +1,143 @@
+[gd_scene load_steps=19 format=3 uid="uid://dpvq1y4qsswa6"]
+
+[ext_resource type="Texture2D" uid="uid://6y1akdum45yy" path="res://skybox.hdr" id="1_lxn8o"]
+[ext_resource type="PackedScene" uid="uid://bdwmserhqai5h" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_physics_hand_low.tscn" id="2_7e4t1"]
+[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="3_b62pu"]
+[ext_resource type="PackedScene" uid="uid://btf05hjpw6k05" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_physics_hand_low.tscn" id="4_1artx"]
+[ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="5_i351a"]
+[ext_resource type="Material" uid="uid://5gb2axv2owie" path="res://assets/stone_marble/stone_marble.tres" id="6_s0vwm"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2v1fl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_880r7"]
+size = Vector3(100, 1, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7eoml"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_g1oxi"]
+material = SubResource("StandardMaterial3D_7eoml")
+size = Vector3(100, 1, 100)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_gs7oq"]
+panorama = ExtResource("1_lxn8o")
+
+[sub_resource type="Sky" id="Sky_n8l8p"]
+sky_material = SubResource("PanoramaSkyMaterial_gs7oq")
+
+[sub_resource type="Environment" id="Environment_eov3n"]
+background_mode = 2
+sky = SubResource("Sky_n8l8p")
+ambient_light_source = 3
+
+[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_yl0bi"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_frluq"]
+height = 2.5
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_teg3t"]
+height = 2.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_6gcfr"]
+size = Vector3(5, 5, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x000d"]
+size = Vector3(5, 5, 5)
+
+[node name="Root" type="RootScene"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+physics_material_override = SubResource("PhysicsMaterial_2v1fl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_880r7")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_g1oxi")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_eov3n")
+camera_attributes = SubResource("CameraAttributesPhysical_yl0bi")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.866025, -0.5, 0, 0.353553, 0.612372, 0.707107, -0.353553, -0.612372, 0.707107, 100, 10, 100)
+
+[node name="Player" type="Player" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+mesh = SubResource("CapsuleMesh_frluq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CapsuleShape3D_teg3t")
+
+[node name="XROrigin3D" type="XROrigin3D" parent="Player"]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="Player/XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="Controller (Left)" type="XRController3D" parent="Player/XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, 0)
+tracker = &"left_hand"
+pose = &"aim"
+
+[node name="LeftPhysicsHand" parent="Player/XROrigin3D/Controller (Left)" instance=ExtResource("2_7e4t1")]
+
+[node name="MovementDirect" parent="Player/XROrigin3D/Controller (Left)" instance=ExtResource("3_b62pu")]
+strafe = true
+input_action = "thumbstick"
+
+[node name="Controller (Right)" type="XRController3D" parent="Player/XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, 0)
+tracker = &"right_hand"
+pose = &"aim"
+
+[node name="RightPhysicsHand" parent="Player/XROrigin3D/Controller (Right)" instance=ExtResource("4_1artx")]
+
+[node name="MovementDirect" parent="Player/XROrigin3D/Controller (Right)" instance=ExtResource("3_b62pu")]
+strafe = true
+input_action = "thumbstick"
+
+[node name="MovementTurn" parent="Player/XROrigin3D/Controller (Right)" instance=ExtResource("5_i351a")]
+input_action = "thumbstick"
+
+[node name="Pivot" type="Node3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player/Pivot"]
+current = true
+
+[node name="Block3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.6751, -2.43728, 4.78628)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Block3"]
+mesh = SubResource("BoxMesh_6gcfr")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("6_s0vwm")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Block3"]
+shape = SubResource("BoxShape3D_x000d")
+
+[node name="Block2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.9655, 0.352526, -0.331986)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Block2"]
+mesh = SubResource("BoxMesh_6gcfr")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("6_s0vwm")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Block2"]
+shape = SubResource("BoxShape3D_x000d")
+
+[node name="Block" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.4702, -1.07999, -0.165993)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Block"]
+mesh = SubResource("BoxMesh_6gcfr")
+skeleton = NodePath("")
+surface_material_override/0 = ExtResource("6_s0vwm")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Block"]
+shape = SubResource("BoxShape3D_x000d")

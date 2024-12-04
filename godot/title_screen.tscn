@@ -1,0 +1,74 @@
+[gd_scene load_steps=3 format=3 uid="uid://d0ib61j4007ft"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r6acx"]
+content_margin_left = 48.0
+content_margin_top = 4.0
+content_margin_right = 48.0
+content_margin_bottom = 4.0
+bg_color = Color(0.407843, 0.141176, 0.427451, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Theme" id="Theme_xrvxu"]
+Button/font_sizes/font_size = 32
+Button/styles/hover = null
+Button/styles/normal = SubResource("StyleBoxFlat_r6acx")
+
+[node name="Node" type="Node"]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -38.0
+offset_top = -103.0
+offset_right = 38.0
+offset_bottom = 103.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer"]
+layout_mode = 2
+
+[node name="PlayVR" type="CustomMenuButton" parent="Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_xrvxu")
+text = "Play (VR)"
+
+[node name="Play3D" type="CustomMenuButton" parent="Control/MarginContainer/VBoxContainer"]
+action = 1
+layout_mode = 2
+text = "Play (3D)"
+
+[node name="Tutorial" type="CustomMenuButton" parent="Control/MarginContainer/VBoxContainer"]
+action = 2
+layout_mode = 2
+text = "Tutorial"
+
+[node name="Options" type="CustomMenuButton" parent="Control/MarginContainer/VBoxContainer"]
+action = 3
+layout_mode = 2
+text = "Options"
+
+[node name="Credits" type="CustomMenuButton" parent="Control/MarginContainer/VBoxContainer"]
+action = 4
+layout_mode = 2
+text = "Credits"
+
+[node name="Quit" type="CustomMenuButton" parent="Control/MarginContainer/VBoxContainer"]
+action = 5
+layout_mode = 2
+text = "Quit"
