@@ -50,7 +50,7 @@ impl IButton for CustomMenuButton {
                 godot_print!("entering as a vr game");
 
                 let xr_server = XrServer::singleton();
-                let display_server = DisplayServer::singleton();
+                let mut display_server = DisplayServer::singleton();
                 let xr_interface = if os.has_feature("web".into()) {
                     xr_server.find_interface("WebXR".into())
                 } else {
@@ -68,8 +68,8 @@ impl IButton for CustomMenuButton {
                         return;
                     }
                     //interface.connect("session_begun".into(), || _);
-                    interface.connect("session_visible".into(), || _);
-                    interface.connect("session_focused".into(), || _);
+                    //interface.connect("session_visible".into(), || _);
+                    //interface.connect("session_focused".into(), || _);
                     if interface.is_passthrough_supported() {
                         interface.start_passthrough();
                     }

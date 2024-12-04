@@ -1,5 +1,3 @@
-use std::f32::consts::PI;
-
 use godot::classes::{CharacterBody3D, ICharacterBody3D, InputEvent, InputEventMouseMotion};
 use godot::prelude::*;
 
@@ -54,21 +52,8 @@ impl ICharacterBody3D for Player {
         if let Ok(motion) = ev {
             godot_print!("mouse motion");
             let rel = -motion.get_relative() * SENSITIVITY as f32;
-            //let rot = pivot.get_rotation();
-            let rot = camera.get_rotation();
-            godot_print!("rotation {:?}", rot);
-            //pivot.set_rotation(Vector3::new(
-            //    rot.x,
-            //    (rot.y + rel.x * 0.001).clamp(0., PI),
-            //    rot.z,
-            //));
             pivot.rotate_y(rel.x * 0.01);
             camera.rotate_x(rel.y * 0.01);
-            pivot.set_rotation(Vector3::new(
-                (rot.x + (rel.y * 0.001)).clamp(0., PI),
-                rot.y,
-                rot.z,
-            ));
         }
     }
 }

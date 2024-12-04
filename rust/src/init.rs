@@ -17,13 +17,5 @@ impl INode for RootScene {
     fn ready(&mut self) {
         let mut input = Input::singleton();
         input.set_mouse_mode(MouseMode::CAPTURED);
-        //let xr_server = XrServer::singleton();
-        //let webxr_interface = xr_server.find_interface("WebXR".into());
-        //match webxr_interface {
-        //    Some(interface) => {
-        //        //interface.connect("Controller", callable);
-        //    }
-        //    None => {}
-        //};
     }
 }

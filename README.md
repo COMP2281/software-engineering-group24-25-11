@@ -7,3 +7,9 @@
 ├── docs: All required documentation, such as requirements etc...
 ├── godot: Godot project.
 └── rust: Rust GDExtension for the Godot project.
+
+# Dependencies
+
+- blender (required)
+- rust - nightly toolchain (required)
+- just (optional)
