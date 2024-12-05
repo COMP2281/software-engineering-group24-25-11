@@ -99,7 +99,7 @@ rust-toolchain:
 [linux]
 blender:
     @echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to ./deps/blender...{{NORMAL}}"
-    @mkdir -p deps/blender
+    @mkdir -p ./deps/blender
     @curl --progress-bar -Lo deps/blender-4.3.0-linux-x64.tar.xz https://download.blender.org/release/Blender4.3/blender-4.3.0-linux-x64.tar.xz
     @tar xf ./deps/blender-4.3.0-linux-x64.tar.xz --directory ./deps/blender --strip-components=1
     @rm ./deps/blender-4.3.0-linux-x64.tar.xz
@@ -109,9 +109,10 @@ blender:
 [windows]
 blender:
     @echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to ./deps/blender...{{NORMAL}}"
-    @mkdir -p deps/blender
+    @mkdir -p ./deps
+    @rm -r ./deps/blender
     @curl --progress-bar -Lo deps/blender-4.3.0-windows-x64.zip https://download.blender.org/release/Blender4.3/blender-4.3.0-windows-x64.zip
     @unzip ./deps/blender-4.3.0-windows-x64.zip -d ./deps
-    @mv ./deps/blender-4.3.0-windows-x64 ./deps/blender
+    @mv ./deps/blender-4.3.0-windows-x64/ ./deps/blender
     @rm ./deps/blender-4.3.0-windows-x64.zip
     @echo -e "{{BOLD+YELLOW}}Blender downloaded successfully.{{NORMAL}}"
