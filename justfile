@@ -1,5 +1,5 @@
 set dotenv-load
-set dotenv-filename := ".env.rust"
+set dotenv-required
 
 default: rust-debug
 
@@ -9,12 +9,18 @@ godot:
 dev: rust-debug
 
 rust-debug:
-    cd rust && cargo +nightly build -Zbuild-std
-    cd rust && cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten
+    #!/usr/bin/env bash
+    [[ -e .env.rust ]] && source .env.rust
+    cd rust
+    cargo +nightly build -Zbuild-std
+    cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten
 
 rust-release:
-    cd rust && cargo +nightly build -Zbuild-std --release
-    cd rust && cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten --release
+    #!/usr/bin/env bash
+    [[ -e .env.rust ]] && source .env.rust
+    cd rust
+    cargo +nightly build -Zbuild-std --release
+    cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten --release
 
 release: release-web
 serve:
