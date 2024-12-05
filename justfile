@@ -111,6 +111,7 @@ blender:
     @echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to ./deps/blender...{{NORMAL}}"
     @mkdir -p deps/blender
     @curl --progress-bar -Lo deps/blender-4.3.0-windows-x64.zip https://download.blender.org/release/Blender4.3/blender-4.3.0-windows-x64.zip
-    @unzip ./deps/blender-4.3.0-windows-x64.zip -d ./deps/blender
+    @unzip ./deps/blender-4.3.0-windows-x64.zip -d ./deps
+    @mv ./deps/blender-4.3.0-windows-x64 ./deps/blender
     @rm ./deps/blender-4.3.0-windows-x64.zip
     @echo -e "{{BOLD+YELLOW}}Blender downloaded successfully.{{NORMAL}}"
