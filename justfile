@@ -1,4 +1,4 @@
-export PATH := "{{env(\"PATH\")}}" + ":" + env("PWD") + "/deps/emsdk:" + env("PWD") + "/deps/emsdk/upstream/emscripten"
+export PATH := env("PATH") + ":" + env("PWD") + "/deps/emsdk:" + env("PWD") + "/deps/emsdk/upstream/emscripten"
 
 default: rust-debug
 
@@ -8,18 +8,13 @@ godot:
 dev: rust-debug
 
 rust-debug:
-    #!/usr/bin/env bash
-    [[ -e .env.rust ]] && source .env.rust
-    cd rust
-    cargo +nightly build -Zbuild-std
-    cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten
+    echo wow
+    cd rust && cargo +nightly build -Zbuild-std
+    cd rust && cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten
 
 rust-release:
-    #!/usr/bin/env bash
-    [[ -e .env.rust ]] && source .env.rust
-    cd rust
-    cargo +nightly build -Zbuild-std --release
-    cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten --release
+    cd rust && cargo +nightly build -Zbuild-std --release
+    cd rust && cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten --release
 
 release: release-web
 
