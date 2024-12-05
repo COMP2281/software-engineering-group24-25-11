@@ -41,8 +41,8 @@ struct CustomMenuButton {
 impl IButton for CustomMenuButton {
     fn pressed(&mut self) {
         let mut scene_tree = self.base().get_tree().expect("able to get the scene tree");
-        let game_scene = load::<PackedScene>("res://game.tscn");
-        let game_root = game_scene.instantiate_as::<RootScene>();
+        let root_game_scene = load::<PackedScene>("res://scenes/game/root.tscn");
+        let game_root = root_game_scene.instantiate_as::<RootScene>();
         let mut os = Os::singleton();
         //see if web: os.has_feature("web".into());
         match self.get_action().into() {
@@ -85,14 +85,14 @@ impl IButton for CustomMenuButton {
                 camera.make_current();
                 godot_print!("camera is current {:?}", camera.is_current());
 
-                scene_tree.change_scene_to_packed(game_scene);
+                scene_tree.change_scene_to_packed(root_game_scene);
             }
             Actions::Enter3D => {
                 godot_print!("entering as a normal 3d game");
                 let mut camera = game_root.get_node_as::<Camera3D>("Player/Pivot/Camera3D");
                 camera.make_current();
                 godot_print!("camera is current {:?}", camera.is_current());
-                scene_tree.change_scene_to_packed(game_scene);
+                scene_tree.change_scene_to_packed(root_game_scene);
             }
             _ => {}
         }

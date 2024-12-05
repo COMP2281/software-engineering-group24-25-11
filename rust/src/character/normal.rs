@@ -8,14 +8,14 @@ struct Player {
 }
 
 const MOVEMENT_SPEED: f64 = 5.;
-const GRAVITY: f64 = 20.;
-const JUMP_IMPULSE: f64 = 30.;
+const GRAVITY: f64 = 9.8;
+const JUMP_IMPULSE: f64 = 5.;
 const SENSITIVITY: f64 = 0.1;
 
 #[godot_api]
 impl ICharacterBody3D for Player {
     fn init(base: Base<CharacterBody3D>) -> Self {
-        godot_print!("Created the character"); // Prints to the Godot console
+        godot_print!("Character created...");
         Self { base }
     }
     fn physics_process(&mut self, delta: f64) {
@@ -34,11 +34,11 @@ impl ICharacterBody3D for Player {
         let mut velocity: Vector3 = direction.normalized_or_zero() * MOVEMENT_SPEED as f32;
 
         if input.is_action_pressed("jump".into()) && self.base().is_on_floor() {
-            velocity.y = JUMP_IMPULSE as f32;
+            velocity.y = self.base().get_velocity().y + JUMP_IMPULSE as f32;
         }
         // TODO: handle outside spaceship - if we even want that
         if !self.base().is_on_floor() {
-            velocity.y -= (GRAVITY * delta) as f32;
+            velocity.y = self.base().get_velocity().y - (GRAVITY * delta) as f32;
         }
 
         self.base_mut().set_velocity(velocity);
@@ -48,9 +48,7 @@ impl ICharacterBody3D for Player {
         let ev = event.try_cast::<InputEventMouseMotion>();
         let mut pivot = self.base().get_node_as::<Node3D>("Pivot");
         let mut camera = pivot.get_node_as::<Camera3D>("Camera3D");
-        godot_print!("input ev");
         if let Ok(motion) = ev {
-            godot_print!("mouse motion");
             let rel = -motion.get_relative() * SENSITIVITY as f32;
             pivot.rotate_y(rel.x * 0.01);
             camera.rotate_x(rel.y * 0.01);

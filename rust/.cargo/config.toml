@@ -1,3 +1,7 @@
+[build]
+rustflags = ["-Z", "unstable-options"]
+
+
 [target.wasm32-unknown-emscripten]
 rustflags = [
   "-C",

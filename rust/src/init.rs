@@ -1,7 +1,4 @@
-use godot::{
-    classes::{input::MouseMode, XrServer},
-    prelude::*,
-};
+use godot::{classes::input::MouseMode, prelude::*};
 
 #[derive(GodotClass)]
 #[class(base=Node)]

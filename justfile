@@ -1,36 +1,105 @@
 set dotenv-load
+set dotenv-filename := ".env.rust"
 
-default: dev
+default: rust-debug
 
-[unix]
-toolchain:
-    mkdir -p deps
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly -t wasm32-unknown-emscripten --no-modify-path
-    
-[unix]
-blender:
-    mkdir -p deps
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly -t wasm32-unknown-emscripten --no-modify-path
-    
+godot:
+    cd godot && godot -e & disown
 
-[windows]
-toolchain:
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly -t wasm32-unknown-emscripten
-    
+dev: rust-debug
 
-setup:
-    cd rust && rm -rf ./emsdk
-    cd rust && git clone https://github.com/emscripten-core/emsdk.git
-    cd rust/emsdk && ./emsdk install 3.1.66
-    cd rust/emsdk && ./emsdk activate 3.1.66
-
-dev:
+rust-debug:
     cd rust && cargo +nightly build -Zbuild-std
     cd rust && cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten
 
-release:
+rust-release:
     cd rust && cargo +nightly build -Zbuild-std --release
     cd rust && cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten --release
 
-package: release
-    cd godot && godot
+release: release-web
+serve:
+    miniserve
+
+# Creates all of the files needed for web
+release-web: rust-release
+    mkdir -p target/web
+    cd godot && godot --export-release Web ../target/web/index.html
+
+# TODO: add export presets for other platforms.
+
+
+# Installs all of the dependencies needed for the project.
+setup: emscripten rust-toolchain blender
+    @echo -e "{{BOLD+GREEN}}Installed all dependencies successfully.{{NORMAL}}"
+
+# Installs emscripten into ./deps/emsdk
+emscripten:
+    @echo -e "{{BOLD+YELLOW}}Installing emscripten...\033{{NORMAL}}"
+    @rm -rf ./deps/emsdk
+    @mkdir -p ./deps
+    @cd ./deps && git clone https://github.com/emscripten-core/emsdk.git
+    @cd ./deps/emsdk && ./emsdk install 3.1.66
+    @cd ./deps/emsdk && ./emsdk activate 3.1.66
+    @echo -e "{{BOLD+YELLOW}}Installed emscripten successfully.{{NORMAL}}"
+
+[windows]
+rust-toolchain:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p ./deps
+    if command -v rustup 2>&1 >/dev/null; then
+        echo -e "{{BOLD+YELLOW}}Rustup already installed, installing globally...\033{{NORMAL}}"
+        rm -f .env.rust
+        rustup toolchain install nightly
+        rustup target add --toolchain nightly wasm32-unknown-emscripten
+    else
+        echo -e "{{BOLD+YELLOW}}Rust toolchain not found, installing to ./deps{{NORMAL}}"
+        RUSTENV="PATH=\$PWD/deps/cargo/bin:\$PATH
+    RUSTUP_HOME=\$PWD/deps/rustup
+    CARGO_HOME=\$PWD/deps/cargo"
+        tee .env.rust > /dev/null <<< $RUSTENV && source .env.rust
+        curl -o ./deps/rustup-init.exe https://static.rust-lang.org/rustup/dist/i686-pc-windows-gnu/rustup-init.exe
+        ./deps/rustup-init.exe --default-toolchain nightly -t wasm32-unknown-emscripten --no-modify-path
+        rustup component add --toolchain nightly rust-src
+    fi
+    echo -e "{{BOLD+YELLOW}}Rust toolchain installed successfully{{NORMAL}}"
+
+[unix]
+rust-toolchain:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p ./deps
+    if command -v rustup 2>&1 >/dev/null; then
+        echo -e "{{BOLD+YELLOW}}Rustup already installed, installing globally...\033{{NORMAL}}"
+        rm -f .env.rust
+        rustup toolchain install nightly
+        rustup target add --toolchain nightly wasm32-unknown-emscripten
+    else
+        echo -e "{{BOLD+YELLOW}}Rust toolchain not found, installing to ./deps{{NORMAL}}"
+        RUSTENV="PATH=\$PWD/deps/cargo/bin:\$PATH
+    RUSTUP_HOME=\$PWD/deps/rustup
+    CARGO_HOME=\$PWD/deps/cargo"
+        tee .env.rust > /dev/null <<< $RUSTENV && source .env.rust
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly -t wasm32-unknown-emscripten --no-modify-path
+        rustup component add --toolchain nightly rust-src
+    fi
+    echo -e "{{BOLD+YELLOW}}Rust toolchain installed successfully.{{NORMAL}}"
+
+[linux]
+blender:
+    @echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to ./deps/blender...{{NORMAL}}"
+    @mkdir -p deps/blender
+    @curl --progress-bar -Lo deps/blender-4.3.0-linux-x64.tar.xz https://download.blender.org/release/Blender4.3/blender-4.3.0-linux-x64.tar.xz
+    @tar xf ./deps/blender-4.3.0-linux-x64.tar.xz --directory ./deps/blender --strip-components=1
+    @rm ./deps/blender-4.3.0-linux-x64.tar.xz
+    @echo -e "{{BOLD+YELLOW}}Blender downloaded successfully.{{NORMAL}}"
+
+
+[windows]
+blender:
+    @echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to ./deps/blender...{{NORMAL}}"
+    @mkdir -p deps/blender
+    @curl --progress-bar -Lo deps/blender-4.3.0-windows-x64.zip https://download.blender.org/release/Blender4.3/blender-4.3.0-windows-x64.zip
+    @unzip ./deps/blender-4.3.0-windows-x64.zip -d ./deps/blender
+    @rm ./deps/blender-4.3.0-windows-x64.zip
+    @echo -e "{{BOLD+YELLOW}}Blender downloaded successfully.{{NORMAL}}"
