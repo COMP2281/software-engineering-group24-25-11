@@ -14,14 +14,11 @@
 
 ## Windows
 
-Ensure you have `git` installed, this can either be gotten [from their website](https://git-scm.com/downloads/win), or downloaded using winget:
-`winget install -e --id Git.Git --source winget`
-
-Next, ensure you have `godot` installed, this can either be gotten [from their website](https://godotengine.org/), or downloaded using winget:
-`winget install -e --id=GodotEngine.GodotEngine -v "4.3"`
+Ensure you have `git` installed, this can downloaded [from their website](https://git-scm.com/downloads/win).
 
 Next, we **highly** recommend installing `just`, a command runner to make it easier to build the project, this can be done with:
 `winget install -e --id Casey.Just`
+If you don't, it is up to you to source the dependencies, setup the environment variables, etc.
 
 Finally, open **git bash** inside the root project directory (i.e. the one which contains the folders mentioned in the structure).
 This typically can be done through opening the file explorer, right clicking -> more options -> git bash here

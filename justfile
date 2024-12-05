@@ -1,5 +1,8 @@
+set dotenv-load
+set dotenv-filename := ".env.rust"
+
 PWD := shell("echo $PWD")
-export PATH := env("PATH") + ":" + PWD + "/deps/emsdk:" + PWD + "/deps/emsdk/upstream/emscripten"
+export PATH := shell("echo $PATH") + ":" + PWD + "/deps:" + PWD + "/deps/emsdk:" + PWD + "/deps/emsdk/upstream/emscripten"
 
 default: rust-debug
 
@@ -27,12 +30,12 @@ release-web: rust-release
 
 
 # Installs all of the dependencies needed for the project.
-@setup: emscripten rust-toolchain blender
+@setup: install-emscripten install-rust-toolchain install-blender install-godot
     echo -e "{{BOLD+GREEN}}Installed all dependencies successfully.{{NORMAL}}"
 
 # Installs emscripten into ./deps/emsdk
 [unix]
-@emscripten:
+@install-emscripten:
     echo -e "{{BOLD+YELLOW}}Installing emscripten...\033{{NORMAL}}"
     rm -rf ./deps/emsdk
     mkdir -p ./deps
@@ -42,7 +45,7 @@ release-web: rust-release
     echo -e "{{BOLD+YELLOW}}Installed emscripten successfully.{{NORMAL}}"
 
 [windows]
-@emscripten:
+@install-emscripten:
     echo -e "{{BOLD+YELLOW}}Installing emscripten...\033{{NORMAL}}"
     rm -rf ./deps/emsdk
     mkdir -p ./deps
@@ -52,7 +55,7 @@ release-web: rust-release
     echo -e "{{BOLD+YELLOW}}Installed emscripten successfully.{{NORMAL}}"
 
 [windows]
-@rust-toolchain:
+@install-rust-toolchain:
     #!/usr/bin/env bash
     set -euo pipefail
     mkdir -p ./deps
@@ -74,7 +77,7 @@ release-web: rust-release
     echo -e "{{BOLD+YELLOW}}Rust toolchain installed successfully{{NORMAL}}"
 
 [unix]
-@rust-toolchain:
+@install-rust-toolchain:
     #!/usr/bin/env bash
     set -euo pipefail
     mkdir -p ./deps
@@ -95,7 +98,7 @@ release-web: rust-release
     echo -e "{{BOLD+YELLOW}}Rust toolchain installed successfully.{{NORMAL}}"
 
 [linux]
-@blender:
+@install-blender:
     echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to ./deps/blender...{{NORMAL}}"
     mkdir -p ./deps/blender
     curl --progress-bar -Lo deps/blender-4.3.0-linux-x64.tar.xz https://download.blender.org/release/Blender4.3/blender-4.3.0-linux-x64.tar.xz
@@ -105,7 +108,7 @@ release-web: rust-release
 
 
 [windows]
-@blender:
+@install-blender:
     echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to ./deps/blender...{{NORMAL}}"
     mkdir -p ./deps
     rm -rf ./deps/blender
@@ -114,3 +117,15 @@ release-web: rust-release
     mv ./deps/blender-4.3.0-windows-x64/ ./deps/blender
     rm ./deps/blender-4.3.0-windows-x64.zip
     echo -e "{{BOLD+YELLOW}}Blender downloaded successfully.{{NORMAL}}"
+
+[windows]
+@install-godot:
+    echo -e "{{BOLD+YELLOW}}Downloading godot 4.3 to ./deps/godot...{{NORMAL}}"
+    mkdir -p ./deps
+    rm -rf ./deps/godot
+    curl --progress-bar -Lo deps/Godot_v4.3-stable_win64.exe.zip https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_win64.exe.zip
+    unzip ./deps/Godot_v4.3-stable_win64.exe.zip -d ./deps
+    mv ./deps/Godot_v4.3-stable_win64.exe ./deps/godot
+    rm ./deps/Godot_v4.3-stable_win64_console.exe
+    rm ./deps/Godot_v4.3-stable_win64.exe.zip
+    echo -e "{{BOLD+YELLOW}}Godot downloaded successfully.{{NORMAL}}"
