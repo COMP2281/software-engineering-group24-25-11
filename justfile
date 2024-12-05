@@ -33,6 +33,7 @@ setup: emscripten rust-toolchain blender
     @echo -e "{{BOLD+GREEN}}Installed all dependencies successfully.{{NORMAL}}"
 
 # Installs emscripten into ./deps/emsdk
+[unix]
 emscripten:
     @echo -e "{{BOLD+YELLOW}}Installing emscripten...\033{{NORMAL}}"
     @rm -rf ./deps/emsdk
@@ -40,6 +41,16 @@ emscripten:
     @cd ./deps && git clone https://github.com/emscripten-core/emsdk.git
     @cd ./deps/emsdk && ./emsdk install 3.1.66
     @cd ./deps/emsdk && ./emsdk activate 3.1.66
+    @echo -e "{{BOLD+YELLOW}}Installed emscripten successfully.{{NORMAL}}"
+
+[windows]
+emscripten:
+    @echo -e "{{BOLD+YELLOW}}Installing emscripten...\033{{NORMAL}}"
+    @rm -rf ./deps/emsdk
+    @mkdir -p ./deps
+    @cd ./deps && git clone https://github.com/emscripten-core/emsdk.git
+    @cd ./deps/emsdk && ./emsdk.bat install 3.1.66
+    @cd ./deps/emsdk && ./emsdk.bat activate 3.1.66
     @echo -e "{{BOLD+YELLOW}}Installed emscripten successfully.{{NORMAL}}"
 
 [windows]
