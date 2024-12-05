@@ -1,5 +1,4 @@
-set dotenv-load
-set dotenv-required
+export PATH := "{{env(\"PATH\")}}" + ":" + env("PWD") + "/deps/emsdk:" + env("PWD") + "/deps/emsdk/upstream/emscripten"
 
 default: rust-debug
 
@@ -23,8 +22,6 @@ rust-release:
     cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten --release
 
 release: release-web
-serve:
-    miniserve
 
 # Creates all of the files needed for web
 release-web: rust-release
@@ -35,32 +32,32 @@ release-web: rust-release
 
 
 # Installs all of the dependencies needed for the project.
-setup: emscripten rust-toolchain blender
-    @echo -e "{{BOLD+GREEN}}Installed all dependencies successfully.{{NORMAL}}"
+@setup: emscripten rust-toolchain blender
+    echo -e "{{BOLD+GREEN}}Installed all dependencies successfully.{{NORMAL}}"
 
 # Installs emscripten into ./deps/emsdk
 [unix]
-emscripten:
-    @echo -e "{{BOLD+YELLOW}}Installing emscripten...\033{{NORMAL}}"
-    @rm -rf ./deps/emsdk
-    @mkdir -p ./deps
-    @cd ./deps && git clone https://github.com/emscripten-core/emsdk.git
-    @cd ./deps/emsdk && ./emsdk install 3.1.66
-    @cd ./deps/emsdk && ./emsdk activate 3.1.66
-    @echo -e "{{BOLD+YELLOW}}Installed emscripten successfully.{{NORMAL}}"
+@emscripten:
+    echo -e "{{BOLD+YELLOW}}Installing emscripten...\033{{NORMAL}}"
+    rm -rf ./deps/emsdk
+    mkdir -p ./deps
+    cd ./deps && git clone https://github.com/emscripten-core/emsdk.git
+    cd ./deps/emsdk && ./emsdk install 3.1.66
+    cd ./deps/emsdk && ./emsdk activate 3.1.66
+    echo -e "{{BOLD+YELLOW}}Installed emscripten successfully.{{NORMAL}}"
 
 [windows]
-emscripten:
-    @echo -e "{{BOLD+YELLOW}}Installing emscripten...\033{{NORMAL}}"
-    @rm -rf ./deps/emsdk
-    @mkdir -p ./deps
-    @cd ./deps && git clone https://github.com/emscripten-core/emsdk.git
-    @cd ./deps/emsdk && ./emsdk.bat install 3.1.66
-    @cd ./deps/emsdk && ./emsdk.bat activate 3.1.66
-    @echo -e "{{BOLD+YELLOW}}Installed emscripten successfully.{{NORMAL}}"
+@emscripten:
+    echo -e "{{BOLD+YELLOW}}Installing emscripten...\033{{NORMAL}}"
+    rm -rf ./deps/emsdk
+    mkdir -p ./deps
+    cd ./deps && git clone https://github.com/emscripten-core/emsdk.git
+    cd ./deps/emsdk && ./emsdk.bat install 3.1.66
+    cd ./deps/emsdk && ./emsdk.bat activate 3.1.66
+    echo -e "{{BOLD+YELLOW}}Installed emscripten successfully.{{NORMAL}}"
 
 [windows]
-rust-toolchain:
+@rust-toolchain:
     #!/usr/bin/env bash
     set -euo pipefail
     mkdir -p ./deps
@@ -82,7 +79,7 @@ rust-toolchain:
     echo -e "{{BOLD+YELLOW}}Rust toolchain installed successfully{{NORMAL}}"
 
 [unix]
-rust-toolchain:
+@rust-toolchain:
     #!/usr/bin/env bash
     set -euo pipefail
     mkdir -p ./deps
@@ -103,22 +100,22 @@ rust-toolchain:
     echo -e "{{BOLD+YELLOW}}Rust toolchain installed successfully.{{NORMAL}}"
 
 [linux]
-blender:
-    @echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to ./deps/blender...{{NORMAL}}"
-    @mkdir -p ./deps/blender
-    @curl --progress-bar -Lo deps/blender-4.3.0-linux-x64.tar.xz https://download.blender.org/release/Blender4.3/blender-4.3.0-linux-x64.tar.xz
-    @tar xf ./deps/blender-4.3.0-linux-x64.tar.xz --directory ./deps/blender --strip-components=1
-    @rm ./deps/blender-4.3.0-linux-x64.tar.xz
-    @echo -e "{{BOLD+YELLOW}}Blender downloaded successfully.{{NORMAL}}"
+@blender:
+    echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to ./deps/blender...{{NORMAL}}"
+    mkdir -p ./deps/blender
+    curl --progress-bar -Lo deps/blender-4.3.0-linux-x64.tar.xz https://download.blender.org/release/Blender4.3/blender-4.3.0-linux-x64.tar.xz
+    tar xf ./deps/blender-4.3.0-linux-x64.tar.xz --directory ./deps/blender --strip-components=1
+    rm ./deps/blender-4.3.0-linux-x64.tar.xz
+    echo -e "{{BOLD+YELLOW}}Blender downloaded successfully.{{NORMAL}}"
 
 
 [windows]
-blender:
-    @echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to ./deps/blender...{{NORMAL}}"
-    @mkdir -p ./deps
-    @rm -rf ./deps/blender
-    @curl --progress-bar -Lo deps/blender-4.3.0-windows-x64.zip https://download.blender.org/release/Blender4.3/blender-4.3.0-windows-x64.zip
-    @unzip ./deps/blender-4.3.0-windows-x64.zip -d ./deps
-    @mv ./deps/blender-4.3.0-windows-x64/ ./deps/blender
-    @rm ./deps/blender-4.3.0-windows-x64.zip
-    @echo -e "{{BOLD+YELLOW}}Blender downloaded successfully.{{NORMAL}}"
+@blender:
+    echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to ./deps/blender...{{NORMAL}}"
+    mkdir -p ./deps
+    rm -rf ./deps/blender
+    curl --progress-bar -Lo deps/blender-4.3.0-windows-x64.zip https://download.blender.org/release/Blender4.3/blender-4.3.0-windows-x64.zip
+    unzip ./deps/blender-4.3.0-windows-x64.zip -d ./deps
+    mv ./deps/blender-4.3.0-windows-x64/ ./deps/blender
+    rm ./deps/blender-4.3.0-windows-x64.zip
+    echo -e "{{BOLD+YELLOW}}Blender downloaded successfully.{{NORMAL}}"
