@@ -1,4 +1,5 @@
-export PATH := env("PATH") + ":" + env("PWD") + "/deps/emsdk:" + env("PWD") + "/deps/emsdk/upstream/emscripten"
+PWD := shell("echo $PWD")
+export PATH := env("PATH") + ":" + PWD + "/deps/emsdk:" + PWD + "/deps/emsdk/upstream/emscripten"
 
 default: rust-debug
 
@@ -8,7 +9,6 @@ godot:
 dev: rust-debug
 
 rust-debug:
-    echo wow
     cd rust && cargo +nightly build -Zbuild-std
     cd rust && cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten
 
