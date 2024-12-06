@@ -1,8 +1,9 @@
 use godot::init::{gdextension, ExtensionLibrary};
 
-pub mod character;
-pub mod init;
-pub mod title_screen;
+mod character;
+mod menu;
+mod scenes;
+mod state;
 
 // Provide an entry for GDExtension -- required - can be named anything.
 struct VRGame;

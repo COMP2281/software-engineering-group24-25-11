@@ -1,21 +1,20 @@
 [gd_scene load_steps=19 format=3 uid="uid://dpvq1y4qsswa6"]
 
-[ext_resource type="Texture2D" uid="uid://6y1akdum45yy" path="res://skybox.hdr" id="1_lxn8o"]
+[ext_resource type="Texture2D" uid="uid://6y1akdum45yy" path="res://assets/skybox.hdr" id="1_lxn8o"]
 [ext_resource type="PackedScene" uid="uid://bdwmserhqai5h" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_physics_hand_low.tscn" id="2_7e4t1"]
 [ext_resource type="PackedScene" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="3_b62pu"]
 [ext_resource type="PackedScene" uid="uid://btf05hjpw6k05" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_physics_hand_low.tscn" id="4_1artx"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="5_i351a"]
 [ext_resource type="Material" uid="uid://5gb2axv2owie" path="res://assets/stone_marble/stone_marble.tres" id="6_s0vwm"]
+[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="7_2urfl"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2v1fl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_880r7"]
 size = Vector3(100, 1, 100)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7eoml"]
-
 [sub_resource type="BoxMesh" id="BoxMesh_g1oxi"]
-material = SubResource("StandardMaterial3D_7eoml")
+material = ExtResource("6_s0vwm")
 size = Vector3(100, 1, 100)
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_gs7oq"]
@@ -102,6 +101,8 @@ input_action = "thumbstick"
 
 [node name="MovementTurn" parent="Player/XROrigin3D/Controller (Right)" instance=ExtResource("5_i351a")]
 input_action = "thumbstick"
+
+[node name="PlayerBody" parent="Player/XROrigin3D" instance=ExtResource("7_2urfl")]
 
 [node name="Pivot" type="Node3D" parent="Player"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)

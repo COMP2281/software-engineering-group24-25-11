@@ -1,4 +1,4 @@
-use crate::init::RootScene;
+use crate::scenes::root::RootScene;
 use godot::{
     classes::{
         display_server::VSyncMode, Button, DisplayServer, IButton, Os, XrCamera3D, XrServer,

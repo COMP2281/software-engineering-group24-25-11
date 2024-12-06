@@ -55,7 +55,7 @@ release-web: rust-release
     echo -e "{{BOLD+YELLOW}}Installed emscripten successfully.{{NORMAL}}"
 
 [windows]
-@install-rust-toolchain:
+install-rust-toolchain:
     #!/usr/bin/env bash
     set -euo pipefail
     mkdir -p ./deps
@@ -77,7 +77,7 @@ release-web: rust-release
     echo -e "{{BOLD+YELLOW}}Rust toolchain installed successfully{{NORMAL}}"
 
 [unix]
-@install-rust-toolchain:
+install-rust-toolchain:
     #!/usr/bin/env bash
     set -euo pipefail
     mkdir -p ./deps
@@ -129,3 +129,6 @@ release-web: rust-release
     rm ./deps/Godot_v4.3-stable_win64_console.exe
     rm ./deps/Godot_v4.3-stable_win64.exe.zip
     echo -e "{{BOLD+YELLOW}}Godot downloaded successfully.{{NORMAL}}"
+[unix]
+@install-godot:
+    echo -e "\n\n{{BOLD+BLUE}}Please install godot yourselves, and ensure that it is accessible on PATH (i.e. running \`godot --version\` works).{{NORMAL}}\n\n"
