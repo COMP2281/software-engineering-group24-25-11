@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://6y1akdum45yy" path="res://assets/skybox.hdr" id="1_lxn8o"]
 [ext_resource type="PackedScene" uid="uid://bdwmserhqai5h" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_physics_hand_low.tscn" id="2_7e4t1"]
-[ext_resource type="PackedScene" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="3_b62pu"]
+[ext_resource type="PackedScene" uid="uid://dgip66hosmype" path="res://addons/godot-xr-tools/functions/movement_direct.tscn" id="3_b62pu"]
 [ext_resource type="PackedScene" uid="uid://btf05hjpw6k05" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_physics_hand_low.tscn" id="4_1artx"]
 [ext_resource type="PackedScene" uid="uid://b6bk2pj8vbj28" path="res://addons/godot-xr-tools/functions/movement_turn.tscn" id="5_i351a"]
 [ext_resource type="Material" uid="uid://5gb2axv2owie" path="res://assets/stone_marble/stone_marble.tres" id="6_s0vwm"]
@@ -59,7 +59,15 @@ environment = SubResource("Environment_eov3n")
 camera_attributes = SubResource("CameraAttributesPhysical_yl0bi")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
-transform = Transform3D(0.866025, -0.5, 0, 0.353553, 0.612372, 0.707107, -0.353553, -0.612372, 0.707107, 100, 10, 100)
+transform = Transform3D(0.866026, -0.5, 0, 0.353553, 0.612373, 0.707107, -0.353553, -0.612373, 0.707107, -4.44785, 12.7189, 22.6932)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="WorldEnvironment"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.2401, 15.5047, 0)
+light_energy = 16.0
+light_indirect_energy = 16.0
+light_volumetric_fog_energy = 16.0
+light_size = 1.0
+omni_range = 4096.0
 
 [node name="Player" type="Player" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

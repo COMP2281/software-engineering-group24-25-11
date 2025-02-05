@@ -1,4 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://d0ib61j4007ft"]
+[gd_scene load_steps=4 format=3 uid="uid://d0ib61j4007ft"]
+
+[ext_resource type="Texture2D" uid="uid://6y1akdum45yy" path="res://assets/skybox.hdr" id="1_cc87h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r6acx"]
 content_margin_left = 48.0
@@ -12,13 +14,14 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [sub_resource type="Theme" id="Theme_xrvxu"]
+Button/colors/font_color = Color(1, 1, 1, 1)
 Button/font_sizes/font_size = 32
 Button/styles/hover = null
 Button/styles/normal = SubResource("StyleBoxFlat_r6acx")
 
 [node name="Node" type="Node"]
 
-[node name="Control" type="Control" parent="."]
+[node name="UI" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,49 +29,64 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Control"]
+[node name="TextureRect" type="TextureRect" parent="UI"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -38.0
-offset_top = -103.0
-offset_right = 38.0
-offset_bottom = 103.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("1_cc87h")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.410547
+anchor_top = 0.341667
+anchor_right = 0.589453
+anchor_bottom = 0.658333
+offset_bottom = -3.05176e-05
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
 layout_mode = 2
 
-[node name="PlayVR" type="CustomMenuButton" parent="Control/MarginContainer/VBoxContainer"]
+[node name="PlayVR" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
+physics_interpolation_mode = 0
 layout_mode = 2
 theme = SubResource("Theme_xrvxu")
 text = "Play (VR)"
 
-[node name="Play3D" type="CustomMenuButton" parent="Control/MarginContainer/VBoxContainer"]
+[node name="Play3D" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
 action = 1
+physics_interpolation_mode = 0
 layout_mode = 2
 text = "Play (3D)"
 
-[node name="Tutorial" type="CustomMenuButton" parent="Control/MarginContainer/VBoxContainer"]
+[node name="Tutorial" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
 action = 2
+physics_interpolation_mode = 0
 layout_mode = 2
 text = "Tutorial"
 
-[node name="Options" type="CustomMenuButton" parent="Control/MarginContainer/VBoxContainer"]
+[node name="Options" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
 action = 3
+physics_interpolation_mode = 0
 layout_mode = 2
 text = "Options"
 
-[node name="Credits" type="CustomMenuButton" parent="Control/MarginContainer/VBoxContainer"]
+[node name="Credits" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
 action = 4
+physics_interpolation_mode = 0
 layout_mode = 2
 text = "Credits"
 
-[node name="Quit" type="CustomMenuButton" parent="Control/MarginContainer/VBoxContainer"]
+[node name="Quit" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
 action = 5
+physics_interpolation_mode = 0
 layout_mode = 2
 text = "Quit"

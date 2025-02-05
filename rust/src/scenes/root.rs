@@ -9,8 +9,10 @@ pub struct RootScene {
 #[godot_api]
 impl INode for RootScene {
     fn init(base: Base<Node>) -> Self {
-        let root_scene = Self { base };
-        root_scene.base().add_child(crate::state::State::new_gd());
+        let mut root_scene = Self { base };
+        //root_scene
+        //    .base_mut()
+        //    .add_child(crate::state::State::new_alloc());
         root_scene
     }
     fn ready(&mut self) {

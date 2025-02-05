@@ -2,15 +2,7 @@
 
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/vdJ2j5Ot)
 
-# Project structure
-
-├── godot: The base godot game project.\
-├── rust: All rust code for the GDExtension for the Godot project, provides custom classes.\
-├── docs: All required documentation, such as requirements etc...\
-├── deps: A local collection of dependencies needed for building/developing.
-└── target (optional): Final files/executables for all build types...\\
-
-# Getting started
+# Installation
 
 ## Windows
 
@@ -20,16 +12,18 @@ Next, we **highly** recommend installing `just`, a command runner to make it eas
 `winget install -e --id Casey.Just`
 If you don't, it is up to you to source the dependencies, setup the environment variables, etc.
 
-Finally, open **git bash** inside the root project directory (i.e. the one which contains the folders mentioned in the structure).
-This typically can be done through opening the file explorer, right clicking -> more options -> git bash here
+Finally, open a terminal inside the root project directory (i.e. the one which contains the folders mentioned in the structure).
+This typically can be done through opening the file explorer, clicking on the address bar, and typing `wt` (windows terminal) or `cmd`
 
 Now we need to install the rest of the dependencies, this can be done by running `just setup`, after which you should see a message indicating if everything was successful.
+
+Next you need to compile the rust extension which can be done with: `just` or alternatively (more verbose) `just rust-debug`
 
 > [!IMPORTANT]
 > You should launch godot through the command `just godot`, this is because to compile for the web emscripten is required, and hence needs to be in the path.
 > You may get around this by manually adding the following paths to your system PATH environment variable:
-> `{PROJECT_DIR}/deps/emsdk`
-> `{PROJECT_DIR}/deps/emsdk/upstream/emscripten`
+> `{ROOT_DIR}/.deps/emsdk`
+> `{ROOT_DIR}/.deps/emsdk/upstream/emscripten`
 
 ## Linux
 
@@ -39,9 +33,9 @@ Ensure you have the following packages installed (should be available in your pa
 
 Then we need to install the rest of the dependencies, this can be done by running `just setup`, after which you should see a message indicating if everything was successful.
 
-Then to run godot, use `just godot`.
+Then to run godot, use `just godot` - this is because we need some dependencies in PATH.
 
-To compile rust changes (in debug mode) do `just dev`.
+To compile rust changes (in debug mode) do `just` or alternatively (more verbose) `just rust-debug`.
 To compile rust changes (in release mode) do `just rust-release`.
 
 ## MacOS (todo)
@@ -62,4 +56,17 @@ While we recommend following the guide above, the following programs are require
 
 You should ensure that these dependencies are in your PATH.
 
-Then you can look at the top of the `justfile` to find commands you may want to run.
+Then you can look at the `justfile` to find commands you may want to run.
+
+# Development
+## Project structure
+├── godot: The base godot game project.\
+├── rust: All rust code for the GDExtension for the Godot project, provides custom classes.\
+├── docs: All required documentation, such as requirements etc...\
+├── .deps: A local collection of dependencies needed for building/developing.
+└── target (optional): Final files/executables for all build types...\\
+## Automatic rebuilding
+To automatically rebuild the rust extension whenever you make changes, you can start a terminal and run `just dev`, then it will rebuild the extension automatically.
+
+> [!NOTE]
+> This requires `watchexec` to be installed, which can be done through `just install-watchexec`

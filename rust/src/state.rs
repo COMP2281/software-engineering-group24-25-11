@@ -9,8 +9,8 @@ enum InputMethod {
 }
 
 #[derive(GodotClass)]
-#[class(init, base=RefCounted)]
+#[class(init, base=Node)]
 pub struct State {
     input_method: InputMethod,
-    base: Base<RefCounted>,
+    base: Base<Node>,
 }

@@ -47,16 +47,19 @@ impl IButton for CustomMenuButton {
         //see if web: os.has_feature("web".into());
         match self.get_action().into() {
             Actions::EnterVR => {
-                godot_print!("entering as a vr game");
+                godot_print!("titlescreen: Attempting to enter using immersive VR.");
 
                 let xr_server = XrServer::singleton();
                 let mut display_server = DisplayServer::singleton();
                 let xr_interface = if os.has_feature("web".into()) {
+                    godot_print!("titlescreen: detected web, trying to find WebXR interface.");
                     xr_server.find_interface("WebXR".into())
                 } else {
+                    godot_print!("titlescreen: detected desktop, trying to find OpenXR interface.");
                     xr_server.find_interface("OpenXR".into())
                 };
                 if xr_interface.is_none() {
+                    godot_warn!("titlescreen: failed to find any XR interface.");
                     os.alert("Could not find any VR interfaces!".into());
                     return;
                 }
