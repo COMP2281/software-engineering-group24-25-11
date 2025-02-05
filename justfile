@@ -70,11 +70,11 @@ release: release-web
 [unix]
 @install-emscripten:
     echo -e "{{BOLD+YELLOW}}Installing emscripten...\033{{NORMAL}}"
-    rm -rf ./deps/emsdk
-    mkdir -p ./deps
-    cd ./deps && git clone https://github.com/emscripten-core/emsdk.git
-    cd ./deps/emsdk && ./emsdk install 3.1.66
-    cd ./deps/emsdk && ./emsdk activate 3.1.66
+    rm -rf {{EMSDK_PATH}}
+    mkdir -p {{DEPS_PATH}}
+    cd {{DEPS_PATH}} && git clone https://github.com/emscripten-core/emsdk.git
+    cd {{EMSDK_PATH}} && ./emsdk install 3.1.66
+    cd {{EMSDK_PATH}} && ./emsdk activate 3.1.66
     echo -e "{{BOLD+YELLOW}}Installed emscripten successfully.{{NORMAL}}"
 
 [windows]
@@ -115,7 +115,7 @@ release: release-web
 @install-rust-toolchain:
     #!/usr/bin/env bash
     set -euo pipefail
-    mkdir -p ./deps
+    mkdir -p {{DEPS_PATH}}
     if command -v rustup 2>&1 >/dev/null; then
         echo -e "{{BOLD+YELLOW}}Rustup already installed, installing globally...{{NORMAL}}"
         rustup toolchain install nightly
@@ -126,7 +126,8 @@ release: release-web
         echo -e "{{BOLD+YELLOW}}Rust toolchain not found, installing to {{DEPS_PATH}}{{NORMAL}}"
         echo 'RUSTUP_HOME="{{LOCAL_RUSTUP_PATH}}"' > {{ENV_PATH}}
         echo "CARGO_HOME={{LOCAL_CARGO_PATH}}" >> {{ENV_PATH}}
-        source "{{ENV_PATH}}"
+        export RUSTUP_HOME="{{LOCAL_RUSTUP_PATH}}"
+        export CARGO_HOME="{{LOCAL_CARGO_PATH}}"
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --no-modify-path
         rustup target add --toolchain nightly wasm32-unknown-emscripten
         rustup target add --toolchain nightly x86_64-unknown-linux-gnu
