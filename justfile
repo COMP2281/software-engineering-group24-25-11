@@ -139,11 +139,11 @@ release: release-web
 
 [unix]
 @install-blender:
-    echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to ./deps/blender...{{NORMAL}}"
-    mkdir -p ./deps/blender
-    curl --progress-bar -Lo deps/blender-4.3.0-linux-x64.tar.xz https://download.blender.org/release/Blender4.3/blender-4.3.0-linux-x64.tar.xz
-    tar xf ./deps/blender-4.3.0-linux-x64.tar.xz --directory ./deps/blender --strip-components=1
-    rm ./deps/blender-4.3.0-linux-x64.tar.xz
+    echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to {{BLENDER_PATH}}...{{NORMAL}}"
+    mkdir -p {{BLENDER_PATH}}
+    curl --progress-bar -Lo '{{join(BLENDER_PATH, "blender-4.3.0-linux-x64.tar.xz")}}' https://download.blender.org/release/Blender4.3/blender-4.3.0-linux-x64.tar.xz
+    tar xf '{{join(BLENDER_PATH, "blender-4.3.0-linux-x64.tar.xz")}}' --directory {{BLENDER_PATH}} --strip-components=1
+    rm '{{join(BLENDER_PATH, "blender-4.3.0-linux-x64.tar.xz")}}'
     echo -e "{{BOLD+YELLOW}}Blender downloaded successfully.{{NORMAL}}"
 
 
@@ -167,4 +167,10 @@ release: release-web
 
 [unix]
 @install-godot:
-    echo -e "\n\n{{BOLD+BLUE}}Please install godot yourselves, and ensure that it is accessible on PATH (i.e. running \`godot --version\` works).{{NORMAL}}\n\n"
+    echo -e "{{BOLD+YELLOW}}Downloading godot 4.3 to {{GODOT_PATH}}...{{NORMAL}}"
+    mkdir -p {{GODOT_PATH}}
+    curl --progress-bar -Lo '{{join(DEPS_PATH, "Godot_v4.3-stable_linux.x86_64.zip")}}' https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
+    unzip '{{join(DEPS_PATH, "Godot_v4.3-stable_linux.x86_64.zip")}}' -d "{{GODOT_PATH}}"
+    mv '{{join(GODOT_PATH, "Godot_v4.3-stable_linux.x86_64")}}' '{{join(GODOT_PATH, "godot")}}'
+    rm '{{join(DEPS_PATH, "Godot_v4.3-stable_linux.x86_64.zip")}}'
+    echo -e "{{BOLD+YELLOW}}Godot downloaded successfully.{{NORMAL}}"
