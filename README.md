@@ -17,30 +17,24 @@ This typically can be done through opening the file explorer, clicking on the ad
 
 Now we need to install the rest of the dependencies, this can be done by running `just setup`, after which you should see a message indicating if everything was successful.
 
-Next you need to compile the rust extension which can be done with: `just` or alternatively (more verbose) `just rust-debug`
+Now you can proceed to [Getting started](#getting-started) to learn how to start development.
 
-> [!IMPORTANT]
-> You should launch godot through the command `just godot`, this is because to compile for the web emscripten is required, and hence needs to be in the path.
-> You may get around this by manually adding the following paths to your system PATH environment variable:
-> `{ROOT_DIR}/.deps/emsdk`
-> `{ROOT_DIR}/.deps/emsdk/upstream/emscripten`
+
 
 ## Linux
+Please ensure that you have up to date packages, otherwise things may not work as expected.
 
 Ensure you have the following packages installed (should be available in your package manager):
 - `git`
-- `just`
+- `just` (needs to be somewhat recent - if needed download from github releases and place at `~/.local/bin/just`)
 
 Then we need to install the rest of the dependencies, this can be done by running `just setup`, after which you should see a message indicating if everything was successful.
 
-Then to run godot, use `just godot` - this is because we need some dependencies in PATH.
+Now you can proceed to [Getting started](#getting-started) to learn how to start development.
 
-To compile rust changes (in debug mode) do `just` or alternatively (more verbose) `just rust-debug`.
-To compile rust changes (in release mode) do `just rust-release`.
 
 ## MacOS (todo)
-This is currently
-This is currently todo since I don't have a Mac
+🚧 This is currently unsupported, please ask for help.
 
 ## Manual installation (any platform)
 
@@ -50,8 +44,8 @@ While we recommend following the guide above, the following programs are require
 - blender (required)
 - rust nightly toolchain + rust-src component (required):
   - wasm32-unknown-emscripten (web)
-  - x86_64-pc-windows-msvc (windows)
-  - x86_64-unknown-linux-gnu (linux)
+  - x86_64-pc-windows-msvc (if on windows)
+  - x86_64-unknown-linux-gnu (if on linux)
 - just (optional - highly recommended - makes it easy to setup, develop, and release)
 
 You should ensure that these dependencies are in your PATH.
@@ -65,8 +59,23 @@ Then you can look at the `justfile` to find commands you may want to run.
 ├── docs: All required documentation, such as requirements etc...\
 ├── .deps: A local collection of dependencies needed for building/developing.
 └── target (optional): Final files/executables for all build types...\\
+
+## Getting started
+To launch godot with the correct environment run: `just godot`
+To launch an editor of your choice (e.g. vscode) with the correct environment run: `just env "code ."` (note: you need to pass the command as a string)
+
+To compile rust extension (in debug mode) do `just` or alternatively (more verbose) `just rust-debug`.
+To compile rust extension (in release mode) do `just rust-release`.
+
+If you wish to automatically compile the rust extension when you make changes, see [automatic rebuilding](#automatic-rebuilding)
+
+
+> [!NOTE]
+> After launching godot for the first time, you will be prompted to find a blender executable, select the one in `${PROJECT_ROOT}/.deps/blender/`.
+> You will also need to download the export templates, which you can do by clicking `Project -> Export... -> Web (runnable)`, after which you will see a red label (if you don't have the export templates installed), follow the instructions there.
+
 ## Automatic rebuilding
-To automatically rebuild the rust extension whenever you make changes, you can start a terminal and run `just dev`, then it will rebuild the extension automatically.
+To automatically rebuild the rust extension whenever you make changes, you can start a terminal and run `just dev`, then it will rebuild the extension (in debug mode) automatically.
 
 > [!NOTE]
 > This requires `watchexec` to be installed, which can be done through `just install-watchexec`

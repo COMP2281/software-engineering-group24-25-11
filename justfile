@@ -25,11 +25,14 @@ default: rust-debug
 
 [unix]
 godot:
-    cd godot && godot -e & disown
+    cd godot && godot -e
 
 [windows]
 godot:
     cd godot; Godot_v4.3-stable_win64.exe -e
+
+@env $BIN_NAME:
+    cd godot; $BIN_NAME
 
 @dev:
     watchexec -r -w rust just rust-debug
