@@ -73,8 +73,8 @@ release: release-web
 [unix]
 @install-emscripten:
     echo -e "{{BOLD+YELLOW}}Installing emscripten...\033{{NORMAL}}"
-    rm -rf {{EMSDK_PATH}}
-    mkdir -p {{DEPS_PATH}}
+    rm -rf "{{EMSDK_PATH}}"
+    mkdir -p "{{DEPS_PATH}}"
     cd {{DEPS_PATH}} && git clone https://github.com/emscripten-core/emsdk.git
     cd {{EMSDK_PATH}} && ./emsdk install 3.1.66
     cd {{EMSDK_PATH}} && ./emsdk activate 3.1.66
@@ -83,7 +83,7 @@ release: release-web
 [windows]
 @install-emscripten:
     Write-Host "Installing emscripten..." -ForegroundColor Yellow
-    New-Item -ItemType Directory -Path {{DEPS_PATH}} -Force | Out-Null
+    New-Item -ItemType Directory -Path "{{DEPS_PATH}}" -Force | Out-Null
     git clone https://github.com/emscripten-core/emsdk.git "{{EMSDK_PATH}}"
     {{join(EMSDK_PATH, "emsdk.ps1")}} install 3.1.66
     {{join(EMSDK_PATH, "emsdk.ps1")}} activate 3.1.66
@@ -93,7 +93,7 @@ release: release-web
 @install-rust-toolchain:
     #!pwsh
     Write-Host "Installing rustup..." -ForegroundColor Yellow
-    New-Item -ItemType Directory -Path {{DEPS_PATH}} -Force | Out-Null
+    New-Item -ItemType Directory -Path "{{DEPS_PATH}}" -Force | Out-Null
     if (Get-Command rustup -ErrorAction SilentlyContinue) {
         Write-Host "Rustup already installed, installing toolchains globally..." -ForegroundColor Yellow
         rustup toolchain install nightly
@@ -118,7 +118,7 @@ release: release-web
 @install-rust-toolchain:
     #!/usr/bin/env bash
     set -euo pipefail
-    mkdir -p {{DEPS_PATH}}
+    mkdir -p "{{DEPS_PATH}}"
     if command -v rustup 2>&1 >/dev/null; then
         echo -e "{{BOLD+YELLOW}}Rustup already installed, installing globally...{{NORMAL}}"
         rustup toolchain install nightly
@@ -144,7 +144,7 @@ release: release-web
 [unix]
 @install-blender:
     echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to {{BLENDER_PATH}}...{{NORMAL}}"
-    mkdir -p {{BLENDER_PATH}}
+    mkdir -p "{{BLENDER_PATH}}"
     curl --progress-bar -Lo '{{join(BLENDER_PATH, "blender-4.3.0-linux-x64.tar.xz")}}' https://download.blender.org/release/Blender4.3/blender-4.3.0-linux-x64.tar.xz
     tar xf '{{join(BLENDER_PATH, "blender-4.3.0-linux-x64.tar.xz")}}' --directory {{BLENDER_PATH}} --strip-components=1
     rm '{{join(BLENDER_PATH, "blender-4.3.0-linux-x64.tar.xz")}}'
@@ -154,25 +154,25 @@ release: release-web
 [windows]
 @install-blender:
     Write-Host "Downloading blender 4.3 to {{BLENDER_PATH}}" -ForegroundColor Yellow
-    New-Item -ItemType Directory -Path {{BLENDER_PATH}} -Force | Out-Null
+    New-Item -ItemType Directory -Path "{{BLENDER_PATH}}" -Force | Out-Null
     Invoke-WebRequest -Uri "https://download.blender.org/release/Blender4.3/blender-4.3.0-windows-x64.zip" -OutFile '{{join(DEPS_PATH, "blender-4.3.0-windows-x64.zip")}}'
-    Expand-Archive -Path '{{join(DEPS_PATH, "blender-4.3.0-windows-x64.zip")}}' -DestinationPath {{BLENDER_PATH}}
+    Expand-Archive -Path '{{join(DEPS_PATH, "blender-4.3.0-windows-x64.zip")}}' -DestinationPath "{{BLENDER_PATH}}"
     Remove-Item '{{join(DEPS_PATH, "blender-4.3.0-windows-x64.zip")}}'
     Write-Host "Blender downloaded successfully" -ForegroundColor Yellow
 
 [windows]
 @install-godot:
     Write-Host "Downloading godot 4.3 to {{GODOT_PATH}}" -ForegroundColor Yellow
-    New-Item -ItemType Directory -Path {{GODOT_PATH}} -Force | Out-Null
+    New-Item -ItemType Directory -Path "{{GODOT_PATH}}" -Force | Out-Null
     Invoke-WebRequest -Uri "https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_win64.exe.zip" -OutFile '{{join(DEPS_PATH, "Godot_v4.3-stable_win64.exe.zip")}}'
-    Expand-Archive -Path '{{join(DEPS_PATH, "Godot_v4.3-stable_win64.exe.zip")}}' -DestinationPath {{GODOT_PATH}}
+    Expand-Archive -Path '{{join(DEPS_PATH, "Godot_v4.3-stable_win64.exe.zip")}}' -DestinationPath "{{GODOT_PATH}}"
     Remove-Item '{{join(DEPS_PATH, "Godot_v4.3-stable_win64.exe.zip")}}'
     Write-Host "Godot 4.3 downloaded successfully" -ForegroundColor Yellow
 
 [unix]
 @install-godot:
     echo -e "{{BOLD+YELLOW}}Downloading godot 4.3 to {{GODOT_PATH}}...{{NORMAL}}"
-    mkdir -p {{GODOT_PATH}}
+    mkdir -p "{{GODOT_PATH}}"
     curl --progress-bar -Lo '{{join(DEPS_PATH, "Godot_v4.3-stable_linux.x86_64.zip")}}' https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
     unzip '{{join(DEPS_PATH, "Godot_v4.3-stable_linux.x86_64.zip")}}' -d "{{GODOT_PATH}}"
     mv '{{join(GODOT_PATH, "Godot_v4.3-stable_linux.x86_64")}}' '{{join(GODOT_PATH, "godot")}}'

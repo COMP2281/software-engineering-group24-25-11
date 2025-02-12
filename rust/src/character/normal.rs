@@ -3,7 +3,7 @@ use godot::prelude::*;
 
 #[derive(GodotClass)]
 #[class(base=CharacterBody3D)]
-struct Player {
+pub struct Player3D {
     base: Base<CharacterBody3D>,
 }
 
@@ -13,7 +13,7 @@ const JUMP_IMPULSE: f64 = 5.;
 const SENSITIVITY: f64 = 0.001;
 
 #[godot_api]
-impl ICharacterBody3D for Player {
+impl ICharacterBody3D for Player3D {
     fn init(base: Base<CharacterBody3D>) -> Self {
         godot_print!("Character created...");
         Self { base }
@@ -27,9 +27,9 @@ impl ICharacterBody3D for Player {
             "move_forward".into(),
             "move_back".into(),
         );
-        let pivot = self.base().get_node_as::<Node3D>("Pivot");
+        let camera = self.base().get_node_as::<Camera3D>("Camera3D");
         let direction =
-            pivot.get_basis() * Vector3::new(horizontal_input.x, 0., horizontal_input.y);
+            camera.get_basis() * Vector3::new(horizontal_input.x, 0., horizontal_input.y);
 
         let mut velocity: Vector3 = direction.normalized_or_zero() * MOVEMENT_SPEED as f32;
 
@@ -43,21 +43,20 @@ impl ICharacterBody3D for Player {
         self.base_mut().set_velocity(velocity);
         self.base_mut().move_and_slide();
     }
+    fn ready(&mut self) {
+        let mut camera = self.base().get_node_as::<Camera3D>("Camera3D");
+        camera.set_current(true);
+    }
     fn unhandled_input(&mut self, event: Gd<InputEvent>) {
         let ev = event.try_cast::<InputEventMouseMotion>();
-        let mut pivot = self.base().get_node_as::<Node3D>("Pivot");
-        let mut camera = pivot.get_node_as::<Camera3D>("Camera3D");
         if let Ok(motion) = ev {
+            let mut camera = self.base().get_node_as::<Camera3D>("Camera3D");
             let rel = -motion.get_relative() * SENSITIVITY as f32;
-            //let mut pivot_rot = pivot.get_rotation();
-            //pivot_rot.y = (pivot_rot.y + rel.x).clamp(0., std::f32::consts::PI);
-            //pivot.set_rotation(pivot_rot);
-            pivot.rotate_y(rel.x);
             let mut camera_rot = camera.get_rotation();
+            camera_rot.y += rel.x;
             camera_rot.x = (camera_rot.x + rel.y)
                 .clamp(-std::f32::consts::FRAC_PI_2, std::f32::consts::FRAC_PI_2);
             camera.set_rotation(camera_rot);
-            //camera.rotate_x(rel.y);
         }
     }
 }

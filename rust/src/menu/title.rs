@@ -1,4 +1,4 @@
-use crate::scenes::root::RootScene;
+use crate::{character::normal::Player3D, scenes::world::WorldScene};
 use godot::{
     classes::{
         display_server::VSyncMode, Button, DisplayServer, IButton, Os, XrCamera3D, XrServer,
@@ -41,61 +41,84 @@ struct CustomMenuButton {
 impl IButton for CustomMenuButton {
     fn pressed(&mut self) {
         let mut scene_tree = self.base().get_tree().expect("able to get the scene tree");
-        let root_game_scene = load::<PackedScene>("res://scenes/game/root.tscn");
-        let game_root = root_game_scene.instantiate_as::<RootScene>();
         let mut os = Os::singleton();
-        //see if web: os.has_feature("web".into());
+
+        let mut root_node = scene_tree
+            .get_root()
+            .unwrap()
+            .get_node_as::<Node>("/root/Root");
+
         match self.get_action().into() {
             Actions::EnterVR => {
                 godot_print!("titlescreen: Attempting to enter using immersive VR.");
-
-                let xr_server = XrServer::singleton();
-                let mut display_server = DisplayServer::singleton();
-                let xr_interface = if os.has_feature("web".into()) {
-                    godot_print!("titlescreen: detected web, trying to find WebXR interface.");
-                    xr_server.find_interface("WebXR".into())
-                } else {
-                    godot_print!("titlescreen: detected desktop, trying to find OpenXR interface.");
-                    xr_server.find_interface("OpenXR".into())
-                };
-                if xr_interface.is_none() {
-                    godot_warn!("titlescreen: failed to find any XR interface.");
-                    os.alert("Could not find any VR interfaces!".into());
-                    return;
-                }
-                let mut interface = xr_interface.unwrap();
-                if !os.has_feature("web".into()) {
-                    godot_print!("OpenXR: Configuring interface");
-                    if !interface.is_initialized() && !interface.initialize() {
-                        os.alert("Could not initialise VR interface!".into());
-                        return;
-                    }
-                    //interface.connect("session_begun".into(), || _);
-                    //interface.connect("session_visible".into(), || _);
-                    //interface.connect("session_focused".into(), || _);
-                    if interface.is_passthrough_supported() {
-                        interface.start_passthrough();
-                    }
-                    display_server.window_set_vsync_mode(VSyncMode::DISABLED);
-                    game_root
-                        .get_viewport()
-                        .expect("game scene has a viewport")
-                        .set_use_xr(true);
-                }
-
-                let mut camera =
-                    game_root.get_node_as::<XrCamera3D>("Player/XROrigin3D/XRCamera3D");
-                camera.make_current();
-                godot_print!("camera is current {:?}", camera.is_current());
-
-                scene_tree.change_scene_to_packed(root_game_scene);
+                //
+                // let xr_server = XrServer::singleton();
+                // let mut display_server = DisplayServer::singleton();
+                // let xr_interface = if os.has_feature("web".into()) {
+                //     godot_print!("titlescreen: detected web, trying to find WebXR interface.");
+                //     xr_server.find_interface("WebXR".into())
+                // } else {
+                //     godot_print!("titlescreen: detected desktop, trying to find OpenXR interface.");
+                //     xr_server.find_interface("OpenXR".into())
+                // };
+                // if xr_interface.is_none() {
+                //     godot_warn!("titlescreen: failed to find any XR interface.");
+                //     os.alert("Could not find any VR interfaces!".into());
+                //     return;
+                // }
+                // let mut interface = xr_interface.unwrap();
+                // if !os.has_feature("web".into()) {
+                //     godot_print!("OpenXR: Configuring interface");
+                //     if !interface.is_initialized() && !interface.initialize() {
+                //         os.alert("Could not initialise VR interface!".into());
+                //         return;
+                //     }
+                //     //interface.connect("session_begun".into(), || _);
+                //     //interface.connect("session_visible".into(), || _);
+                //     //interface.connect("session_focused".into(), || _);
+                //     if interface.is_passthrough_supported() {
+                //         interface.start_passthrough();
+                //     }
+                //     display_server.window_set_vsync_mode(VSyncMode::DISABLED);
+                //     game_root
+                //         .get_viewport()
+                //         .expect("game scene has a viewport")
+                //         .set_use_xr(true);
+                // }
+                //
+                // let mut camera =
+                //     game_root.get_node_as::<XrCamera3D>("Player/XROrigin3D/XRCamera3D");
+                // camera.make_current();
+                // godot_print!("camera is current {:?}", camera.is_current());
+                //
+                // scene_tree.change_scene_to_packed(root_game_scene);
             }
             Actions::Enter3D => {
                 godot_print!("entering as a normal 3d game");
-                let mut camera = game_root.get_node_as::<Camera3D>("Player/Pivot/Camera3D");
-                camera.make_current();
-                godot_print!("camera is current {:?}", camera.is_current());
-                scene_tree.change_scene_to_packed(root_game_scene);
+                let world_scene = load::<PackedScene>("res://scenes/game/world.tscn")
+                    .instantiate_as::<WorldScene>();
+                let character_3d = load::<PackedScene>("res://scenes/character/character_3d.tscn")
+                    .instantiate_as::<Player3D>();
+
+                let mut player = world_scene.get_node_as::<Node>("Player");
+                player.add_child(&character_3d);
+
+                let title_screen = root_node
+                    .find_child("TitleScreen".into())
+                    .expect("we are in the title screen");
+                root_node.remove_child(title_screen);
+                root_node.add_child(world_scene);
+                // character_3d
+                //     .get_node_as::<Camera3D>("Camera3D")
+                //     .make_current();
+
+                // let mut camera = game_root.get_node_as::<Camera3D>("Player/Pivot/Camera3D");
+                // camera.make_current();
+                // godot_print!("camera is current {:?}", camera.is_current());
+                // scene_tree.change_scene_to_packed(&root_scene);
+                // let root_node = scene_tree.scene().unwrap();
+
+                godot_print!("Done entering");
             }
             _ => {}
         }

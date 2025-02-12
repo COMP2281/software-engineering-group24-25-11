@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://iwmj6q4fau8m"]
+
+[ext_resource type="PackedScene" uid="uid://d0ib61j4007ft" path="res://scenes/menu/title.tscn" id="1_ny47x"]
+
+[node name="Root" type="Node"]
+
+[node name="TitleScreen" parent="." instance=ExtResource("1_ny47x")]

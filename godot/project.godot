@@ -11,17 +11,12 @@ config_version=5
 [application]
 
 config/name="ibm_vr"
-run/main_scene="res://scenes/menu/title.tscn"
+run/main_scene="res://scenes/root.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 boot_splash/image="res://assets/boot_splash.png"
 boot_splash/use_filter=false
 config/icon="res://assets/icon.svg"
-
-[autoload]
-
-XRToolsUserSettings="*res://addons/godot-xr-tools/user_settings/user_settings.gd"
-XRToolsRumbleManager="*res://addons/godot-xr-tools/rumble/rumble_manager.gd"
 
 [display]
 
@@ -32,7 +27,7 @@ display_server/driver.linuxbsd="wayland"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg")
+enabled=PackedStringArray()
 
 [input]
 

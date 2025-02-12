@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3sbdxrh3jdyt"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ld6cf"]
+
+[node name="PlayerVR" type="PlayerVR"]
+
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+current = true
+
+[node name="LeftController" type="XRController3D" parent="XROrigin3D"]
+tracker = &"left_hand"
+show_when_tracked = true
+
+[node name="RightController" type="XRController3D" parent="XROrigin3D"]
+tracker = &"right_hand"
+show_when_tracked = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_ld6cf")
