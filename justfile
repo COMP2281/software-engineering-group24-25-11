@@ -173,11 +173,11 @@ release: release-web
     Write-Host "Godot 4.3 downloaded successfully" -ForegroundColor Yellow
 
 
-[unix]
+[macos]
 @install-godot:
     brew install godot
 
-[unix]
+[linux]
 @install-godot:
     echo -e "{{BOLD+YELLOW}}Downloading godot 4.3 to {{GODOT_PATH}}...{{NORMAL}}"
     mkdir -p "{{GODOT_PATH}}"
