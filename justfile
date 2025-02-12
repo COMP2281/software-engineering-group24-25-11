@@ -114,7 +114,7 @@ release: release-web
     }
     Write-Host "Rust toolchains installed successfully." -ForegroundColor Yellow
 
-[linux]
+[unix]
 @install-rust-toolchain:
     #!/usr/bin/env bash
     set -euo pipefail
