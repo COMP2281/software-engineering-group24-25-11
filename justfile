@@ -114,7 +114,7 @@ release: release-web
     }
     Write-Host "Rust toolchains installed successfully." -ForegroundColor Yellow
 
-[unix]
+[linux]
 @install-rust-toolchain:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -133,7 +133,6 @@ release: release-web
         export CARGO_HOME="{{LOCAL_CARGO_PATH}}"
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --no-modify-path
         rustup target add --toolchain nightly wasm32-unknown-emscripten
-        rustup target add --toolchain nightly x86_64-unknown-linux-gnu
         rustup component add --toolchain nightly rust-src
     fi
     echo -e "{{BOLD+YELLOW}}Rust toolchain installed successfully.{{NORMAL}}"
@@ -141,7 +140,7 @@ release: release-web
 @install-watchexec: install-rust-toolchain
     cargo install watchexec-cli
 
-[unix]
+[linux]
 @install-blender:
     echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to {{BLENDER_PATH}}...{{NORMAL}}"
     mkdir -p "{{BLENDER_PATH}}"
@@ -149,6 +148,10 @@ release: release-web
     tar xf '{{join(BLENDER_PATH, "blender-4.3.0-linux-x64.tar.xz")}}' --directory {{BLENDER_PATH}} --strip-components=1
     rm '{{join(BLENDER_PATH, "blender-4.3.0-linux-x64.tar.xz")}}'
     echo -e "{{BOLD+YELLOW}}Blender downloaded successfully.{{NORMAL}}"
+
+[macos]
+@install-blender:
+    brew install blender
 
 
 [windows]
@@ -168,6 +171,11 @@ release: release-web
     Expand-Archive -Path '{{join(DEPS_PATH, "Godot_v4.3-stable_win64.exe.zip")}}' -DestinationPath "{{GODOT_PATH}}"
     Remove-Item '{{join(DEPS_PATH, "Godot_v4.3-stable_win64.exe.zip")}}'
     Write-Host "Godot 4.3 downloaded successfully" -ForegroundColor Yellow
+
+
+[unix]
+@install-godot:
+    brew install godot
 
 [unix]
 @install-godot:
