@@ -1,0 +1,175 @@
+Question,Choice1,Choice2,Choice3,Choice4,Answer,Difficulty
+"While reviewing a spreadsheet with customer information, you see that one of the columns contains data for the marital status of the customers.
+
+
+
+What type of data is this?",Nominal,Continuous,Ordinal,Discrete,Nominal,
+"Which of the following conclusions can you make about structured data? Select the two that apply.",
+
+"It’s organized into rows and columns in a spreadsheet or database.
+
+","It’s raw data that is stored in its original, undefined format.
+
+","Examples can include images, text messages, and social media posts.
+
+","Examples can include names, dates, and addresses.
+
+","It’s organized into rows and columns in a spreadsheet or database.
+
+ / Examples can include names, dates, and addresses.
+
+",
+"What type of data is on a driver’s license that records a person's eye color and hair color?
+
+","Qualitative data
+
+","Quantitative data
+
+",,,"Qualitative data
+
+",
+"Fill in the blank. Text in a book, audio files, and social media posts are examples of _______________ data.",database,structured,unstructured,complex,unstructured,
+"Fill in the blank. With big data, the __________ is the quality and trustworthiness of the data.","Veracity
+
+","Value
+
+","Volume
+
+",Velocity,"Veracity
+
+",
+"What is the speed at which new data is generated and moves around?
+
+","Velocity
+
+","Value
+
+","Veracity
+
+","Veracity
+
+","Velocity
+
+",
+"Fill in the blank. The __________ of big data refers to the ability to obtain monetary, medical, social, or personal benefits from the data.",Value,"Velocity
+
+","Veracity
+
+",Volume,Value,
+"A company uses data analytics to get a “snapshot” of its business and to identify issues. The company’s data sources are past and present revenue reports and stock prices.
+
+
+
+Which type of analytics uses this type of data?","Diagnostic analytics
+
+","Predictive analytics
+
+","Prescriptive analytics
+
+","Descriptive analytics
+
+","Descriptive analytics
+
+",
+Which type of analytics recommends actions to take to eliminate a future problem or take advantage of a promising trend?,"Prescriptive analytics
+
+","Diagnostic analytics
+
+","Predictive analytics
+
+","Descriptive analytics
+
+","Prescriptive analytics
+
+",
+"Which type of analytics makes forecasts about the future?
+
+","Diagnostic analytics
+
+","Descriptive analytics
+
+","Predictive analytics
+
+","Prescriptive analytics
+
+","Predictive analytics
+
+",
+Which type of analytics drills down the trends and patterns to identify the causes of problems?,"Predictive analytics
+
+","Descriptive analytics
+
+","Diagnostic analytics
+
+","Prescriptive analytics
+
+","Diagnostic analytics
+
+",
+"In which step did Charles share that he spends most of his time, nearly 80%?
+
+","Analyze
+
+","Collect
+
+",Visualize,Clean,Clean,
+In which step did Charles share he figures out the best way to depict his results in a team presentation?,"Collect
+
+","Visualize
+
+","Clean
+
+",Analyze,"Visualize
+
+",
+In which step did Charles share that he gets excited to investigate and use the right analytical methods to find root causes?,"Visualize
+
+",Clean,Analyze,Collect,Analyze,
+In which step did Charles share that he is careful to follow the company guidelines when storing data for security purposes?,"Clean
+
+","Analyze
+
+","Collect
+
+","Visualize
+
+","Collect
+
+",
+"Which type of visualization is best-suited for ranking a large number of categories, showing correlation, and using for before-after analysis?","Line chart
+
+","Bar chart
+
+","Pie chart
+
+","Scatter plot chart
+
+","Bar chart
+
+",
+"What is the purpose of a data visualization? 
+
+Select the two that apply.","Communicate results and help people understand the insights to make decisions.
+
+","Explore and interpret data during analysis to identify patterns or trends.
+
+","Organize data in a usable format, such as a spreadsheet, for people to easily access.
+
+",,"
+Communicate results and help people understand the insights to make decisions. / Explore and interpret data during analysis to identify patterns or trends.
+
+",
+"Which of the following statements about data visualizations is correct?
+
+
+","Data visualizations turn narratives into numbers.
+
+","The goal is to have a visual that is effective, attractive, and impactive. 
+
+","The audience should be confused when they first see a visualization.
+
+","Data analysts typically use one of four types of visualizations.
+
+","The goal is to have a visual that is effective, attractive, and impactive. 
+
+",
