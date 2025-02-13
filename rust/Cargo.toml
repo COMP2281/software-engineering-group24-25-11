@@ -9,6 +9,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
+cfg-if = "1.0.0"
 
 [dependencies.godot]
 git = "https://github.com/godot-rust/gdext"
