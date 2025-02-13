@@ -28,16 +28,20 @@ impl ICharacterBody3D for Player3D {
             "move_back".into(),
         );
         let camera = self.base().get_node_as::<Camera3D>("Camera3D");
-        let direction =
-            camera.get_basis() * Vector3::new(horizontal_input.x, 0., horizontal_input.y);
+        let direction = (camera.get_basis()
+            * Vector3::new(horizontal_input.x, 0., horizontal_input.y))
+        .normalized_or_zero();
 
-        let mut velocity: Vector3 = direction.normalized_or_zero() * MOVEMENT_SPEED as f32;
+        let mut velocity: Vector3 = Vector3::new(
+            direction.x * MOVEMENT_SPEED as f32,
+            0.,
+            direction.z * MOVEMENT_SPEED as f32,
+        );
 
-        if input.is_action_pressed("jump".into()) && self.base().is_on_floor() {
-            velocity.y = JUMP_IMPULSE as f32;
-        }
         if !self.base().is_on_floor() {
             velocity.y = self.base().get_velocity().y - (GRAVITY * delta) as f32;
+        } else if input.is_action_pressed("jump".into()) {
+            velocity.y = JUMP_IMPULSE as f32;
         }
 
         self.base_mut().set_velocity(velocity);
