@@ -1,24 +1,6 @@
-Question,Choice1,Choice2,Choice3,Choice4,Answer,Difficulty
-"While reviewing a spreadsheet with customer information, you see that one of the columns contains data for the marital status of the customers.
-
-
-
-What type of data is this?",Nominal,Continuous,Ordinal,Discrete,Nominal,
-"Which of the following conclusions can you make about structured data? Select the two that apply.",
-
-"It’s organized into rows and columns in a spreadsheet or database.
-
-","It’s raw data that is stored in its original, undefined format.
-
-","Examples can include images, text messages, and social media posts.
-
-","Examples can include names, dates, and addresses.
-
-","It’s organized into rows and columns in a spreadsheet or database.
-
- / Examples can include names, dates, and addresses.
-
-",
+Question,Choice1,Choice2,Choice3,Choice4,Answer
+"While reviewing a spreadsheet with customer information, you see that one of the columns contains data for the marital status of the customers. What type of data is this?",Nominal,Continuous,Ordinal,Discrete,Nominal,
+"Which of the following conclusions can you make about structured data? Select the two that apply.", "It’s organized into rows and columns in a spreadsheet or database. ","It’s raw data that is stored in its original, undefined format. ","Examples can include images, text messages, and social media posts. ","Examples can include names, dates, and addresses. ","It’s organized into rows and columns in a spreadsheet or database. / Examples can include names, dates, and addresses. ",
 "What type of data is on a driver’s license that records a person's eye color and hair color?
 
 ","Qualitative data
