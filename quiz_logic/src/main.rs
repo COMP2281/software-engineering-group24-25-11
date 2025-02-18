@@ -1,4 +1,3 @@
-
 use std::error::Error;
 use std::fs::File;
 use csv::ReaderBuilder;
@@ -17,6 +16,12 @@ struct Question {
     difficulty: Option<f64>,
 }
 
+struct User {
+    name: String,
+    score: f64,
+    difficulty: f64,
+}
+
 fn main() -> Result<(), Box<dyn Error>> {
     // open the CSV file
     let file_path = "question_bank/ai_modules.csv";
@@ -30,11 +35,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut questions = Vec::new();
 
     for result in rdr.deserialize() {
-        let record: Question = result?;
+        let mut record: Question = result?;
+        if record.difficulty.is_none() {
+            record.difficulty = Some(0.5);
+        }
         questions.push(record);
+        println!("{:?}", record.answer);
     }
 
-    println!("{:?}", questions);
 
 
 
