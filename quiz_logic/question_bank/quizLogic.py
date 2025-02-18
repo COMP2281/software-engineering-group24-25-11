@@ -20,8 +20,14 @@ class User:
         self.difficulty = difficulty
 
 def main():
+
+    # set filepath for later use when multiple question banks are implemented
+    def setFilepath(filepath: str):
+        file_path = "quiz_logic/question_bank/" + filepath + ".csv"
+
     file_path = "quiz_logic/question_bank/ai_modules.csv"
     df = pd.read_csv(file_path)
+    selectedQuestions = []
     
     df.columns = [col.strip() for col in df.columns]  
 
@@ -42,6 +48,8 @@ def main():
         for _, row in df.iterrows()
     ]
 
+
+    # "adaptive difficulty" algorithm, adjust user score, as well as difficulty accordingly when answer is correct or false
     def evaulateAnswer(user: User, question: Question, answer: str) -> bool:
         if question.answer == answer:
             user.score += question.difficulty * 100
@@ -60,9 +68,27 @@ def main():
                 user.difficulty = 0
         return 1
     
+    # get question based on user difficulty
+    def getQuestion(user: User, questions) -> Question:
+        userDifficulty = user.difficulty
+        randSeed = userDifficulty + np.random.uniform(-0.15, 0.15)
+        if randSeed < 0:
+            randSeed = 0
+        elif randSeed > 1:
+            randSeed = 1
 
-    for question in questions:
-        print(question)
+        # return question with lowest difference to randSeed
+        selectedQ = min(questions, key=lambda q: abs(q.difficulty - randSeed))
+
+        # remove selected question from list of questions and add it to selectedQuestions
+        questions.remove(selectedQ)
+        selectedQuestions.append(selectedQ)
+        return selectedQ
+    
+    
+    
+
+    
 
 if __name__ == "__main__":
     main()
