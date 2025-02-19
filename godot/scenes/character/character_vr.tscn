@@ -5,6 +5,7 @@
 [node name="PlayerVR" type="PlayerVR"]
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
+current = true
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
 current = true

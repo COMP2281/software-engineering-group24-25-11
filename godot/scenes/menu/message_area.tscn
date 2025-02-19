@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://r485y2ecvjwb"]
+
+[ext_resource type="Theme" uid="uid://d215b0ikbvflb" path="res://assets/message_area_theme.tres" id="1_kc13h"]
+
+[node name="MessageArea" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Wrapper" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4
+anchor_top = 0.4
+anchor_right = 0.6
+anchor_bottom = 0.6
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Wrapper"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("1_kc13h")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Wrapper/PanelContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Wrapper/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_kc13h")
+theme_type_variation = &"Title"
+text = "NOTICE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Message" type="Label" parent="Wrapper/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(100, 16)
+layout_mode = 2
+text = "omething is here wowow this should be great but yeah lets keepe adadingnasdnadnas stuff here because why not otherwise we might not make it all correct something lorem ipsum lwow yay"
+horizontal_alignment = 1
+autowrap_mode = 2

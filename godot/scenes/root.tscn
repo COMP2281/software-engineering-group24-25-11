@@ -1,7 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://iwmj6q4fau8m"]
+[gd_scene load_steps=4 format=3 uid="uid://iwmj6q4fau8m"]
 
 [ext_resource type="PackedScene" uid="uid://d0ib61j4007ft" path="res://scenes/menu/title.tscn" id="1_ny47x"]
+[ext_resource type="PackedScene" uid="uid://r485y2ecvjwb" path="res://scenes/menu/message_area.tscn" id="2_a4wnd"]
+[ext_resource type="PackedScene" uid="uid://crq7gvwnrcti4" path="res://scenes/menu/main_menu.tscn" id="3_2a6fy"]
 
 [node name="Root" type="Node"]
 
+[node name="SceneManager" type="SceneManager" parent="."]
+
+[node name="State" type="Node" parent="."]
+
 [node name="TitleScreen" parent="." instance=ExtResource("1_ny47x")]
+
+[node name="MessageArea" parent="." instance=ExtResource("2_a4wnd")]
+visible = false
+
+[node name="Control" parent="." instance=ExtResource("3_2a6fy")]
+visible = false

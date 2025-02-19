@@ -1,16 +1,27 @@
 use godot::prelude::*;
 
 #[derive(Debug, Default, GodotConvert, Var, Export)]
-#[godot(via = GString)]
+#[godot(via = u8)]
 enum InputMethod {
-    VR,
     #[default]
     Normal,
+    VR,
 }
 
-#[derive(GodotClass)]
-#[class(init, base=Node)]
-pub struct State {
+#[derive(Debug)]
+struct SessionState {
     input_method: InputMethod,
+    course: String,
+}
+
+#[derive(GodotClass, Debug)]
+#[class(init, base=Node)]
+pub struct AudioSettings {
+    #[export]
+    master: f64,
+    #[export]
+    music: f64,
+    #[export]
+    commentary: f64,
     base: Base<Node>,
 }

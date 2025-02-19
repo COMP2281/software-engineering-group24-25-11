@@ -1,0 +1,97 @@
+Question,Choice1,Choice2,Choice3,Choice4,Answer,Difficulty
+What type of software enables you to communicate with the computer and acts as a coordinator between the hardware and all systems that are running?,Operating system,Word processor,Web application,Web browser,Operating system,
+You just got a new touchscreen tablet. Which basic computer function does the screen perform?,input,processing,storage,audio,input,
+A computer must translate the data it receives from the input devices into 0’s and 1’s so that it can either store or process the data. What is this system of 0’s and 1’s called? ,Long-term storage system,Scripting system,Binary code,Input and output system,Binary code,
+What type of storage does a computer use when a user enters data into an online form and before they submit the form? ,Processing storage,Cookies,Long-term storage,Short-term storage,Short-term storage,
+"Thanks to advances in internet technology, web developers can now create programs that are a hybrid between a software program and a web page. What is this called?",Web browsers,Web sites,Web applications,Web pages,Web applications,
+Which of the following types of languages is the most abstract and self-describing so developers can easily read it? ,Compiled language,Interpreted language,Machine language,System language,Interpreted language,
+What makes interpreted languages different from compiled languages?,Interpreted languages are loaded into computer memory before processing starts.,Interpreted languages are written in binary.,Interpreted languages are responsible for managing parts of the computer system such as memory and data transfer. ,Interpreted languages are executed line-by-line.,Interpreted languages are executed line-by-line.,
+"Jane has written and compiled the code for her application, but when she tests it, the application doesn’t work quite as she intended. She now wants to make changes to the code. What steps does she need to take to change how the application works and test it again?",Change the compiled code and then test her application.,"Change the compiled code, compile it, and then test her application.",Change the source code and then test her application.,"Change the source code, compile it, and then test her application.","Change the source code, compile it, and then test her application.",
+At which stage of the compilation process does the compiler check your code for errors?,Before converting the code into machine language,While converting the code into machine language,After converting the code into machine language,Never,Before converting the code into machine language,
+"Complete the sentence. _______________ run on user devices and respond to user interactions like buttons, while _______________ run complex processes that require a lot of power and send results back to the client.","Server-side processes, client-side processes","Website processes, web development processes","Client-side processes, server-side processes","Web development processes, website processes","Client-side processes, server-side processes",
+During which phase of the web development process does a web developer work with a web designer to understand what functions the website needs to perform?,The coding phase,"
+The planning and design phase",The testing and publishing phase,The maintenance phase,"
+The planning and design phase",
+Which of the following is a client-side process?,Maintaining content management,Ensuring that websites and systems are safe from hackers,Rendering web page layouts,Creating and connecting websites to databases,Rendering web page layouts,
+Which of the following interprets files from the server and displays the information in the user interface (UI)?,The URL,The search bar,The web host,"
+The browser","
+The browser",
+"If you were a web developer on a new project, which of the of the following would be one of your responsibilities?",Test design ideas as per the prototype created.,"
+Build a site based on the required design and functionality needs.",Translate the vision into viable designs for a site.,Create wireframes and prototypes based on user requirements.,Test design ideas as per the prototype created.,
+Which of the following is a challenge that front-end developers must face and address when developing websites?,Making sure websites have simple page layout and style with no interactions.,"Making sure websites focus on logic, integration, and data management.",Making sure websites work consistently across different browsers.,Making sure websites do not degrade or operate on older versions of browsers.,Making sure websites work consistently across different browsers.,
+What is the purpose of back-end development?,To create interactions and animations for the user’s front-end experience,"To implement design on a website, such as colors and fonts",To build and maintain the background services that powers the user’s front-end experience,To develop and maintain the user interface,To build and maintain the background services that powers the user’s front-end experience,
+Which of the following tasks are executed by a front-end developer?,Writing the code for styles and user interactions,Creating user databases,Conducting load tests,Creating APIs,Writing the code for styles and user interactions,
+Which language do web developers use to build out the structure of a web page?,HTML,CSS,JavaScript,C,HTML,
+"A front-end web developer has to collect information about users that could be sensitive if exposed to someone with malicious intent.  
+
+ 
+
+How can a back-end developer ensure the data that’s collected is secure? ",Use an application programming interface (API) to program the back-end data collection service.,Encrypt any personally identifiable information (PII).,Avoid storing any personal data on the server’s database.,Ask the front-end developer to avoid collecting any sensitive information.,Encrypt any personally identifiable information (PII).,
+Back-end developers are responsible for database security and server-side encryption to ensure that websites are compliant with which security standards?,Back-end development,Personal account data,PII and payment card industry (PCI),Artificial intelligence (AI),PII and payment card industry (PCI),
+Complete the sentence. Back-end developers can use _______________ to create dynamic web pages and _______________ to build web applications with strong security.,"JavaScript, Java","Python, JavaScript","Java, Python","Java, JavaScript","JavaScript, Java",
+"As a back-end web developer, you’ve been assigned a task to enable your front-end team to retrieve data from the site’s database.   
+
+
+
+What should you build so your front-end developers can retrieve the data predictably and securely?",A dynamic web page,A domain naming system (DNS),A filter for personally identifiable information (PII),An application programming interface (API),An application programming interface (API),
+"You are responsible for storing and delivering image files for a photo sharing website you’re developing. 
+
+
+
+Which of the following cloud features should you use for this task?",Blob storage,Open-source database,Scaling architecture,Domain name service,Blob storage,
+What are the two basic standards that define the internet?,TCP and IP,DNS and TCP,TCP and ISP,"
+DNS and IP",TCP and IP,
+Fill in the blank. The ________ is a network of computers and servers that provide infrastructure for you to access the web. ,browser,World Wide Web,"
+internet",router,"
+internet",
+Which of the following pieces of hardware connects you to the internet?,Modem,Web Server,"
+Router",Domain name server,Modem,
+Which of the following is a step in the compilation process?,The compiler checks the code for correct syntax.,The compiler overwrites the source code files with binary files.,The compiler translates the code to a different programming language.,The compiler updates the source code.,The compiler checks the code for correct syntax.,
+Why do back-end developers create application programming interfaces (APIs)?,"
+To move data between the user and the data or services on the server",To ensure availability of websites,To improve the visual design of websites,To ensure accessibility of websites,"
+To move data between the user and the data or services on the server",
+Which of the following statements is an example of the four functions of a computer?,"You write and send a text message to a contact on your mobile device. Your device processes the message and sends it to the correct contact. After receiving the message, your contact responds to you. You’re able to see your contact’s response and your original stored message on your device.","A person reads about an online course offered through their local library and they sign up for the course the next time they visit the library. Once they’re enrolled in the course, they take the course, complete the coursework, and earn a course credential.","A marathon runner checks their running application to make sure that they are on the correct course for the race. They monitor their heart rate with the application, and they make sure to drink enough water when they are slowing down. They are able to achieve their personal best time for the marathon.","You are asked to log your hours worked for your organization in your timesheet. You write down your hours worked, double-check your total to make sure it’s accurate, and then sign the timesheet before giving it to your manager.","
+You write and send a text message to a contact on your mobile device. Your device processes the message and sends it to the correct contact. After receiving the message, your contact responds to you. You’re able to see your contact’s response and your original stored message on your device.",
+What is client-side processing? ,It refers to implementing and maintaining content management and digital asset management systems.,It refers to creating and connecting websites to databases.,It refers to building and maintaining the background that powers the user’s front-end experience.,"It refers to processes that run on the user’s device, or web browser, rather than the server.","It refers to processes that run on the user’s device, or web browser, rather than the server.",
+Which language do back-end web developers often use to develop web applications and web servers?,Python,Java,CSS,HTML,Java,
+Which of the following benefits can cloud services provide to web developers?,"Provide a system with a known, fixed capacity",Consolidate data into a single location,Compile source code based on website demand,"
+Distribute software workloads to reduce download and load times","
+Distribute software workloads to reduce download and load times",
+"You’ve recently purchased a new computer. The first time you start your computer, you need to set up a username and password. After logging in to the computer, you enter other personal and configuration information which the computer verifies you have entered correctly. However, next time you start the computer it begins the setup process again. 
+
+ 
+
+Which of the four functions of a computer is not working on your computer? ",Processing,Input,"
+Storage",Output,"
+Storage",
+Which programming language do front-end web developers use for adding style to a website?,HTML,CSS,JavaScript,C,CSS,
+Which of the following is a set of links presented in a user-friendly way?,navigation menu,browser,URL,website,navigation menu ,
+Fill in the blank. Front-end web developers use _________ to add interactivity to websites.,HTML,CSS,Vue.js,"
+JavaScript","
+JavaScript",
+Why do front-end developers use search engine optimization (SEO) for websites?,To develop responsive web designs,To optimize websites for increasing the visibility,To create dynamic web pages,To improve accessibility,To optimize websites for increasing the visibility,
+Fill in the blank. Computer programs are a combination of binary digits. When the binary digit is in 0 state the switch is __________. ,off,cloud-based,digitized,on,off,
+Which of the following is a compiled language?,Ruby,JavaScript,C,Python,C,
+Which of the following pieces of hardware manages the information sent over the internet and ensures the delivery of the right information to the intended device?,Web server,Modem,"
+Router",Domain name server,"
+Router",
+Which step in the website development process ensures the website is functional and accessible for as many people as possible?,Maintenance,Testing and publishing,"
+Planning and design",Coding,Coding,
+"John is creating a website and wants to divide the page into sections using bold headings.
+
+
+
+What is the best way to do this?",Use markup language to set instructions for the browser.,Embed images of bold headings.,Use a proprietary application containing pre-formatted text.,Use bold font while writing the HTML.,Use markup language to set instructions for the browser.,
+What is the purpose of web browsers?,Web browsers create the same experience for all users on different devices.,"
+Web browsers enable users to view and exchange information with websites.",Web browsers limit your bandwidth to limit file sizes and avoid impacting others.,Web browsers use all the features and functionalities on many different devices.,"
+Web browsers enable users to view and exchange information with websites.",
+"You visit a website on your mobile device. The text and images are so small that you can barely see them.
+
+
+
+Which aspect does the web developer need to consider when creating the website?",Processing speed of the device,Data storage in different browsers,Speed of the internet,"
+Different screen sizes","
+Different screen sizes",
+"A web browser opens an HTML document, interprets the document, and displays the results using human-readable styles and format. What is this process called?  ",Markup,Bandwidth,Embedding,"
+Rendering","
+Rendering",
