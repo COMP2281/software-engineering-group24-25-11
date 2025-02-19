@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://d0ib61j4007ft"]
+[gd_scene load_steps=5 format=3 uid="uid://d0ib61j4007ft"]
 
 [ext_resource type="Texture2D" uid="uid://6y1akdum45yy" path="res://assets/skybox.hdr" id="1_cc87h"]
+[ext_resource type="Script" path="res://scenes/menu/play_vr.gd" id="2_d52i2"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r6acx"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_haww6"]
 content_margin_left = 48.0
 content_margin_top = 4.0
 content_margin_right = 48.0
@@ -17,7 +18,7 @@ corner_radius_bottom_left = 5
 Button/colors/font_color = Color(1, 1, 1, 1)
 Button/font_sizes/font_size = 32
 Button/styles/hover = null
-Button/styles/normal = SubResource("StyleBoxFlat_r6acx")
+Button/styles/normal = SubResource("StyleBoxFlat_haww6")
 
 [node name="Node" type="Node"]
 
@@ -60,6 +61,7 @@ physics_interpolation_mode = 0
 layout_mode = 2
 theme = SubResource("Theme_xrvxu")
 text = "Play (VR)"
+script = ExtResource("2_d52i2")
 
 [node name="Play3D" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
 action = 1
@@ -90,3 +92,5 @@ action = 5
 physics_interpolation_mode = 0
 layout_mode = 2
 text = "Quit"
+
+[connection signal="pressed" from="UI/MarginContainer/VBoxContainer/PlayVR" to="UI/MarginContainer/VBoxContainer/PlayVR" method="_on_pressed"]
