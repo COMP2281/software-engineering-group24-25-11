@@ -46,7 +46,7 @@ impl SceneManager {
         godot_print!("entering the vr world");
         let world_scene =
             load::<PackedScene>("res://scenes/game/world.tscn").instantiate_as::<WorldScene>();
-        let character_3d = load::<PackedScene>("res://scenes/character/character_3d.tscn")
+        let character_vr = load::<PackedScene>("res://scenes/character/character_vr.tscn")
             .instantiate_as::<PlayerVR>();
 
         if let Some(title_screen) = root_node.find_child("TitleScreen".into()) {
@@ -55,7 +55,7 @@ impl SceneManager {
 
         if root_node.find_child("WorldScene".into()).is_none() {
             let mut player = world_scene.get_node_as::<Node>("Player");
-            player.add_child(&character_3d);
+            player.add_child(&character_vr);
             root_node.add_child(world_scene);
         }
 
