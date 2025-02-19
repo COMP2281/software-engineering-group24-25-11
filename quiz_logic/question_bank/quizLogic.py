@@ -18,6 +18,14 @@ class User:
         self.name = name
         self.score = score
         self.difficulty = difficulty
+    def setDifficulty(self, difficulty: str):
+        if difficulty == "easy":
+            self.difficulty = 0.3
+        elif difficulty == "medium":
+            self.difficulty = 0.5
+        elif difficulty == "hard":
+            self.difficulty = 0.7
+    
 
 def main():
 
@@ -85,10 +93,12 @@ def main():
         selectedQuestions.append(selectedQ)
         return selectedQ
     
+
+    
+    # TODO: Connect to godot user interface
     
     
 
     
-
 if __name__ == "__main__":
     main()
