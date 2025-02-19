@@ -1,8 +1,8 @@
 import csv
 import json
 
-FILE_PATH = "data_fundamentals_modules.csv"
-OUT_FILE_PATH = "./data_fundamentals.json"
+FILE_PATH = "WebDev.csv"
+OUT_FILE_PATH = "./web_dev.json"
 if __name__ == "__main__":
     try:
         with open(FILE_PATH, "r", newline="", encoding="utf-8") as file:
