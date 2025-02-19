@@ -2,8 +2,10 @@ use std::str::FromStr;
 
 use crate::{
     character::{normal::Player3D, vr::PlayerVR},
+    scene_manager::SceneManager,
     scenes::world::WorldScene,
 };
+use cfg_if::cfg_if;
 use godot::{
     classes::{
         display_server::VSyncMode, xr_interface, Button, DisplayServer, IButton, InputEvent, Os,
@@ -55,7 +57,6 @@ const HOVER_COLOR: Color = Color {
 #[derive(GodotClass)]
 #[class(base=Button)]
 struct CustomMenuButton {
-    // tween: Option<Gd<Tween>>,
     #[export(enum = (EnterVR, Enter3D, Tutorial, Options, Credits, Quit))]
     action: i64,
     base: Base<Button>,
@@ -74,7 +75,6 @@ impl IButton for CustomMenuButton {
     fn pressed(&mut self) {
         let mut scene_tree = self.base().get_tree().expect("able to get the scene tree");
         let mut os = Os::singleton();
-
         let mut root_node = scene_tree
             .get_root()
             .unwrap()
@@ -83,69 +83,66 @@ impl IButton for CustomMenuButton {
         let mut title_screen = root_node
             .find_child("TitleScreen".into())
             .expect("custom menu button used outside of title screen");
+        let mut scene_manager = root_node
+            .find_child("SceneManager".into())
+            .expect("SceneManager not present at the root of the scene")
+            .try_cast::<SceneManager>()
+            .expect("path /SceneManager is not a SceneManager!");
+        let mut scene_manager = scene_manager.bind_mut();
 
         match self.get_action().into() {
             Actions::EnterVR => {
-                godot_print!("titlescreen: Attempting to enter using immersive VR.");
-
-                let xr_server = XrServer::singleton();
-                let mut display_server = DisplayServer::singleton();
-                // let xr_interace = xr_server.find_interface("WebXR".into());
-                //
-                // let Some(xr_interface) = xr_interace else {
-                //     os.alert("failed to find web xr interface!".into());
-                //     return;
-                // };
-                // let xr_interface = xr_interface.try_cast::<WebXrInterface>();
-                if os.has_feature("web".into()) {
-                    godot_print!("titlescreen: detected web, trying to find WebXR interface.");
-                    let xr_interace = xr_server.find_interface("WebXR".into());
-                    let Some(xr_interface) = xr_interace else {
-                        os.alert("failed to find web xr interface!".into());
-                        return;
-                    };
-                    let mut xr_interface = xr_interface
-                        .try_cast::<WebXrInterface>()
-                        .expect("should be a webxr interface");
-                    godot_print!("WebXR: Configuring interface");
-                    if !xr_interface.is_initialized() && !xr_interface.initialize() {
-                        os.alert("Could not initialise VR interface!".into());
-                        return;
+                godot_print!("titlescreen: Attempting to enter world using immersive VR.");
+                cfg_if! {
+                    if #[cfg(target_arch = "wasm32")] {
+                        godot_print!("initialising webxr");
+                        scene_manager.init_web_xr();
+                    } else {
+                        godot_print!("initialising openxr");
+                        scene_manager.init_open_xr();
                     }
+                };
 
-                    let base = self.base().to_godot();
-                    self.base_mut().connect(
-                        "is_session_supported".into(),
-                        Callable::from_object_method(&base, "immersive_xr_supported"),
-                    );
-                    xr_interface.set_session_mode("immersive-vr".into());
-                    xr_interface.set_requested_reference_space_types(
-                        "bounded-floor, local-floor, local".into(),
-                    );
-                    xr_interface.set_required_features("local-floor".into());
-                    xr_interface.set_optional_features("bounded-floor, hand-tracking".into());
-
-                    xr_interface.is_session_supported("immersive-vr".into());
-
-                    // display_server.window_set_vsync_mode(VSyncMode::DISABLED);
-                    // let world_scene = load::<PackedScene>("res://scenes/game/world.tscn")
-                    //     .instantiate_as::<WorldScene>();
-                    // let character_vr = load::<PackedScene>("res://scenes/character/character_vr.tscn")
-                    //     .instantiate_as::<PlayerVR>();
-                    //
-                    // let mut player = world_scene.get_node_as::<Node>("Player");
-                    // player.add_child(&character_vr);
-                    //
-                    // root_node.remove_child(title_screen);
-                    // root_node.add_child(world_scene);
-                } else {
-                    godot_print!("titlescreen: detected desktop, trying to find OpenXR interface.");
-                    let xr_interace = xr_server.find_interface("OpenXR".into());
-                    let Some(xr_interface) = xr_interace else {
-                        os.alert("failed to find open xr interface!".into());
-                        return;
-                    };
-                }
+                // let xr_server = XrServer::singleton();
+                // if os.has_feature("web".into()) {
+                //     godot_print!("titlescreen: detected web, trying to find WebXR interface.");
+                //     let xr_interace = xr_server.find_interface("WebXR".into());
+                //     let Some(xr_interface) = xr_interace else {
+                //         os.alert("failed to find web xr interface!".into());
+                //         return;
+                //     };
+                //     let mut xr_interface = xr_interface
+                //         .try_cast::<WebXrInterface>()
+                //         .expect("should be a webxr interface");
+                //     godot_print!("WebXR: Configuring interface");
+                //     if !xr_interface.is_initialized() && !xr_interface.initialize() {
+                //         os.alert("Could not initialise VR interface!".into());
+                //         return;
+                //     }
+                //
+                //     let base = self.base().to_godot();
+                //     self.base_mut().connect(
+                //         "is_session_supported".into(),
+                //         Callable::from_object_method(&base, "immersive_xr_supported"),
+                //     );
+                //     xr_interface.set_session_mode("immersive-vr".into());
+                //     xr_interface.set_requested_reference_space_types(
+                //         "bounded-floor, local-floor, local".into(),
+                //     );
+                //     xr_interface.set_required_features("local-floor".into());
+                //     xr_interface.set_optional_features("bounded-floor, hand-tracking".into());
+                //
+                //     xr_interface.is_session_supported("immersive-vr".into());
+                //
+                //     // display_server.window_set_vsync_mode(VSyncMode::DISABLED);
+                // } else {
+                //     godot_print!("titlescreen: detected desktop, trying to find OpenXR interface.");
+                //     let xr_interace = xr_server.find_interface("OpenXR".into());
+                //     let Some(xr_interface) = xr_interace else {
+                //         os.alert("failed to find open xr interface!".into());
+                //         return;
+                //     };
+                // }
             }
             Actions::Enter3D => {
                 godot_print!("entering as a normal 3d game");
@@ -165,24 +162,37 @@ impl IButton for CustomMenuButton {
             _ => {}
         }
     }
-
-    // fn ready(&mut self) {
-    //     let base = self.base().to_godot();
-    //     self.base_mut().connect(
-    //         "mouse_entered".into(),
-    //         Callable::from_object_method(&base, "mouse_entered"),
-    //     );
-    //     self.base_mut().connect(
-    //         "mouse_exited".into(),
-    //         Callable::from_object_method(&base, "mouse_exited"),
-    //     );
-    // }
 }
 
 #[godot_api]
 impl CustomMenuButton {
     #[func]
     fn immersive_xr_supported(&mut self, session_mode: GString, supported: bool) {
+        if session_mode != "immersive-vr".into() || !supported {
+            return;
+        }
+        let mut scene_tree = self.base().get_tree().expect("able to get the scene tree");
+        let mut os = Os::singleton();
+
+        let mut root_node = scene_tree
+            .get_root()
+            .unwrap()
+            .get_node_as::<Node>("/root/Root");
+
+        let mut title_screen = root_node
+            .find_child("TitleScreen".into())
+            .expect("custom menu button used outside of title screen");
+
+        let xr_server = XrServer::singleton();
+        let xr_interace = xr_server.find_interface("WebXR".into());
+        let Some(xr_interface) = xr_interace else {
+            os.alert("failed to find web xr interface!".into());
+            return;
+        };
+        let mut xr_interface = xr_interface
+            .try_cast::<WebXrInterface>()
+            .expect("should be a webxr interface");
+
         if !xr_interface.is_passthrough_supported() && !xr_interface.start_passthrough() {
             os.alert("Could not start VR passthrough!".into());
             return;
@@ -191,33 +201,16 @@ impl CustomMenuButton {
             .get_viewport()
             .expect("game scene has a viewport")
             .set_use_xr(true);
+
+        let world_scene =
+            load::<PackedScene>("res://scenes/game/world.tscn").instantiate_as::<WorldScene>();
+        let character_vr = load::<PackedScene>("res://scenes/character/character_vr.tscn")
+            .instantiate_as::<PlayerVR>();
+
+        let mut player = world_scene.get_node_as::<Node>("Player");
+        player.add_child(&character_vr);
+
+        root_node.remove_child(title_screen);
+        root_node.add_child(world_scene);
     }
-    // #[func]
-    // fn mouse_entered(&mut self) {
-    //     let tween = self.tween.take().or_else(|| self.base_mut().create_tween());
-    //     let Some(mut tween) = tween else {
-    //         return;
-    //     };
-    //     tween.tween_property(
-    //         self.base_mut().to_godot(),
-    //         "modulate".into(),
-    //         &Variant::from(HOVER_COLOR),
-    //         TRANSITION_DURATION,
-    //     );
-    //     tween.play();
-    // }
-    // #[func]
-    // fn mouse_exited(&mut self) {
-    //     let tween = self.tween.take().or_else(|| self.base_mut().create_tween());
-    //     let Some(mut tween) = tween else {
-    //         return;
-    //     };
-    //     tween.tween_property(
-    //         self.base_mut().to_godot(),
-    //         "modulate".into(),
-    //         &Variant::from(NORMAL_COLOR),
-    //         TRANSITION_DURATION,
-    //     );
-    //     tween.play();
-    // }
 }

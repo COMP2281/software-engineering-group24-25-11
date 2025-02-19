@@ -2,6 +2,7 @@ use godot::init::{gdextension, ExtensionLibrary};
 
 mod character;
 mod menu;
+mod scene_manager;
 mod scenes;
 mod state;
 
