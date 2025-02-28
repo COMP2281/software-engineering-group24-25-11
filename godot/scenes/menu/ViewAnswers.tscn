@@ -1,0 +1,119 @@
+[gd_scene load_steps=7 format=3 uid="uid://h1jvkxp4pd5x"]
+
+[ext_resource type="Script" path="res://scenes/menu/popupmenu.gd" id="1_cy0yy"]
+
+[sub_resource type="Theme" id="Theme_6jkfp"]
+RichTextLabel/font_sizes/normal_font_size = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h8cvx"]
+bg_color = Color(0.597394, 1.08294e-07, 0.0602391, 0.423529)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.207843, 0, 0.00784314, 0.564706)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_size = 3
+shadow_offset = Vector2(3, 3)
+
+[sub_resource type="Theme" id="Theme_q0rxw"]
+Button/font_sizes/font_size = 20
+Button/styles/normal = SubResource("StyleBoxFlat_h8cvx")
+Button/styles/normal_mirrored = null
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4iqs7"]
+bg_color = Color(0.0950706, 0.332818, 0.618699, 0.643137)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.0174236, 0.175864, 0.251208, 1)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+shadow_size = 3
+shadow_offset = Vector2(3, 3)
+
+[sub_resource type="Theme" id="Theme_6yn54"]
+Button/font_sizes/font_size = 20
+Button/styles/normal = SubResource("StyleBoxFlat_4iqs7")
+
+[node name="Popupmenu" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -46.0
+offset_top = -71.0
+offset_right = -46.0
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cy0yy")
+metadata/_edit_vertical_guides_ = [-119.0]
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_left = -591.0
+offset_top = -287.0
+offset_right = 681.0
+offset_bottom = 463.0
+
+[node name="PopupPanel" type="PopupPanel" parent="MarginContainer"]
+auto_translate_mode = 1
+transparent_bg = true
+initial_position = 1
+size = Vector2i(460, 300)
+visible = true
+transparent = true
+min_size = Vector2i(460, 264)
+max_size = Vector2i(460, 300)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PopupPanel"]
+custom_minimum_size = Vector2(400, 400)
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 456.0
+offset_bottom = 652.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/PopupPanel/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_6jkfp")
+text = "Question:"
+fit_content = true
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="MarginContainer/PopupPanel/VBoxContainer"]
+layout_mode = 2
+text = "Answer:"
+fit_content = true
+
+[node name="Exit" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_q0rxw")
+text = "Exit "
+
+[node name="Play again" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_6yn54")
+text = "Play again"
+
+[node name="View correct answers" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_6yn54")
+text = "View Answers"
+
+[node name="Choose another course2" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_6yn54")
+text = "Choose another course"
+
+[connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/Exit" to="." method="_on_exit_pressed"]

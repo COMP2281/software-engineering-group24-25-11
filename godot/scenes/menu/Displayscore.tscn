@@ -1,6 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://bo6waq710o67y"]
+[gd_scene load_steps=19 format=3 uid="uid://bo6waq710o67y"]
 
 [ext_resource type="Script" path="res://scenes/menu/popupmenu.gd" id="1_gfell"]
+[ext_resource type="Script" path="res://scenes/menu/Score.gd" id="2_oh8dv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h7rkg"]
 bg_color = Color(0.889409, 0.227296, 1, 0.341176)
@@ -38,8 +39,88 @@ Label/styles/normal = SubResource("StyleBoxFlat_nhppn")
 [sub_resource type="LabelSettings" id="LabelSettings_si83b"]
 font_size = 60
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4iqs7"]
+bg_color = Color(0.0950706, 0.332818, 0.618699, 0.643137)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.0174236, 0.175864, 0.251208, 1)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+shadow_size = 3
+shadow_offset = Vector2(3, 3)
+
+[sub_resource type="Theme" id="Theme_6yn54"]
+Button/font_sizes/font_size = 20
+Button/styles/normal = SubResource("StyleBoxFlat_4iqs7")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qwk0v"]
+bg_color = Color(0.199911, 0.413945, 0.166983, 0.784314)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.119432, 0.264778, 0.097073, 0.784314)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+shadow_size = 3
+shadow_offset = Vector2(3, 3)
+
+[sub_resource type="Theme" id="Theme_1n1kx"]
+Button/font_sizes/font_size = 20
+Button/styles/normal = SubResource("StyleBoxFlat_qwk0v")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rbbea"]
+bg_color = Color(0.571572, 0.206573, 0.340316, 0.784314)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.339239, 0.105342, 0.191942, 0.784314)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+shadow_size = 3
+shadow_offset = Vector2(3, 3)
+
+[sub_resource type="Theme" id="Theme_qp51a"]
+Button/font_sizes/font_size = 20
+Button/styles/normal = SubResource("StyleBoxFlat_rbbea")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bwjia"]
+bg_color = Color(0.471728, 0.380123, 0.10325, 0.784314)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.348371, 0.27821, 0.0661277, 0.784314)
+border_blend = true
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+corner_detail = 20
+shadow_size = 3
+shadow_offset = Vector2(3, 3)
+
+[sub_resource type="Theme" id="Theme_xwntl"]
+Button/font_sizes/font_size = 20
+Button/styles/normal = SubResource("StyleBoxFlat_bwjia")
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h8cvx"]
-bg_color = Color(0.597394, 1.08294e-07, 0.0602391, 0.423529)
+bg_color = Color(0.944784, 0.000684997, 0.121769, 0.423529)
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
@@ -58,26 +139,6 @@ Button/font_sizes/font_size = 20
 Button/styles/normal = SubResource("StyleBoxFlat_h8cvx")
 Button/styles/normal_mirrored = null
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_drouc"]
-bg_color = Color(0.0950706, 0.332818, 0.618699, 0.643137)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(0.0174236, 0.175864, 0.251208, 1)
-border_blend = true
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
-corner_detail = 20
-shadow_size = 3
-shadow_offset = Vector2(3, 3)
-
-[sub_resource type="Theme" id="Theme_6yn54"]
-Button/font_sizes/font_size = 20
-Button/styles/normal = SubResource("StyleBoxFlat_drouc")
-
 [node name="Popupmenu" type="Control"]
 layout_mode = 3
 anchors_preset = 8
@@ -92,6 +153,7 @@ offset_bottom = -71.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_gfell")
+metadata/_edit_vertical_guides_ = [-119.0]
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 0
@@ -104,11 +166,11 @@ offset_bottom = 463.0
 auto_translate_mode = 1
 transparent_bg = true
 initial_position = 1
-size = Vector2i(460, 260)
+size = Vector2i(460, 350)
 visible = true
 transparent = true
-min_size = Vector2i(460, 260)
-max_size = Vector2i(460, 260)
+min_size = Vector2i(460, 350)
+max_size = Vector2i(460, 350)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PopupPanel"]
 custom_minimum_size = Vector2(400, 400)
@@ -132,20 +194,34 @@ text = "10/15
 "
 label_settings = SubResource("LabelSettings_si83b")
 horizontal_alignment = 1
+script = ExtResource("2_oh8dv")
+
+[node name="Choose another course" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_6yn54")
+text = "Choose another course"
+
+[node name="View correct answers" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_1n1kx")
+text = "View Answers"
+
+[node name="Play Again" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_qp51a")
+text = "Play Again"
+
+[node name="Leaderboard" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_xwntl")
+text = "Leaderboard
+"
 
 [node name="Exit" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
 layout_mode = 2
 theme = SubResource("Theme_q0rxw")
 text = "Exit "
 
-[node name="Play again" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
-layout_mode = 2
-theme = SubResource("Theme_6yn54")
-text = "Play again"
-
-[node name="Play again2" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
-layout_mode = 2
-theme = SubResource("Theme_6yn54")
-text = "Choose another course"
-
+[connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/View correct answers" to="." method="_on_view_answers_pressed"]
+[connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/Play Again" to="." method="_on_play_again_pressed"]
 [connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/Exit" to="." method="_on_exit_pressed"]

@@ -1,78 +1,115 @@
-[gd_scene load_steps=13 format=3 uid="uid://drov7q4fc21jc"]
+[gd_scene load_steps=14 format=3 uid="uid://drov7q4fc21jc"]
 
 [ext_resource type="Script" path="res://scenes/menu/popupmenu.gd" id="1_8rgqo"]
 [ext_resource type="Script" path="res://scenes/menu/Volume.gd" id="2_e21ea"]
 
+[sub_resource type="Theme" id="Theme_4idyd"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qgh0p"]
-bg_color = Color(0.889409, 0.227296, 1, 0.341176)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(0.342893, 0.00021269, 0.394821, 0.341176)
+bg_color = Color(0.03, 0.07, 0.15, 0.92)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 7
+border_width_bottom = 8
+border_color = Color(0, 0.85, 1, 0.7)
 border_blend = true
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 60
-corner_radius_bottom_left = 60
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 corner_detail = 20
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+shadow_color = Color(0, 0.72, 1, 0.4)
 shadow_size = 2
-shadow_offset = Vector2(2, 2)
+shadow_offset = Vector2(5, 2)
 
 [sub_resource type="Theme" id="Theme_3qx8l"]
 Label/styles/normal = SubResource("StyleBoxFlat_qgh0p")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_efnou"]
-bg_color = Color(0.52549, 0.247059, 1, 0.223529)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(0.361872, 0.00161267, 0.74961, 0.223529)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2vd4q"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0.02, 0.06, 0.12, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 6
+border_width_bottom = 7
+border_color = Color(0, 0.75, 0.9, 0.6)
 border_blend = true
-corner_radius_top_left = 50
-corner_radius_top_right = 50
-corner_radius_bottom_right = 50
-corner_radius_bottom_left = 50
-corner_detail = 20
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 1
+shadow_color = Color(4.57242e-07, 0.26161, 0.33567, 0.3)
 shadow_size = 2
-shadow_offset = Vector2(2, 2)
+shadow_offset = Vector2(5, 2)
 
 [sub_resource type="Theme" id="Theme_14cnl"]
-Button/font_sizes/font_size = 20
-Button/styles/normal = SubResource("StyleBoxFlat_efnou")
+Button/font_sizes/font_size = 16
+Button/styles/normal = SubResource("StyleBoxFlat_2vd4q")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lhpkl"]
-bg_color = Color(0.163861, 0.000343509, 0.367426, 0.223529)
+bg_color = Color(0.04, 0.08, 0.15, 0.85)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 7
+border_width_bottom = 8
+border_color = Color(0, 0.75, 0.9, 0.5)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 1
+expand_margin_top = 1.0
+expand_margin_bottom = 1.0
+shadow_size = 2
+shadow_offset = Vector2(5, 2)
 
 [sub_resource type="Theme" id="Theme_j4w1x"]
 Label/font_sizes/font_size = 16
 Label/styles/normal = SubResource("StyleBoxFlat_lhpkl")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hgjbh"]
-bg_color = Color(0.664333, 0.471756, 1, 1)
+bg_color = Color(0, 0.9, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="Theme" id="Theme_6eaq0"]
 HSlider/styles/grabber_area = SubResource("StyleBoxFlat_hgjbh")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_44wlx"]
-bg_color = Color(0.597394, 1.08294e-07, 0.0602391, 0.423529)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(0.207843, 0, 0.00784314, 0.564706)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8qr1j"]
+bg_color = Color(0.15, 0.04, 0.05, 0.9)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 7
+border_width_bottom = 8
+border_color = Color(1, 0.2, 0.1, 0.7)
 border_blend = true
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 1
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+shadow_color = Color(1, 0.2, 0.1, 0.3)
 shadow_size = 2
-shadow_offset = Vector2(2, 2)
+shadow_offset = Vector2(5, 2)
 
 [sub_resource type="Theme" id="Theme_q0rxw"]
-Button/font_sizes/font_size = 20
-Button/styles/normal = SubResource("StyleBoxFlat_44wlx")
+Button/font_sizes/font_size = 16
+Button/styles/normal = SubResource("StyleBoxFlat_8qr1j")
 
 [node name="Popupmenu" type="Control"]
 layout_mode = 3
@@ -99,11 +136,12 @@ offset_bottom = 424.0
 [node name="PopupPanel" type="PopupPanel" parent="MarginContainer"]
 transparent_bg = true
 initial_position = 1
-size = Vector2i(460, 305)
+size = Vector2i(460, 360)
 visible = true
 transparent = true
-min_size = Vector2i(460, 305)
-max_size = Vector2i(460, 305)
+min_size = Vector2i(460, 360)
+max_size = Vector2i(460, 360)
+theme = SubResource("Theme_4idyd")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PopupPanel"]
 custom_minimum_size = Vector2(400, 400)
@@ -111,39 +149,48 @@ offset_left = 4.0
 offset_top = 4.0
 offset_right = 456.0
 offset_bottom = 404.0
+theme_override_constants/separation = 8
 
 [node name="RichTextLabel" type="Label" parent="MarginContainer/PopupPanel/VBoxContainer"]
 layout_mode = 2
 theme = SubResource("Theme_3qx8l")
-text = "Select Course
-"
+text = "SPACEDROID NAVIGATION SYSTEM "
 horizontal_alignment = 1
 
-[node name="AI course" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
+[node name="Course 5" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
 layout_mode = 2
+size_flags_stretch_ratio = 11.76
 theme = SubResource("Theme_14cnl")
-text = "AI Fundamentals"
-
-[node name="Network course" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
-layout_mode = 2
-theme = SubResource("Theme_14cnl")
-text = "Data Fundamentals"
-
-[node name="Course 3" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
-layout_mode = 2
-theme = SubResource("Theme_14cnl")
-text = "Machine Learning"
+text = "Systems"
 
 [node name="Course 4" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
 layout_mode = 2
 theme = SubResource("Theme_14cnl")
 text = "Networking"
 
+[node name="AI course" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_14cnl")
+text = "AI Fundamentals"
+icon_alignment = 1
+
+[node name="Network course" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_stretch_ratio = 0.1
+theme = SubResource("Theme_14cnl")
+text = "Data Fundamentals"
+
+[node name="Course 3" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_stretch_ratio = 11.76
+theme = SubResource("Theme_14cnl")
+text = "Web Dev Fundamentals"
+
 [node name="RichTextLabel2" type="Label" parent="MarginContainer/PopupPanel/VBoxContainer"]
 layout_mode = 2
 theme = SubResource("Theme_j4w1x")
-text = "                                              Volume
-"
+text = "QUANTUM VOLUME POWER"
+horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="HSlider" type="HSlider" parent="MarginContainer/PopupPanel/VBoxContainer"]
@@ -156,13 +203,14 @@ script = ExtResource("2_e21ea")
 [node name="Exit" type="Button" parent="MarginContainer/PopupPanel/VBoxContainer"]
 layout_mode = 2
 theme = SubResource("Theme_q0rxw")
-text = "Exit "
+text = "EMERGENCY SHUTDOWN "
 
 [connection signal="popup_hide" from="MarginContainer/PopupPanel" to="." method="_on_popup_panel_popup_hide"]
-[connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/AI course" to="." method="_on_ai_course_pressed"]
-[connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/Network course" to="." method="_on_networking_course_pressed"]
-[connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/Network course" to="." method="_on_network_course_pressed"]
-[connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/Course 3" to="." method="_on_course_3_pressed"]
+[connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/Course 5" to="." method="_on_course_3_pressed"]
 [connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/Course 4" to="." method="_on_course_4_pressed"]
+[connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/AI course" to="." method="_on_ai_course_pressed"]
+[connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/Network course" to="." method="_on_network_course_pressed"]
+[connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/Network course" to="." method="_on_networking_course_pressed"]
+[connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/Course 3" to="." method="_on_course_3_pressed"]
 [connection signal="value_changed" from="MarginContainer/PopupPanel/VBoxContainer/HSlider" to="MarginContainer/PopupPanel/VBoxContainer/HSlider" method="_on_value_changed"]
 [connection signal="pressed" from="MarginContainer/PopupPanel/VBoxContainer/Exit" to="." method="_on_exit_pressed"]
