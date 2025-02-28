@@ -1,7 +1,7 @@
 [gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://5gb2axv2owie"]
 
-[ext_resource type="Texture2D" uid="uid://cbh7sr8qa0nbw" path="res://assets/stone_marble/skcxcfhc_8K_Albedo.jpg" id="1_r1cpc"]
-[ext_resource type="Texture2D" uid="uid://qg8ca1r602kn" path="res://assets/stone_marble/skcxcfhc_8K_Roughness.jpg" id="2_qpq6p"]
+[ext_resource type="Texture2D" uid="uid://cbh7sr8qa0nbw" path="res://assets/stone_marble/albedo.jpg" id="1_r1cpc"]
+[ext_resource type="Texture2D" uid="uid://qg8ca1r602kn" path="res://assets/stone_marble/roughness.jpg" id="2_qpq6p"]
 
 [resource]
 albedo_texture = ExtResource("1_r1cpc")

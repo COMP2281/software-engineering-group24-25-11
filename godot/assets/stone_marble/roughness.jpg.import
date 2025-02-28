@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://qg8ca1r602kn"
-path.s3tc="res://.godot/imported/skcxcfhc_8K_Roughness.jpg-927cb8799e4bba6c88f3bb889585da4c.s3tc.ctex"
-path.etc2="res://.godot/imported/skcxcfhc_8K_Roughness.jpg-927cb8799e4bba6c88f3bb889585da4c.etc2.ctex"
+path.s3tc="res://.godot/imported/roughness.jpg-f39e1f6811857c5841a586505af5c942.s3tc.ctex"
+path.etc2="res://.godot/imported/roughness.jpg-f39e1f6811857c5841a586505af5c942.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/stone_marble/skcxcfhc_8K_Roughness.jpg"
-dest_files=["res://.godot/imported/skcxcfhc_8K_Roughness.jpg-927cb8799e4bba6c88f3bb889585da4c.s3tc.ctex", "res://.godot/imported/skcxcfhc_8K_Roughness.jpg-927cb8799e4bba6c88f3bb889585da4c.etc2.ctex"]
+source_file="res://assets/stone_marble/roughness.jpg"
+dest_files=["res://.godot/imported/roughness.jpg-f39e1f6811857c5841a586505af5c942.s3tc.ctex", "res://.godot/imported/roughness.jpg-f39e1f6811857c5841a586505af5c942.etc2.ctex"]
 
 [params]
 

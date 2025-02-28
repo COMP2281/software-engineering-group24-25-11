@@ -1,7 +1,9 @@
 use godot::classes::{
-    CharacterBody3D, ICharacterBody3D, InputEvent, InputEventMouseMotion, XrCamera3D, XrOrigin3D,
+    CharacterBody3D, ICharacterBody3D, InputEvent, InputEventMouseMotion, RayCast3D,
 };
 use godot::prelude::*;
+
+use crate::scenes::question_panel::QuestionPanel;
 
 #[derive(GodotClass)]
 #[class(base=CharacterBody3D)]
@@ -15,55 +17,87 @@ const JUMP_IMPULSE: f64 = 5.;
 const SENSITIVITY: f64 = 0.001;
 
 #[godot_api]
+impl PlayerVR {
+    #[func]
+    fn ray_cast(&mut self) {
+        // this raycast is masked to collision layer 8, which only the quiz
+        // buttons are attached to. Therefore any collisions means we are
+        // looking at a button on the quiz panel.
+        let ray_cast = self.base().get_node_as::<RayCast3D>("Head/RayCast3D");
+        let Some(collider) = ray_cast.get_collider() else {
+            return;
+        };
+        let scene_tree = self
+            .base()
+            .get_tree()
+            .expect("character is in the scene tree");
+
+        let Some(mut panel) = QuestionPanel::find_panel(scene_tree) else {
+            godot_print!("raycast: could not find question panel");
+            return;
+        };
+
+        let input = Input::singleton();
+        panel.bind_mut().set_looking_at(collider);
+        if input.is_action_pressed(&StringName::from("interact")) {
+            panel.bind_mut().handle_click();
+        };
+    }
+}
+
+#[godot_api]
 impl ICharacterBody3D for PlayerVR {
     fn init(base: Base<CharacterBody3D>) -> Self {
-        // let mut camera = res.base().get_node_as::<XrCamera3D>("XrCamera3D");
-        // camera.set_current(true);
-        godot_print!("VR Character created...");
+        godot_print!("VR character created...");
         Self { base }
     }
-
     fn physics_process(&mut self, delta: f64) {
         let input = Input::singleton();
         // 2D direction input for horizontal movement
         let horizontal_input = input.get_vector(
-            "move_left".into(),
-            "move_right".into(),
-            "move_forward".into(),
-            "move_back".into(),
+            &StringName::from("move_left"),
+            &StringName::from("move_right"),
+            &StringName::from("move_forward"),
+            &StringName::from("move_back"),
         );
-        let pivot = self.base().get_node_as::<Node3D>("Pivot");
-        let direction =
-            pivot.get_basis() * Vector3::new(horizontal_input.x, 0., horizontal_input.y);
+        let head = self.base().get_node_as::<Node3D>("Head");
+        let direction = (head.get_basis()
+            * Vector3::new(horizontal_input.x, 0., horizontal_input.y))
+        .normalized_or_zero();
 
-        let mut velocity: Vector3 = direction.normalized_or_zero() * MOVEMENT_SPEED as f32;
+        let mut velocity: Vector3 = Vector3::new(
+            direction.x * MOVEMENT_SPEED as f32,
+            0.,
+            direction.z * MOVEMENT_SPEED as f32,
+        );
 
-        if input.is_action_pressed("jump".into()) && self.base().is_on_floor() {
-            velocity.y = JUMP_IMPULSE as f32;
-        }
         if !self.base().is_on_floor() {
             velocity.y = self.base().get_velocity().y - (GRAVITY * delta) as f32;
+        } else if input.is_action_pressed(&StringName::from("jump")) {
+            velocity.y = JUMP_IMPULSE as f32;
         }
 
         self.base_mut().set_velocity(velocity);
         self.base_mut().move_and_slide();
     }
-
+    fn ready(&mut self) {
+        let mut camera = self.base().get_node_as::<Camera3D>("Head/Camera3D");
+        camera.set_current(true);
+    }
     fn unhandled_input(&mut self, event: Gd<InputEvent>) {
+        // In the web, we want to recapture the mouse if it has been uncaptured,
+        // but only when the user clicks back into the game. Likewise, we should
+        // also only respond to mouse events if the mouse is captured.
         let ev = event.try_cast::<InputEventMouseMotion>();
         if let Ok(motion) = ev {
-            let mut pivot = self.base().get_node_as::<Node3D>("Pivot");
-            let mut camera = pivot.get_node_as::<Camera3D>("Camera3D");
+            let mut head = self.base().get_node_as::<Node3D>("Head");
             let rel = -motion.get_relative() * SENSITIVITY as f32;
-            //let mut pivot_rot = pivot.get_rotation();
-            //pivot_rot.y = (pivot_rot.y + rel.x).clamp(0., std::f32::consts::PI);
-            //pivot.set_rotation(pivot_rot);
-            pivot.rotate_y(rel.x);
-            let mut camera_rot = camera.get_rotation();
-            camera_rot.x = (camera_rot.x + rel.y)
+            let mut head_rot = head.get_rotation();
+            head_rot.y += rel.x;
+            head_rot.x = (head_rot.x + rel.y)
                 .clamp(-std::f32::consts::FRAC_PI_2, std::f32::consts::FRAC_PI_2);
-            camera.set_rotation(camera_rot);
-            //camera.rotate_x(rel.y);
+            head.set_rotation(head_rot);
         }
+        self.ray_cast();
     }
 }

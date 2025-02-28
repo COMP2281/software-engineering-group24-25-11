@@ -8,11 +8,11 @@ enum InputMethod {
     VR,
 }
 
-#[derive(Debug)]
-struct SessionState {
-    input_method: InputMethod,
-    course: String,
-}
+// #[derive(Debug)]
+// struct SessionState {
+//     input_method: InputMethod,
+//     course: String,
+// }
 
 #[derive(GodotClass, Debug)]
 #[class(init, base=Node)]

@@ -1,19 +1,17 @@
+#[cfg(target_arch = "wasm32")]
+use godot::classes::WebXrInterface;
+#[cfg(not(target_arch = "wasm32"))]
+use godot::classes::XrInterface;
 use godot::{
-    classes::{Control, WebXrInterface, XrInterface, XrServer},
+    classes::{Control, XrServer},
     prelude::*,
 };
 
-use crate::{
-    character::{normal::Player3D, vr::PlayerVR},
-    scenes::world::WorldScene,
-};
+use crate::{character::vr::PlayerVR, scenes::world::WorldScene};
 
 #[derive(GodotClass)]
 #[class(init, base=Node)]
 pub struct SceneManager {
-    title_screen: Option<Gd<Node>>,
-    world_scene: Option<Gd<WorldScene>>,
-
     #[cfg(not(target_arch = "wasm32"))]
     xr_interface: Option<Gd<XrInterface>>,
     #[cfg(target_arch = "wasm32")]
@@ -49,14 +47,14 @@ impl SceneManager {
         let character_vr = load::<PackedScene>("res://scenes/character/character_vr.tscn")
             .instantiate_as::<PlayerVR>();
 
-        if let Some(title_screen) = root_node.find_child("TitleScreen".into()) {
-            root_node.remove_child(title_screen);
+        if let Some(title_screen) = root_node.find_child(&GString::from("TitleScreen")) {
+            root_node.remove_child(&title_screen);
         }
 
-        if root_node.find_child("WorldScene".into()).is_none() {
+        if root_node.find_child(&GString::from("WorldScene")).is_none() {
             let mut player = world_scene.get_node_as::<Node>("Player");
             player.add_child(&character_vr);
-            root_node.add_child(world_scene);
+            root_node.add_child(&world_scene);
         }
 
         root_node
@@ -74,11 +72,14 @@ impl SceneManager {
         let title_scene =
             load::<PackedScene>("res://scenes/menu/title.tscn").instantiate_as::<Control>();
 
-        if let Some(world_scene) = root_node.find_child("WorldScene".into()) {
-            root_node.remove_child(world_scene);
+        if let Some(world_scene) = root_node.find_child(&GString::from("WorldScene")) {
+            root_node.remove_child(&world_scene);
         }
-        if root_node.find_child("TitleScreen".into()).is_none() {
-            root_node.add_child(title_scene);
+        if root_node
+            .find_child(&GString::from("TitleScreen"))
+            .is_none()
+        {
+            root_node.add_child(&title_scene);
         }
         root_node
             .get_viewport()
@@ -89,7 +90,7 @@ impl SceneManager {
     #[func]
     #[cfg(not(target_arch = "wasm32"))]
     pub fn init_open_xr(&mut self) {
-        let xr_interface = XrServer::singleton().find_interface("WebXR".into());
+        let xr_interface = XrServer::singleton().find_interface(&GString::from("OpenXR"));
         let Some(xr_interface) = xr_interface else {
             return;
         };
@@ -100,13 +101,11 @@ impl SceneManager {
     #[func]
     #[cfg(target_arch = "wasm32")]
     pub fn init_web_xr(&mut self) {
-        use godot::classes::web_xr_interface;
-
         let mut os = godot::classes::Os::singleton();
 
-        os.alert("initialising webxr 2".into());
-        let xr_interface = XrServer::singleton().find_interface("WebXR".into());
-        let Some(mut xr_interface) = xr_interface else {
+        os.alert(&GString::from("initialising webxr 2"));
+        let xr_interface = XrServer::singleton().find_interface(&GString::from("WebXR"));
+        let Some(xr_interface) = xr_interface else {
             return;
         };
         let mut webxr_interface = xr_interface
@@ -120,22 +119,23 @@ impl SceneManager {
         let session_started = self.base().callable("webxr_session_started");
         let session_ended = self.base().callable("webxr_session_ended");
         let session_failed = self.base().callable("webxr_session_failed");
-        webxr_interface.connect("session_supported".into(), session_supported);
-        webxr_interface.connect("session_started".into(), session_started);
-        webxr_interface.connect("session_ended".into(), session_ended);
-        webxr_interface.connect("session_failed".into(), session_failed);
+        webxr_interface.connect(&StringName::from("session_supported"), &session_supported);
+        webxr_interface.connect(&StringName::from("session_started"), &session_started);
+        webxr_interface.connect(&StringName::from("session_ended"), &session_ended);
+        webxr_interface.connect(&StringName::from("session_failed"), &session_failed);
 
-        os.alert("Configuring webxr interface".into());
+        os.alert(&GString::from("Configuring webxr interface"));
 
-        webxr_interface.is_session_supported("immersive-vr".into());
-        webxr_interface
-            .set_requested_reference_space_types("bounded-floor, local-floor, local".into());
-        webxr_interface.set_required_features("local-floor".into());
-        webxr_interface.set_optional_features("bounded-floor, hand-tracking".into());
+        webxr_interface.is_session_supported(&GString::from("immersive-vr"));
+        webxr_interface.set_requested_reference_space_types(&GString::from(
+            "bounded-floor, local-floor, local",
+        ));
+        webxr_interface.set_required_features(&GString::from("local-floor"));
+        webxr_interface.set_optional_features(&GString::from("bounded-floor, hand-tracking"));
 
         if !webxr_interface.is_initialized() && !webxr_interface.initialize() {
             godot_print!("failed to initialise webxr interface, exiting...");
-            os.alert("Could not initialise VR interface!".into());
+            os.alert(&GString::from("Could not initialise VR interface!"));
             return;
         }
     }
@@ -151,11 +151,11 @@ impl SceneManager {
         let Some(ref mut webxr_interface) = self.webxr_interface else {
             return;
         };
-        webxr_interface.set_session_mode("immersive-vr".into());
+        webxr_interface.set_session_mode(&GString::from("immersive-vr"));
 
         godot_print!("immersive-vr is supported in this session");
         let mut os = godot::classes::Os::singleton();
-        os.alert("session supported".into());
+        os.alert(&GString::from("session supported"));
     }
     #[func]
     #[cfg(target_arch = "wasm32")]
@@ -179,7 +179,10 @@ impl SceneManager {
     #[cfg(target_arch = "wasm32")]
     fn webxr_session_failed(&mut self, message: GString) {
         let mut os = godot::classes::Os::singleton();
-        os.alert(format!("failed to start webxr session: {}", message).into());
+        os.alert(&GString::from(format!(
+            "failed to start webxr session: {}",
+            message
+        )));
         godot_warn!("failed to start webxr session: {}", message);
 
         if let Some(ref mut webxr_interface) = self.webxr_interface {

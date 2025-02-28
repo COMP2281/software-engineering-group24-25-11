@@ -3,8 +3,8 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://jwe438nwefty"
-path.s3tc="res://.godot/imported/skcxcfhc_8K_Normal.jpg-bd67314923d0082db8264dc1fc7570fa.s3tc.ctex"
-path.etc2="res://.godot/imported/skcxcfhc_8K_Normal.jpg-bd67314923d0082db8264dc1fc7570fa.etc2.ctex"
+path.s3tc="res://.godot/imported/normal.jpg-fc105435008ee2e1f2efd0501eb14837.s3tc.ctex"
+path.etc2="res://.godot/imported/normal.jpg-fc105435008ee2e1f2efd0501eb14837.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://assets/stone_marble/skcxcfhc_8K_Normal.jpg"
-dest_files=["res://.godot/imported/skcxcfhc_8K_Normal.jpg-bd67314923d0082db8264dc1fc7570fa.s3tc.ctex", "res://.godot/imported/skcxcfhc_8K_Normal.jpg-bd67314923d0082db8264dc1fc7570fa.etc2.ctex"]
+source_file="res://assets/stone_marble/normal.jpg"
+dest_files=["res://.godot/imported/normal.jpg-fc105435008ee2e1f2efd0501eb14837.s3tc.ctex", "res://.godot/imported/normal.jpg-fc105435008ee2e1f2efd0501eb14837.etc2.ctex"]
 
 [params]
 
