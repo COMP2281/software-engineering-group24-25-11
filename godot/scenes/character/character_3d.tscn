@@ -1,10 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://b8g4tl3qnvhoh"]
+[gd_scene load_steps=4 format=3 uid="uid://b8g4tl3qnvhoh"]
+
+[ext_resource type="Texture2D" uid="uid://dxmrucg1n38ow" path="res://assets/crosshair.png" id="1_f1gj0"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_kj8wx"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_sa7k6"]
 
 [node name="Player3D" type="Player3D"]
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer"]
+layout_mode = 2
+texture = ExtResource("1_f1gj0")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_kj8wx")
@@ -20,5 +35,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 current = true
 
 [node name="RayCast3D" type="RayCast3D" parent="Head"]
-target_position = Vector3(0, 0, -10)
+target_position = Vector3(0, 0, -25)
 collision_mask = 128

@@ -43,7 +43,7 @@ impl Player3D {
 
         let input = Input::singleton();
         panel.bind_mut().set_looking_at(collider);
-        if input.is_action_pressed(&StringName::from("interact")) {
+        if input.is_action_just_pressed(&StringName::from("interact")) {
             panel.bind_mut().handle_click();
         };
     }

@@ -165,6 +165,9 @@ impl QuestionPanel {
     /// the answer was correct.
     #[func]
     pub fn submit(&mut self) {
+        if self.currently_selected.len() == 0 {
+            return;
+        }
         let scene_tree = self
             .base()
             .get_tree()

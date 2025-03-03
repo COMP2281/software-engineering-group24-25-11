@@ -7,7 +7,10 @@ use godot::{
     prelude::*,
 };
 
-use crate::{character::vr::PlayerVR, scenes::world::WorldScene};
+use crate::{
+    character::{normal::Player3D, vr::PlayerVR},
+    scenes::world::WorldScene,
+};
 
 #[derive(GodotClass)]
 #[class(init, base=Node)]
@@ -189,6 +192,34 @@ impl SceneManager {
             webxr_interface.uninitialize();
             self.webxr_interface = None
         }
+    }
+    #[func]
+    pub fn init_3d(&mut self) {
+        // FIXME: move resource paths into const file
+        let scene_tree = self.base().get_tree().expect("able to get the scene tree");
+        let world_scene =
+            load::<PackedScene>("res://scenes/game/world.tscn").instantiate_as::<WorldScene>();
+        let character_3d = load::<PackedScene>("res://scenes/character/character_3d.tscn")
+            .instantiate_as::<Player3D>();
+
+        let mut player = world_scene.get_node_as::<Node>("Player");
+        player.add_child(&character_3d);
+
+        self.swap_scene(world_scene.upcast());
+
+        godot_print!("Done entering");
+    }
+
+    #[func]
+    fn swap_scene(&mut self, scene: Gd<Node>) {
+        let mut root_node = self.get_root();
+        if let Some(world_scene) = root_node.find_child(&GString::from("WorldScene")) {
+            root_node.remove_child(&world_scene);
+        }
+        if let Some(title_screen) = root_node.find_child(&GString::from("TitleScreen")) {
+            root_node.remove_child(&title_screen);
+        }
+        root_node.add_child(&scene);
     }
     // #[func]
     // fn switch_to_world(&self, is_vr: bool) {
