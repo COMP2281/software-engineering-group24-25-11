@@ -37,6 +37,12 @@ godot:
 @dev:
     watchexec -r -w rust just rust-debug
 
+@dev-release:
+    watchexec -r -w rust just rust-release
+
+@dev-all:
+    watchexec -r -w rust just rust-debug rust-release
+
 rust-debug:
     cd rust; cargo +nightly build -Zbuild-std
     cd rust; cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten
@@ -76,8 +82,8 @@ release: release-web
     rm -rf "{{EMSDK_PATH}}"
     mkdir -p "{{DEPS_PATH}}"
     cd {{DEPS_PATH}} && git clone https://github.com/emscripten-core/emsdk.git
-    cd {{EMSDK_PATH}} && ./emsdk install 3.1.66
-    cd {{EMSDK_PATH}} && ./emsdk activate 3.1.66
+    cd {{EMSDK_PATH}} && ./emsdk install 3.1.74
+    cd {{EMSDK_PATH}} && ./emsdk activate 3.1.74
     echo -e "{{BOLD+YELLOW}}Installed emscripten successfully.{{NORMAL}}"
 
 [windows]
@@ -85,8 +91,8 @@ release: release-web
     Write-Host "Installing emscripten..." -ForegroundColor Yellow
     New-Item -ItemType Directory -Path "{{DEPS_PATH}}" -Force | Out-Null
     git clone https://github.com/emscripten-core/emsdk.git "{{EMSDK_PATH}}"
-    {{join(EMSDK_PATH, "emsdk.ps1")}} install 3.1.66
-    {{join(EMSDK_PATH, "emsdk.ps1")}} activate 3.1.66
+    {{join(EMSDK_PATH, "emsdk.ps1")}} install 3.1.74
+    {{join(EMSDK_PATH, "emsdk.ps1")}} activate 3.1.74
     Write-Host "Installed emscripten successfully." -ForegroundColor Yellow
 
 [windows]

@@ -19,6 +19,7 @@ const MOVEMENT_SPEED: f64 = 5.;
 const GRAVITY: f64 = 9.8;
 const JUMP_IMPULSE: f64 = 5.;
 const SENSITIVITY: f64 = 0.001;
+const JOYSTICK_SENSITIVITY: f64 = 0.025;
 
 #[godot_api]
 impl Player3D {
@@ -64,7 +65,7 @@ impl ICharacterBody3D for Player3D {
             &StringName::from("move_forward"),
             &StringName::from("move_back"),
         );
-        let head = self.base().get_node_as::<Node3D>("Head");
+        let mut head = self.base().get_node_as::<Node3D>("Head");
         let direction = (head.get_basis()
             * Vector3::new(horizontal_input.x, 0., horizontal_input.y))
         .normalized_or_zero();
@@ -83,6 +84,22 @@ impl ICharacterBody3D for Player3D {
 
         self.base_mut().set_velocity(velocity);
         self.base_mut().move_and_slide();
+
+        // handle joystick looking
+        let rel = input.get_vector(
+            &StringName::from("look_left"),
+            &StringName::from("look_right"),
+            &StringName::from("look_forward"),
+            &StringName::from("look_back"),
+        );
+        let rel = -rel * JOYSTICK_SENSITIVITY as f32;
+        // let relabs = rel.abs();
+        // let rel = Vector2::new(relabs.x.powi(3), relabs.y.powi(3)) * rel.sign();
+        let mut head_rot = head.get_rotation();
+        head_rot.y += rel.x;
+        head_rot.x =
+            (head_rot.x + rel.y).clamp(-std::f32::consts::FRAC_PI_2, std::f32::consts::FRAC_PI_2);
+        head.set_rotation(head_rot);
     }
     fn ready(&mut self) {
         let mut camera = self.base().get_node_as::<Camera3D>("Head/Camera3D");

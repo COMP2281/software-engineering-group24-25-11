@@ -3,14 +3,20 @@ rustflags = ["-Z", "unstable-options"]
 
 
 [target.wasm32-unknown-emscripten]
+# rustflags = [
+#   "-Ctarget-feature=+atomics,+bulk-memory,+mutable-globals",
+#   "-Zlink-native-libraries=no",
+#   "-Clink-arg=-fwasm-exceptions",
+#   "-Clink-args=-sSUPPORT_LONGJMP=wasm",
+#   "-Cllvm-args=-enable-emscripten-cxx-exceptions=0",
+#   "-Cllvm-args=-wasm-enable-sjlj",
+#   "-Clink-args=-sDISABLE_EXCEPTION_CATCHING=1",
+# ]
+# TODO: cleanup
 rustflags = [
   "-Clink-args=-sSIDE_MODULE=2",
   "-Clink-args=-pthread",
   "-Ctarget-feature=+atomics,+bulk-memory,+mutable-globals",
   "-Zlink-native-libraries=no",
-  "-Clink-arg=-fwasm-exceptions",
-  "-Clink-args=-sSUPPORT_LONGJMP=wasm",
   "-Cllvm-args=-enable-emscripten-cxx-exceptions=0",
-  "-Cllvm-args=-wasm-enable-sjlj",
-  "-Clink-args=-sDISABLE_EXCEPTION_CATCHING=1",
 ]

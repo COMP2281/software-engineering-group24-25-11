@@ -1,24 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://d0ib61j4007ft"]
+[gd_scene load_steps=5 format=3 uid="uid://d0ib61j4007ft"]
 
-[ext_resource type="Texture2D" uid="uid://6y1akdum45yy" path="res://assets/skybox.hdr" id="1_cc87h"]
+[ext_resource type="Texture2D" uid="uid://bhos422jd8qde" path="res://assets/skybox.webp" id="1_13ukm"]
+[ext_resource type="PackedScene" uid="uid://drov7q4fc21jc" path="res://scenes/menu/course_selection.tscn" id="2_fqxnr"]
+[ext_resource type="Theme" uid="uid://7hhvlf8d7bt" path="res://assets/course_select_button.tres" id="2_hc8f3"]
+[ext_resource type="Theme" uid="uid://cwb7hmd5nwlic" path="res://assets/red_button.tres" id="3_6s72b"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dwe35"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bfym3"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_27sr5"]
-
-[sub_resource type="Theme" id="Theme_xrvxu"]
-Button/colors/font_color = Color(1.5, 1.5, 1.5, 1)
-Button/colors/font_hover_color = Color(4, 4, 4, 1)
-Button/font_sizes/font_size = 32
-Button/styles/focus = SubResource("StyleBoxEmpty_dwe35")
-Button/styles/hover = SubResource("StyleBoxEmpty_bfym3")
-Button/styles/normal = SubResource("StyleBoxEmpty_27sr5")
-
-[node name="Node" type="Node"]
-
-[node name="UI" type="Control" parent="."]
+[node name="TitleScreen" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,18 +13,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextureRect" type="TextureRect" parent="UI"]
+[node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_cc87h")
+texture = ExtResource("1_13ukm")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="MarginContainer" type="MarginContainer" parent="UI"]
+[node name="MainMenu" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.410547
@@ -49,41 +36,51 @@ grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenu"]
 layout_mode = 2
+alignment = 1
 
-[node name="PlayVR" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
+[node name="PlayVR" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
 physics_interpolation_mode = 0
 layout_mode = 2
-theme = SubResource("Theme_xrvxu")
+theme = ExtResource("2_hc8f3")
 text = "Play (VR)"
 
-[node name="Play3D" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Play3D" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
 action = 1
 physics_interpolation_mode = 0
 layout_mode = 2
+theme = ExtResource("2_hc8f3")
 text = "Play (3D)"
 
-[node name="Tutorial" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Tutorial" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
 action = 2
 physics_interpolation_mode = 0
 layout_mode = 2
+theme = ExtResource("2_hc8f3")
 text = "Tutorial"
 
-[node name="Options" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Options" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
 action = 3
 physics_interpolation_mode = 0
 layout_mode = 2
+theme = ExtResource("2_hc8f3")
 text = "Options"
 
-[node name="Credits" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Credits" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
 action = 4
 physics_interpolation_mode = 0
 layout_mode = 2
+theme = ExtResource("2_hc8f3")
 text = "Credits"
 
-[node name="Quit" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Quit" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
 action = 5
 physics_interpolation_mode = 0
 layout_mode = 2
+theme = ExtResource("3_6s72b")
 text = "Quit"
+
+[node name="CourseSelection" parent="." instance=ExtResource("2_fqxnr")]
+visible = false
+layout_mode = 1

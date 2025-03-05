@@ -29,11 +29,11 @@ pub struct QuestionPanel {
     base: Base<StaticBody3D>,
 }
 
-const BUTTON_SIZE: Vector3 = Vector3::new(5.9, 0.5, 0.4);
+const BUTTON_SIZE: Vector3 = Vector3::new(8.9, 0.5, 0.4);
 const BUTTON_SPACER: f32 = 0.1;
-const PANEL_SIZE: Vector3 = Vector3::new(8., BUTTON_SIZE.y * 12., 0.2);
+const PANEL_SIZE: Vector3 = Vector3::new(10., BUTTON_SIZE.y * 12., 0.2);
 // by default, one pixel = 0.005m
-const TEXT_WIDTH_PX: f32 = 7. / 0.005;
+const TEXT_WIDTH_PX: f32 = 8.5 / 0.005;
 
 const SUBMIT_TEXT: &str = "Submit";
 
@@ -60,8 +60,7 @@ impl QuestionPanel {
         let mut panel_mesh = MeshInstance3D::new_alloc();
         let mut panel_collision = CollisionShape3D::new_alloc();
 
-        let hot_blued_steel =
-            load::<StandardMaterial3D>("res://assets/hot_blued_steel/hot_blued_steel.tres");
+        let hot_blued_steel = load::<StandardMaterial3D>(crate::resources::MAT_HOT_BLUED_STEEL);
 
         let mut panel_mesh_inner = BoxMesh::new_gd();
         panel_mesh_inner.set_size(PANEL_SIZE);
@@ -97,7 +96,7 @@ impl QuestionPanel {
 
     #[func]
     fn add_choices(&mut self) {
-        let gold = load::<StandardMaterial3D>("res://assets/gold/gold.tres");
+        let gold = load::<StandardMaterial3D>(crate::resources::MAT_COPPER);
         for (idx, choice) in self.choices.clone().iter_shared().enumerate() {
             let mut btn = self.create_button(gold.clone(), choice, BUTTON_SIZE);
 
@@ -113,7 +112,7 @@ impl QuestionPanel {
     }
     #[func]
     fn add_submit_button(&mut self) {
-        let gold = load::<StandardMaterial3D>("res://assets/copper/copper.tres");
+        let gold = load::<StandardMaterial3D>(crate::resources::MAT_GOLD);
         let mut btn = self.create_button(gold, SUBMIT_TEXT.into(), BUTTON_SIZE);
 
         btn.set_position(Vector3::new(0., -(PANEL_SIZE.y / 2.) + 1., 0.));
@@ -165,7 +164,7 @@ impl QuestionPanel {
     /// the answer was correct.
     #[func]
     pub fn submit(&mut self) {
-        if self.currently_selected.len() == 0 {
+        if self.currently_selected.len() != self.correct_answers.len() {
             return;
         }
         let scene_tree = self
@@ -211,10 +210,35 @@ impl QuestionPanel {
             self.submit();
         } else {
             if self.currently_selected.len() >= self.correct_answers.len() {
-                self.currently_selected.pop_front();
+                let removed = self.currently_selected.pop_front();
+                if let Some(removed) = removed {
+                    let empty = load::<StandardMaterial3D>(crate::resources::MAT_EMPTY);
+                    self.button_objects
+                        .get(removed as usize)
+                        .unwrap()
+                        .try_cast::<AnimatableBody3D>()
+                        .unwrap()
+                        .get_child(0)
+                        .unwrap()
+                        .try_cast::<MeshInstance3D>()
+                        .unwrap()
+                        .set_material_override(&empty);
+                }
             }
             godot_print!("currently selecte {looking_at}");
             self.currently_selected.push(looking_at);
+
+            let empty = load::<StandardMaterial3D>(crate::resources::MAT_SELECTED);
+            self.button_objects
+                .get(looking_at as usize)
+                .unwrap()
+                .try_cast::<AnimatableBody3D>()
+                .unwrap()
+                .get_child(0)
+                .unwrap()
+                .try_cast::<MeshInstance3D>()
+                .unwrap()
+                .set_material_override(&empty);
         }
     }
 

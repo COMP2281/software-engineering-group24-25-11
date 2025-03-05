@@ -1,0 +1,78 @@
+[gd_scene load_steps=11 format=3 uid="uid://2w5gc5p42ju4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j4vfv"]
+size = Vector3(30, 4, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_0cv2e"]
+size = Vector3(30, 4, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5mde0"]
+size = Vector3(13, 7, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_un2ih"]
+size = Vector3(13, 7, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_exhv2"]
+size = Vector3(13, 7, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_dxbu1"]
+size = Vector3(13, 7, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hedmc"]
+size = Vector3(4, 6, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cni8j"]
+size = Vector3(4, 6, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_v7o6f"]
+size = Vector3(4, 1, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ij5l8"]
+size = Vector3(4, 1, 0.5)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Upper" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Upper"]
+shape = SubResource("BoxShape3D_j4vfv")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Upper"]
+mesh = SubResource("BoxMesh_0cv2e")
+
+[node name="LowerLeft" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LowerLeft"]
+shape = SubResource("BoxShape3D_5mde0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LowerLeft"]
+mesh = SubResource("BoxMesh_un2ih")
+
+[node name="LowerRight" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LowerRight"]
+shape = SubResource("BoxShape3D_exhv2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LowerRight"]
+mesh = SubResource("BoxMesh_dxbu1")
+
+[node name="Door" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Door"]
+shape = SubResource("BoxShape3D_hedmc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Door"]
+mesh = SubResource("BoxMesh_cni8j")
+
+[node name="DoorFloor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorFloor"]
+shape = SubResource("BoxShape3D_v7o6f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="DoorFloor"]
+mesh = SubResource("BoxMesh_ij5l8")

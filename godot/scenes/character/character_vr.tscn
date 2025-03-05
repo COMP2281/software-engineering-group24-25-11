@@ -1,4 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://d3sbdxrh3jdyt"]
+[gd_scene load_steps=5 format=3 uid="uid://d3sbdxrh3jdyt"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_fc3ea"]
+radius = 0.05
+height = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kn6nv"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qkuf8"]
+material = SubResource("StandardMaterial3D_kn6nv")
+top_radius = 0.01
+bottom_radius = 0.01
+height = 25.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ld6cf"]
 
@@ -8,15 +21,37 @@
 current = true
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 current = true
 
-[node name="LeftController" type="XRController3D" parent="XROrigin3D"]
+[node name="LeftController" type="VRController" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0, 0)
 tracker = &"left_hand"
 show_when_tracked = true
 
-[node name="RightController" type="XRController3D" parent="XROrigin3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/LeftController"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_fc3ea")
+
+[node name="RightController" type="VRController" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0)
 tracker = &"right_hand"
+pose = &"aim"
 show_when_tracked = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/RightController"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_fc3ea")
+skeleton = NodePath("../../LeftController")
+
+[node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/RightController"]
+target_position = Vector3(0, 0, -25)
+collision_mask = 128
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="XROrigin3D/RightController/RayCast3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, -12.5)
+mesh = SubResource("CylinderMesh_qkuf8")
+skeleton = NodePath("../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_ld6cf")

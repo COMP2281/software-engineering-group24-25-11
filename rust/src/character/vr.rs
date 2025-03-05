@@ -1,12 +1,14 @@
+use godot::classes::xr_positional_tracker::TrackerHand;
 use godot::classes::{
-    CharacterBody3D, ICharacterBody3D, InputEvent, InputEventMouseMotion, RayCast3D,
+    CharacterBody3D, ICharacterBody3D, IXrController3D, InputEvent, RayCast3D, XrCamera3D,
+    XrController3D,
 };
 use godot::prelude::*;
 
 use crate::scenes::question_panel::QuestionPanel;
 
 #[derive(GodotClass)]
-#[class(base=CharacterBody3D)]
+#[class(init, base=CharacterBody3D)]
 pub struct PlayerVR {
     base: Base<CharacterBody3D>,
 }
@@ -14,7 +16,7 @@ pub struct PlayerVR {
 const MOVEMENT_SPEED: f64 = 5.;
 const GRAVITY: f64 = 9.8;
 const JUMP_IMPULSE: f64 = 5.;
-const SENSITIVITY: f64 = 0.001;
+const JOYSTICK_SENSITIVITY: f64 = 0.025;
 
 #[godot_api]
 impl PlayerVR {
@@ -23,7 +25,9 @@ impl PlayerVR {
         // this raycast is masked to collision layer 8, which only the quiz
         // buttons are attached to. Therefore any collisions means we are
         // looking at a button on the quiz panel.
-        let ray_cast = self.base().get_node_as::<RayCast3D>("Head/RayCast3D");
+        let ray_cast = self
+            .base()
+            .get_node_as::<RayCast3D>("XROrigin3D/RightController/RayCast3D");
         let Some(collider) = ray_cast.get_collider() else {
             return;
         };
@@ -37,9 +41,12 @@ impl PlayerVR {
             return;
         };
 
-        let input = Input::singleton();
+        let right = self
+            .base()
+            .get_node_as::<VRController>("XROrigin3D/RightController");
+
         panel.bind_mut().set_looking_at(collider);
-        if input.is_action_pressed(&StringName::from("interact")) {
+        if right.is_button_pressed("trigger") {
             panel.bind_mut().handle_click();
         };
     }
@@ -47,23 +54,24 @@ impl PlayerVR {
 
 #[godot_api]
 impl ICharacterBody3D for PlayerVR {
-    fn init(base: Base<CharacterBody3D>) -> Self {
-        godot_print!("VR character created...");
-        Self { base }
-    }
+    // fn init(base: Base<CharacterBody3D>) -> Self {
+    //     godot_print!("VR character created...");
+    //     Self { base }
+    // }
     fn physics_process(&mut self, delta: f64) {
-        let input = Input::singleton();
-        // 2D direction input for horizontal movement
-        let horizontal_input = input.get_vector(
-            &StringName::from("move_left"),
-            &StringName::from("move_right"),
-            &StringName::from("move_forward"),
-            &StringName::from("move_back"),
-        );
-        let head = self.base().get_node_as::<Node3D>("Head");
-        let direction = (head.get_basis()
-            * Vector3::new(horizontal_input.x, 0., horizontal_input.y))
-        .normalized_or_zero();
+        let right = self
+            .base()
+            .get_node_as::<VRController>("XROrigin3D/RightController");
+        let left = self
+            .base()
+            .get_node_as::<VRController>("XROrigin3D/LeftController");
+
+        let movement = right.get_vector2("thumbstick");
+        let mut head = self
+            .base()
+            .get_node_as::<XrCamera3D>("XROrigin3D/XRCamera3D");
+        let direction =
+            (head.get_basis() * Vector3::new(movement.x, 0., -movement.y)).normalized_or_zero();
 
         let mut velocity: Vector3 = Vector3::new(
             direction.x * MOVEMENT_SPEED as f32,
@@ -73,31 +81,33 @@ impl ICharacterBody3D for PlayerVR {
 
         if !self.base().is_on_floor() {
             velocity.y = self.base().get_velocity().y - (GRAVITY * delta) as f32;
-        } else if input.is_action_pressed(&StringName::from("jump")) {
+        } else if right.is_button_pressed(&StringName::from("a click")) {
             velocity.y = JUMP_IMPULSE as f32;
         }
 
         self.base_mut().set_velocity(velocity);
         self.base_mut().move_and_slide();
-    }
-    fn ready(&mut self) {
-        let mut camera = self.base().get_node_as::<Camera3D>("Head/Camera3D");
-        camera.set_current(true);
-    }
-    fn unhandled_input(&mut self, event: Gd<InputEvent>) {
-        // In the web, we want to recapture the mouse if it has been uncaptured,
-        // but only when the user clicks back into the game. Likewise, we should
-        // also only respond to mouse events if the mouse is captured.
-        let ev = event.try_cast::<InputEventMouseMotion>();
-        if let Ok(motion) = ev {
-            let mut head = self.base().get_node_as::<Node3D>("Head");
-            let rel = -motion.get_relative() * SENSITIVITY as f32;
-            let mut head_rot = head.get_rotation();
-            head_rot.y += rel.x;
-            head_rot.x = (head_rot.x + rel.y)
-                .clamp(-std::f32::consts::FRAC_PI_2, std::f32::consts::FRAC_PI_2);
-            head.set_rotation(head_rot);
-        }
+
+        // // handle joystick looking
+        let rel = -left.get_vector2("thumbstick") * JOYSTICK_SENSITIVITY as f32;
+        let mut head_rot = self.base().get_rotation();
+        head_rot.y += rel.x;
+        self.base_mut().set_rotation(head_rot);
         self.ray_cast();
     }
+    fn ready(&mut self) {
+        let mut camera = self
+            .base()
+            .get_node_as::<XrCamera3D>("XROrigin3D/XRCamera3D");
+        camera.set_current(true);
+    }
+    fn unhandled_input(&mut self, _: Gd<InputEvent>) {
+        // self.ray_cast();
+    }
+}
+
+#[derive(GodotClass)]
+#[class(init, base=XrController3D)]
+pub struct VRController {
+    base: Base<XrController3D>,
 }

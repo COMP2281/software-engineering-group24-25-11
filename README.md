@@ -40,7 +40,7 @@ Now you can proceed to [Getting started](#getting-started) to learn how to start
 
 While we recommend following the guide above, the following programs are required to build the project.
 
-- emsdk + emscripten v3.1.66 (required for web)
+- emsdk + emscripten v3.1.74 (required for web)
 - blender (required)
 - rust nightly toolchain + rust-src component (required):
   - wasm32-unknown-emscripten (web)

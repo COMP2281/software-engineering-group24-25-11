@@ -1,26 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://iwmj6q4fau8m"]
+[gd_scene load_steps=2 format=3 uid="uid://yx6f1w0iqbqa"]
 
 [ext_resource type="PackedScene" uid="uid://d0ib61j4007ft" path="res://scenes/menu/title.tscn" id="1_ny47x"]
-[ext_resource type="Texture2D" uid="uid://6y1akdum45yy" path="res://assets/skybox.hdr" id="2_mdl26"]
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_y3kjc"]
-panorama = ExtResource("2_mdl26")
-
-[sub_resource type="Sky" id="Sky_n8l8p"]
-sky_material = SubResource("PanoramaSkyMaterial_y3kjc")
-
-[sub_resource type="Environment" id="Environment_uajv8"]
-background_mode = 2
-sky = SubResource("Sky_n8l8p")
-ambient_light_source = 3
-ambient_light_color = Color(1, 1, 1, 1)
-ambient_light_energy = 4.0
-glow_enabled = true
-glow_strength = 1.3
-glow_hdr_scale = 4.0
-glow_hdr_luminance_cap = 32.0
-
-[sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_qloia"]
 
 [node name="Root" type="Node"]
 
@@ -29,7 +9,3 @@ glow_hdr_luminance_cap = 32.0
 [node name="State" type="Node" parent="."]
 
 [node name="TitleScreen" parent="." instance=ExtResource("1_ny47x")]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_uajv8")
-camera_attributes = SubResource("CameraAttributesPhysical_qloia")

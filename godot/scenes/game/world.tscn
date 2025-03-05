@@ -1,6 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://dpvq1y4qsswa6"]
+[gd_scene load_steps=6 format=3 uid="uid://dpvq1y4qsswa6"]
 
 [ext_resource type="PackedScene" uid="uid://bpbgtrjl3m7jt" path="res://scenes/game/room.tscn" id="2_dgsix"]
+[ext_resource type="Texture2D" uid="uid://bhos422jd8qde" path="res://assets/skybox.webp" id="2_plw8s"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_k4qd3"]
+panorama = ExtResource("2_plw8s")
+
+[sub_resource type="Sky" id="Sky_n8l8p"]
+sky_material = SubResource("PanoramaSkyMaterial_k4qd3")
+
+[sub_resource type="Environment" id="Environment_3cmne"]
+background_mode = 2
+sky = SubResource("Sky_n8l8p")
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 4.0
+glow_strength = 1.3
+glow_hdr_scale = 4.0
+glow_hdr_luminance_cap = 32.0
 
 [node name="World" type="WorldScene"]
 
@@ -24,3 +41,6 @@ omni_range = 4096.0
 
 [node name="Room" parent="." instance=ExtResource("2_dgsix")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_3cmne")
