@@ -1,7 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://drov7q4fc21jc"]
+[gd_scene load_steps=5 format=3 uid="uid://d37w3meqvg7hp"]
 
-[ext_resource type="Theme" uid="uid://7hhvlf8d7bt" path="res://assets/course_select_button.tres" id="1_u1bsp"]
-[ext_resource type="Theme" uid="uid://cwb7hmd5nwlic" path="res://assets/red_button.tres" id="2_1vdwn"]
+[ext_resource type="Theme" uid="uid://dos5qkbbul75v" path="res://assets/general_button.tres" id="1_tgmk5"]
+[ext_resource type="Theme" uid="uid://b2dhbdb6c0g38" path="res://assets/red_button.tres" id="2_1vdwn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qgh0p"]
 bg_color = Color(0.03, 0.07, 0.15, 0.92)
@@ -27,7 +27,7 @@ shadow_offset = Vector2(5, 2)
 [sub_resource type="Theme" id="Theme_3qx8l"]
 Label/styles/normal = SubResource("StyleBoxFlat_qgh0p")
 
-[node name="Popupmenu" type="Control"]
+[node name="CourseSelector" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -72,36 +72,24 @@ theme = SubResource("Theme_3qx8l")
 text = "SPACEDROID NAVIGATION SYSTEM "
 horizontal_alignment = 1
 
-[node name="Course 5" type="Button" parent="Control/VBoxContainer"]
-visible = false
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = ExtResource("1_u1bsp")
-text = "Systems"
-
-[node name="Course 4" type="Button" parent="Control/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme = ExtResource("1_u1bsp")
-text = "Networking"
-
-[node name="AI course" type="CourseSelectionButton" parent="Control/VBoxContainer"]
+[node name="AI Modules" type="CourseSelectionButton" parent="Control/VBoxContainer"]
 course = 2
 layout_mode = 2
-theme = ExtResource("1_u1bsp")
+theme = ExtResource("1_tgmk5")
 text = "AI Modules"
 icon_alignment = 1
 
-[node name="Network course" type="CourseSelectionButton" parent="Control/VBoxContainer"]
+[node name="Data Fundamentals" type="CourseSelectionButton" parent="Control/VBoxContainer"]
 layout_mode = 2
 size_flags_stretch_ratio = 0.1
-theme = ExtResource("1_u1bsp")
+theme = ExtResource("1_tgmk5")
 text = "Data Fundamentals"
 
-[node name="Course 3" type="CourseSelectionButton" parent="Control/VBoxContainer"]
+[node name="Wed Dev Fundamentals" type="CourseSelectionButton" parent="Control/VBoxContainer"]
+course = 1
 layout_mode = 2
 size_flags_stretch_ratio = 11.76
-theme = ExtResource("1_u1bsp")
+theme = ExtResource("1_tgmk5")
 text = "Web Dev Fundamentals"
 
 [node name="Exit" type="CourseSelectionButton" parent="Control/VBoxContainer"]

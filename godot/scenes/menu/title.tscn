@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://d0ib61j4007ft"]
 
-[ext_resource type="Texture2D" uid="uid://bhos422jd8qde" path="res://assets/skybox.webp" id="1_13ukm"]
-[ext_resource type="PackedScene" uid="uid://drov7q4fc21jc" path="res://scenes/menu/course_selection.tscn" id="2_fqxnr"]
-[ext_resource type="Theme" uid="uid://7hhvlf8d7bt" path="res://assets/course_select_button.tres" id="2_hc8f3"]
-[ext_resource type="Theme" uid="uid://cwb7hmd5nwlic" path="res://assets/red_button.tres" id="3_6s72b"]
+[ext_resource type="Texture2D" path="res://assets/skybox.webp" id="1_13ukm"]
+[ext_resource type="PackedScene" path="res://scenes/menu/course_selection.tscn" id="2_fqxnr"]
+[ext_resource type="Theme" path="res://assets/course_select_button.tres" id="2_hc8f3"]
+[ext_resource type="Theme" path="res://assets/red_button.tres" id="3_6s72b"]
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3

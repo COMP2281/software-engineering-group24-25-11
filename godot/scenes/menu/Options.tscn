@@ -1,7 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dqb5uyhcg3846"]
-
-[ext_resource type="Script" uid="uid://bq0kadke5mbm3" path="res://scenes/menu/popupmenu.gd" id="1_w0a33"]
-[ext_resource type="Script" uid="uid://bo02xbr8toay8" path="res://scenes/menu/Volume.gd" id="2_iyjud"]
+[gd_scene load_steps=9 format=3 uid="uid://dqb5uyhcg3846"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_racy6"]
 bg_color = Color(0.03, 0.07, 0.15, 0.92)
@@ -91,7 +88,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_w0a33")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -134,7 +130,6 @@ layout_mode = 2
 theme = SubResource("Theme_oeeyb")
 min_value = -30.0
 max_value = 0.0
-script = ExtResource("2_iyjud")
 
 [node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -146,5 +141,3 @@ layout_mode = 2
 layout_mode = 2
 theme = SubResource("Theme_7yt32")
 text = "EMERGENCY SHUTDOWN "
-
-[connection signal="value_changed" from="MarginContainer/VBoxContainer/HSlider" to="MarginContainer/VBoxContainer/HSlider" method="_on_value_changed"]
