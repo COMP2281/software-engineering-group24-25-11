@@ -1,10 +1,6 @@
-<<<<<<< HEAD:godot/scenes/menu/completion_screen.tscn
-[gd_scene load_steps=17 format=3 uid="uid://bo6waq710o67y"]
-=======
-[gd_scene load_steps=12 format=3 uid="uid://bo6waq710o67y"]
+[gd_scene load_steps=12 format=3 uid="uid://ceu4v20xfutaf"]
 
-[ext_resource type="Texture2D" uid="uid://6y1akdum45yy" path="res://assets/skybox.hdr" id="2_d7ny3"]
->>>>>>> a303390 (feat: new ui):godot/scenes/menu/Displayscore.tscn
+[ext_resource type="Texture2D" uid="uid://6y1akdum45yy" path="res://assets/skybox.hdr" id="1_dryny"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8u1m2"]
 bg_color = Color(0.03, 0.07, 0.15, 0.92)
@@ -193,11 +189,11 @@ grow_vertical = 2
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer"]
 layout_mode = 2
-texture = ExtResource("2_d7ny3")
+texture = ExtResource("1_dryny")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="RichTextLabel" type="Label" parent="MarginContainer/TextureRect"]
+[node name="Leaderbord" type="Label" parent="MarginContainer/TextureRect"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.004
@@ -210,20 +206,13 @@ offset_right = 0.639893
 offset_bottom = -0.279999
 theme = SubResource("Theme_d7ny3")
 theme_override_font_sizes/font_size = 25
-text = "SCROLL TO SELECT QUESTION"
+text = "USERNAME                                                                                                   TIME "
 horizontal_alignment = 1
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/TextureRect"]
 custom_minimum_size = Vector2(0, 400)
 layout_direction = 1
 layout_mode = 2
-<<<<<<< HEAD:godot/scenes/menu/completion_screen.tscn
-theme = SubResource("Theme_j4w1x")
-text = "10/15
-"
-label_settings = SubResource("LabelSettings_si83b")
-horizontal_alignment = 1
-=======
 anchor_left = 0.002
 anchor_top = 0.09
 anchor_right = 0.992
@@ -233,7 +222,6 @@ offset_top = 0.199997
 offset_right = 0.23999
 offset_bottom = 0.279968
 horizontal_scroll_mode = 0
->>>>>>> a303390 (feat: new ui):godot/scenes/menu/Displayscore.tscn
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TextureRect/ScrollContainer"]
 custom_minimum_size = Vector2(1236, 200)
@@ -242,94 +230,6 @@ size_flags_horizontal = 3
 alignment = 1
 
 [node name="Question 1" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 2" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 3" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 4" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-<<<<<<< HEAD:godot/scenes/menu/completion_screen.tscn
-theme = SubResource("Theme_q0rxw")
-text = "Exit "
-=======
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 5" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 6" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 7" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 8" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 9" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 10" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 11" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 12" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 13" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 14" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_stretch_ratio = 11.76
-theme = SubResource("Theme_o5ir0")
-text = "Question 1"
-
-[node name="Question 15" type="Button" parent="MarginContainer/TextureRect/ScrollContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_stretch_ratio = 11.76
 theme = SubResource("Theme_o5ir0")
@@ -348,4 +248,3 @@ offset_right = 0.519897
 offset_bottom = 0.0799561
 theme = SubResource("Theme_8u1m2")
 text = "EMERGENCY SHUTDOWN "
->>>>>>> a303390 (feat: new ui):godot/scenes/menu/Displayscore.tscn

@@ -1,0 +1,150 @@
+[gd_scene load_steps=11 format=3 uid="uid://dqb5uyhcg3846"]
+
+[ext_resource type="Script" uid="uid://bq0kadke5mbm3" path="res://scenes/menu/popupmenu.gd" id="1_w0a33"]
+[ext_resource type="Script" uid="uid://bo02xbr8toay8" path="res://scenes/menu/Volume.gd" id="2_iyjud"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_racy6"]
+bg_color = Color(0.03, 0.07, 0.15, 0.92)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 7
+border_width_bottom = 8
+border_color = Color(0, 0.85, 1, 0.7)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 20
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+shadow_color = Color(0, 0.72, 1, 0.4)
+shadow_size = 2
+shadow_offset = Vector2(5, 2)
+
+[sub_resource type="Theme" id="Theme_pod2m"]
+Label/styles/normal = SubResource("StyleBoxFlat_racy6")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lhpkl"]
+bg_color = Color(0.04, 0.08, 0.15, 0.85)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 7
+border_width_bottom = 8
+border_color = Color(0, 0.75, 0.9, 0.5)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 1
+expand_margin_top = 1.0
+expand_margin_bottom = 1.0
+shadow_size = 2
+shadow_offset = Vector2(5, 2)
+
+[sub_resource type="Theme" id="Theme_3tn5l"]
+Label/font_sizes/font_size = 16
+Label/styles/normal = SubResource("StyleBoxFlat_lhpkl")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hgjbh"]
+bg_color = Color(0, 0.9, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="Theme" id="Theme_oeeyb"]
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_hgjbh")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bu06m"]
+bg_color = Color(0.15, 0.04, 0.05, 0.9)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 7
+border_width_bottom = 8
+border_color = Color(1, 0.2, 0.1, 0.7)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 1
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+shadow_color = Color(1, 0.2, 0.1, 0.3)
+shadow_size = 2
+shadow_offset = Vector2(5, 2)
+
+[sub_resource type="Theme" id="Theme_7yt32"]
+Button/font_sizes/font_size = 16
+Button/styles/normal = SubResource("StyleBoxFlat_bu06m")
+
+[node name="Popupmenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_w0a33")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.256
+anchor_top = 0.378
+anchor_right = 0.739
+anchor_bottom = 0.783
+offset_left = 0.319977
+offset_top = -0.160004
+offset_right = 0.0799561
+offset_bottom = 0.23999
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_pod2m")
+text = "SPACEDROID CONTROL SYSTEM "
+horizontal_alignment = 1
+
+[node name="HSeparator4" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator6" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel2" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_3tn5l")
+text = "QUANTUM VOLUME POWER"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="HSlider" type="HSlider" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_oeeyb")
+min_value = -30.0
+max_value = 0.0
+script = ExtResource("2_iyjud")
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Exit" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_7yt32")
+text = "EMERGENCY SHUTDOWN "
+
+[connection signal="value_changed" from="MarginContainer/VBoxContainer/HSlider" to="MarginContainer/VBoxContainer/HSlider" method="_on_value_changed"]
