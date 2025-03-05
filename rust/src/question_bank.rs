@@ -46,30 +46,47 @@ impl From<Mode> for f64 {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Question {
-    question: String,
-    choices: Vec<String>,
-    answers: Vec<i64>,
-    difficulty: f64,
+    pub question: String,
+    pub choices: Vec<String>,
+    pub answers: Vec<i64>,
+    pub difficulty: f64,
+}
+impl Question {
+    pub fn to_answered(&self, selected: Array<i64>, time_taken_ms: i64) -> AnsweredQuestion {
+        AnsweredQuestion {
+            question: GString::from(&self.question),
+            choices: self.choices.iter().map(GString::from).collect(),
+            correct_answers: self.answers.iter().cloned().collect(),
+            given_answers: selected.iter_shared().collect(),
+            correct: selected.iter_shared().eq(self.answers.iter().cloned()),
+            time_taken_ms,
+        }
+    }
 }
 
+#[derive(Default, Debug, Clone)]
 pub struct AnsweredQuestion {
-    question: GString,
-    correct_answer: GString,
-    given_answer: GString,
-    correct: bool,
-    time_taken_ms: i64,
+    pub question: GString,
+    pub choices: Array<GString>,
+    pub correct_answers: Array<i64>,
+    pub given_answers: Array<i64>,
+    pub correct: bool,
+    pub time_taken_ms: i64,
 }
 
+#[derive(Debug, Default)]
 pub struct QuestionBank {
     questions: Vec<Question>,
+    answered_questions: Vec<AnsweredQuestion>,
+
+    question_limit: Option<usize>,
     pub current_difficulty: f64,
     pub start_time: u64,
     mode: Mode,
-    panel: Option<Gd<QuestionPanel>>,
 }
 
 impl QuestionBank {
-    pub fn new(course: Course, mode: Mode) -> Option<Self> {
+    pub fn new(course: Course, mode: Mode, question_limit: Option<usize>) -> Option<Self> {
         let course_path: GString = course.into();
         let file = FileAccess::open(&course_path, ModeFlags::READ)
             .expect("failed to open course question bank");
@@ -85,11 +102,16 @@ impl QuestionBank {
             current_difficulty: mode.into(),
             start_time: spawn_time,
             mode,
-            panel: None,
+            question_limit,
+            ..Default::default()
         })
     }
 
-    pub fn get_question(&mut self) -> Question {
+    pub fn get_question(&mut self) -> Option<Question> {
+        if self.question_limit == Some(0) {
+            return None;
+        }
+
         let difficulty = self.current_difficulty + (randi_range(-15, 15) as f64 * 0.01);
         let idx = self
             .questions
@@ -107,26 +129,15 @@ impl QuestionBank {
             })
             .map(|(idx, _)| idx)
             .expect("have a question left");
-        self.questions.remove(idx)
+
+        if let Some(limit) = self.question_limit {
+            self.question_limit = Some(limit.saturating_sub(1))
+        };
+
+        Some(self.questions.remove(idx))
     }
-    pub fn create_panel(question: Question, mut room: Gd<Node3D>, position: Vector3) {
-        let mut panel = QuestionPanel::create_panel(
-            GString::from(question.question),
-            question
-                .choices
-                .iter()
-                .map(GString::from)
-                .collect::<Array<GString>>(),
-            question.answers.iter().cloned().collect::<Array<i64>>(),
-        );
-        // panel.set_position(Vector3::new(0., 5., 0.));
-        panel.set_position(position);
-        panel.set_name(&GString::from("QuestionPanel"));
-        room.add_child(&panel);
-    }
-    pub fn remove_panel(&mut self) {
-        if let Some(mut panel) = self.panel.take() {
-            panel.queue_free();
-        }
+
+    pub fn adjust_difficulty(&mut self, amount: f64) {
+        self.current_difficulty = (self.current_difficulty + amount).clamp(0., 1.);
     }
 }

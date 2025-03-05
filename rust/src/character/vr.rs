@@ -6,6 +6,7 @@ use godot::classes::{
 use godot::prelude::*;
 
 use crate::scenes::question_panel::QuestionPanel;
+use crate::scenes::world::WorldScene;
 
 #[derive(GodotClass)]
 #[class(init, base=CharacterBody3D)]
@@ -28,16 +29,13 @@ impl PlayerVR {
         let ray_cast = self
             .base()
             .get_node_as::<RayCast3D>("XROrigin3D/RightController/RayCast3D");
-        let Some(collider) = ray_cast.get_collider() else {
+        let Some(scene_tree) = self.base().get_tree() else {
             return;
         };
-        let scene_tree = self
-            .base()
-            .get_tree()
-            .expect("character is in the scene tree");
-
-        let Some(mut panel) = QuestionPanel::find_panel(scene_tree) else {
-            godot_print!("raycast: could not find question panel");
+        let Some(mut world) = WorldScene::get_world(scene_tree) else {
+            return;
+        };
+        let Some(collider) = ray_cast.get_collider() else {
             return;
         };
 
@@ -45,10 +43,18 @@ impl PlayerVR {
             .base()
             .get_node_as::<VRController>("XROrigin3D/RightController");
 
-        panel.bind_mut().set_looking_at(collider);
-        if right.is_button_pressed("trigger") {
-            panel.bind_mut().handle_click();
-        };
+        let world_bind = world.bind_mut();
+        let rooms = &world_bind.rooms.duplicate_shallow();
+        drop(world_bind);
+
+        for mut room in rooms.iter_shared() {
+            if let Some(ref mut panel) = room.bind_mut().panel {
+                panel.bind_mut().set_looking_at(collider.clone());
+                if right.is_button_pressed("trigger") {
+                    panel.bind_mut().handle_click();
+                };
+            }
+        }
     }
 }
 

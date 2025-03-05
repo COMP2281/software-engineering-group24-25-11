@@ -7,7 +7,7 @@ use godot::classes::{
 };
 use godot::prelude::*;
 
-use crate::scenes::question_panel::QuestionPanel;
+use crate::scenes::world::WorldScene;
 
 #[derive(GodotClass)]
 #[class(base=CharacterBody3D)]
@@ -28,25 +28,34 @@ impl Player3D {
         // this raycast is masked to collision layer 8, which only the quiz
         // buttons are attached to. Therefore any collisions means we are
         // looking at a button on the quiz panel.
+
         let ray_cast = self.base().get_node_as::<RayCast3D>("Head/RayCast3D");
-        let Some(collider) = ray_cast.get_collider() else {
+        let Some(scene_tree) = self.base().get_tree() else {
             return;
         };
-        let scene_tree = self
-            .base()
-            .get_tree()
-            .expect("character is in the scene tree");
-
-        let Some(mut panel) = QuestionPanel::find_panel(scene_tree) else {
-            godot_print!("raycast: could not find question panel");
+        let Some(mut world) = WorldScene::get_world(scene_tree) else {
+            return;
+        };
+        let Some(collider) = ray_cast.get_collider() else {
             return;
         };
 
         let input = Input::singleton();
-        panel.bind_mut().set_looking_at(collider);
-        if input.is_action_just_pressed(&StringName::from("interact")) {
-            panel.bind_mut().handle_click();
-        };
+
+        // world bind needs to be dropped before QuestionPanel::handle_click() since it also takes
+        // a binding of world.
+        let world_bind = world.bind_mut();
+        let rooms = &world_bind.rooms.duplicate_shallow();
+        drop(world_bind);
+
+        for mut room in rooms.iter_shared() {
+            if let Some(ref mut panel) = room.bind_mut().panel {
+                panel.bind_mut().set_looking_at(collider.clone());
+                if input.is_action_just_pressed(&StringName::from("interact")) {
+                    panel.bind_mut().handle_click();
+                };
+            }
+        }
     }
 }
 

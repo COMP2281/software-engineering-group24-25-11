@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://bpbgtrjl3m7jt"]
 
-[ext_resource type="PackedScene" uid="uid://cxykhg7cewjji" path="res://scenes/game/room_window_wall.tscn" id="2_2ac3s"]
-[ext_resource type="PackedScene" uid="uid://2w5gc5p42ju4" path="res://scenes/game/room_door_wall.tscn" id="3_yo3lp"]
+[ext_resource type="PackedScene" path="res://scenes/game/room_window_wall.tscn" id="2_2ac3s"]
+[ext_resource type="PackedScene" uid="uid://cmjgw5fyeb3l8" path="res://scenes/game/room_door_wall.tscn" id="3_yo3lp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2qsxh"]
 size = Vector3(30, 1, 30)
@@ -21,7 +21,7 @@ size = Vector3(12, 1.5, 2)
 [sub_resource type="BoxMesh" id="BoxMesh_hdnwr"]
 size = Vector3(12, 1.5, 2)
 
-[node name="Room" type="Node3D"]
+[node name="Room" type="QuestionRoom"]
 
 [node name="Floor" type="StaticBody3D" parent="."]
 

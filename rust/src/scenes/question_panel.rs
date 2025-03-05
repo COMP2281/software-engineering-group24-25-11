@@ -3,29 +3,26 @@ use std::{f32::consts::PI, str::FromStr};
 use godot::{
     classes::{
         label_3d::DrawFlags, text_server::AutowrapMode, AnimatableBody3D, BoxMesh, BoxShape3D,
-        CollisionShape3D, IStaticBody3D, Label3D, MeshInstance3D, StandardMaterial3D, StaticBody3D,
+        CollisionShape3D, Label3D, MeshInstance3D, StandardMaterial3D, StaticBody3D,
     },
     obj::WithBaseField,
     prelude::*,
 };
 
-use crate::scenes::world::WorldScene;
+use crate::{question_bank::Question, scenes::world::WorldScene};
 
 #[derive(GodotClass)]
 #[class(init, base=StaticBody3D)]
 pub struct QuestionPanel {
-    #[export]
-    question: GString,
-    #[export]
-    choices: Array<GString>,
-    #[export]
-    correct_answers: Array<i64>,
+    question: Question,
 
     currently_selected: Array<i64>,
     /// 0..n-1 are the choices buttons, whereas the last object is the submit button.
     button_objects: Array<Gd<Object>>,
     // index of the button currently being looked at
     looking_at: Option<i64>,
+    // whether the panel has already been submitted, if it has no actions are allowed on it.
+    submitted: bool,
     base: Base<StaticBody3D>,
 }
 
@@ -39,23 +36,28 @@ const SUBMIT_TEXT: &str = "Submit";
 
 #[godot_api]
 impl QuestionPanel {
-    #[func]
-    pub fn create_panel(
-        question: GString,
-        choices: Array<GString>,
-        correct_answers: Array<i64>,
-    ) -> Gd<Self> {
+    pub fn create_panel(question: Question) -> Gd<Self> {
         let mut panel = Gd::from_init_fn(|base| Self {
             question,
-            choices,
-            correct_answers,
 
             currently_selected: Array::default(),
             button_objects: Array::default(),
             looking_at: None,
+            submitted: false,
 
             base,
         });
+
+        panel.bind_mut().add_body();
+        panel.bind_mut().add_question();
+        panel.bind_mut().add_choices();
+        panel.bind_mut().add_submit_button();
+
+        panel
+    }
+
+    #[func]
+    fn add_body(&mut self) {
         // NOTE: must be added to the scene otherwise it will cause memory leaks.
         let mut panel_mesh = MeshInstance3D::new_alloc();
         let mut panel_collision = CollisionShape3D::new_alloc();
@@ -71,21 +73,15 @@ impl QuestionPanel {
         panel_collision_inner.set_size(PANEL_SIZE);
         panel_collision.set_shape(&panel_collision_inner);
 
-        panel.add_child(&panel_mesh);
-        panel.add_child(&panel_collision);
-
-        panel.bind_mut().add_question_body();
-        panel.bind_mut().add_choices();
-        panel.bind_mut().add_submit_button();
-
-        panel
+        self.base_mut().add_child(&panel_mesh);
+        self.base_mut().add_child(&panel_collision);
     }
 
     #[func]
-    fn add_question_body(&mut self) {
+    fn add_question(&mut self) {
         for i in [(-PANEL_SIZE.z / 2.) - 0.001, (PANEL_SIZE.z / 2.) + 0.001].iter() {
             let mut question = Self::new_label();
-            question.set_text(&self.question.clone());
+            question.set_text(&self.question.question);
             question.set_position(Vector3::new(0., 3.5 * BUTTON_SIZE.y, *i));
             if i.is_sign_negative() {
                 question.set_rotation(Vector3::new(0., PI, 0.));
@@ -97,9 +93,8 @@ impl QuestionPanel {
     #[func]
     fn add_choices(&mut self) {
         let gold = load::<StandardMaterial3D>(crate::resources::MAT_COPPER);
-        for (idx, choice) in self.choices.clone().iter_shared().enumerate() {
-            let mut btn = self.create_button(gold.clone(), choice, BUTTON_SIZE);
-
+        for (idx, choice) in self.question.choices.clone().iter().enumerate() {
+            let mut btn = self.create_button(gold.clone(), GString::from(choice), BUTTON_SIZE);
             btn.set_position(Vector3::new(
                 0.,
                 (PANEL_SIZE.y / 2.) - 2.5 - ((BUTTON_SIZE.y + BUTTON_SPACER) * idx as f32),
@@ -164,7 +159,7 @@ impl QuestionPanel {
     /// the answer was correct.
     #[func]
     pub fn submit(&mut self) {
-        if self.currently_selected.len() != self.correct_answers.len() {
+        if self.currently_selected.len() != self.question.answers.len() {
             return;
         }
         let scene_tree = self
@@ -172,73 +167,50 @@ impl QuestionPanel {
             .get_tree()
             .expect("question panel is in scene tree");
         let mut world = WorldScene::get_world(scene_tree).expect("question panel is in world");
-        let matching = self
-            .currently_selected
-            .iter_shared()
-            .eq(self.correct_answers.iter_shared());
-        if matching {
-            world.bind_mut().answered_correctly();
-            godot_print!("correctly selected");
-        } else {
-            world.bind_mut().answered_incorrectly();
-            godot_print!(
-                "incorrectly selected, current: {:?}",
-                self.currently_selected
-            );
-        }
+
+        self.submitted = true;
+
+        let answered_question = self
+            .question
+            .to_answered(self.currently_selected.clone(), 0);
+
+        world.bind_mut().question_answered(answered_question);
     }
 
     #[func]
     pub fn set_looking_at(&mut self, obj: Gd<Object>) {
         let button_index = self.button_objects.iter_shared().position(|x| obj.eq(&x));
-        if let Some(button_index) = button_index {
-            self.looking_at = Some(button_index as i64);
-        } else {
-            godot_print!("didnt find");
-            self.looking_at = None
-        }
+        self.looking_at = button_index.map(|x| x as i64);
     }
 
     #[func]
     pub fn handle_click(&mut self) {
-        // godot_print!("handling click");
         let Some(looking_at) = self.looking_at else {
-            godot_print!("not looking at anything, this should be a bug.");
             return;
         };
+        if self.submitted {
+            return;
+        };
+
         if looking_at == (self.button_objects.len() as i64 - 1) {
+            godot_print!("attempting to submit");
             self.submit();
         } else {
-            if self.currently_selected.len() >= self.correct_answers.len() {
+            if self.currently_selected.len() >= self.question.answers.len() {
                 let removed = self.currently_selected.pop_front();
                 if let Some(removed) = removed {
                     let empty = load::<StandardMaterial3D>(crate::resources::MAT_EMPTY);
-                    self.button_objects
-                        .get(removed as usize)
-                        .unwrap()
-                        .try_cast::<AnimatableBody3D>()
-                        .unwrap()
-                        .get_child(0)
-                        .unwrap()
-                        .try_cast::<MeshInstance3D>()
-                        .unwrap()
+                    self.get_button_mesh(self.get_button_from_idx(removed).expect("button exists"))
                         .set_material_override(&empty);
                 }
             }
-            godot_print!("currently selecte {looking_at}");
             self.currently_selected.push(looking_at);
 
-            let empty = load::<StandardMaterial3D>(crate::resources::MAT_SELECTED);
-            self.button_objects
-                .get(looking_at as usize)
-                .unwrap()
-                .try_cast::<AnimatableBody3D>()
-                .unwrap()
-                .get_child(0)
-                .unwrap()
-                .try_cast::<MeshInstance3D>()
-                .unwrap()
-                .set_material_override(&empty);
+            godot_print!("currently selected {:?}", self.currently_selected);
+
+            let selected = load::<StandardMaterial3D>(crate::resources::MAT_SELECTED);
+            self.get_button_mesh(self.get_button_from_idx(looking_at).expect("button exists"))
+                .set_material_override(&selected);
         }
     }
 
@@ -255,20 +227,28 @@ impl QuestionPanel {
     }
 
     #[func]
-    pub fn find_panel(scene_tree: Gd<SceneTree>) -> Option<Gd<QuestionPanel>> {
-        let world =
-            WorldScene::get_world(scene_tree).expect("find_panel called with a world available");
-
-        let path: NodePath = NodePath::from_str("Room/QuestionPanel")
-            .expect("failed to create question panel node path");
-        world
-            .get_node_or_null(&path)?
-            .try_cast::<QuestionPanel>()
+    pub fn get_button_from_idx(&self, button: i64) -> Option<Gd<AnimatableBody3D>> {
+        self.button_objects
+            .get(button as usize)?
+            .try_cast::<AnimatableBody3D>()
             .ok()
     }
-}
 
-#[godot_api]
-impl IStaticBody3D for QuestionPanel {
-    fn ready(&mut self) {}
+    #[func]
+    pub fn get_button_mesh(&self, button: Gd<AnimatableBody3D>) -> Gd<MeshInstance3D> {
+        button
+            .get_child(0)
+            .unwrap()
+            .try_cast::<MeshInstance3D>()
+            .unwrap()
+    }
+
+    #[func]
+    pub fn get_button_shape(&self, button: Gd<AnimatableBody3D>) -> Gd<MeshInstance3D> {
+        button
+            .get_child(0)
+            .unwrap()
+            .try_cast::<MeshInstance3D>()
+            .unwrap()
+    }
 }

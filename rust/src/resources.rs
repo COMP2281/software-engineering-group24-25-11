@@ -1,8 +1,10 @@
 pub const TITLE_SCENE: &str = "res://scenes/menu/title.tscn";
 
-pub const WORLD_SCENE: &str = "res://scenes/game/world.tscn";
 pub const NORMAL_CHARACTER: &str = "res://scenes/character/character_3d.tscn";
 pub const VR_CHARACTER: &str = "res://scenes/character/character_vr.tscn";
+
+pub const WORLD_SCENE: &str = "res://scenes/game/world.tscn";
+pub const QUESTION_ROOM_SCENE: &str = "res://scenes/game/room.tscn";
 
 // Databank paths
 pub const COURSE_DATA_FUNDAMENTALS: &str = "res://question_bank/data_fundamentals.json";
