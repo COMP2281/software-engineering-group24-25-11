@@ -1,96 +1,85 @@
-[gd_scene load_steps=5 format=3 uid="uid://d0ib61j4007ft"]
+[gd_scene load_steps=4 format=3 uid="uid://d0ib61j4007ft"]
 
 [ext_resource type="Texture2D" uid="uid://6y1akdum45yy" path="res://assets/skybox.hdr" id="1_cc87h"]
-[ext_resource type="Script" path="res://scenes/menu/play_vr.gd" id="2_d52i2"]
+[ext_resource type="Theme" uid="uid://gn0ajfyljd75" path="res://assets/menu_theme.tres" id="2_siy0l"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_haww6"]
-content_margin_left = 48.0
-content_margin_top = 4.0
-content_margin_right = 48.0
-content_margin_bottom = 4.0
-bg_color = Color(0.407843, 0.141176, 0.427451, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_p3lsm"]
+texture = ExtResource("1_cc87h")
 
-[sub_resource type="Theme" id="Theme_xrvxu"]
-Button/colors/font_color = Color(1, 1, 1, 1)
-Button/font_sizes/font_size = 32
-Button/styles/hover = null
-Button/styles/normal = SubResource("StyleBoxFlat_haww6")
-
-[node name="Node" type="Node"]
-
-[node name="UI" type="Control" parent="."]
+[node name="UI" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="TextureRect" type="TextureRect" parent="UI"]
+[node name="Panel" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_cc87h")
-expand_mode = 1
-metadata/_edit_use_anchors_ = true
+theme_override_styles/panel = SubResource("StyleBoxTexture_p3lsm")
 
-[node name="MarginContainer" type="MarginContainer" parent="UI"]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.410547
-anchor_top = 0.341667
-anchor_right = 0.589453
-anchor_bottom = 0.658333
-offset_bottom = -3.05176e-05
-grow_horizontal = 2
-grow_vertical = 2
-metadata/_edit_use_anchors_ = true
+anchor_left = 0.1
+anchor_top = 0.5
+anchor_right = 0.2
+anchor_bottom = 0.9
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
-layout_mode = 2
-
-[node name="PlayVR" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
+[node name="PlayVR" type="CustomMenuButton" parent="VBoxContainer"]
 physics_interpolation_mode = 0
 layout_mode = 2
-theme = SubResource("Theme_xrvxu")
+size_flags_vertical = 3
+theme = ExtResource("2_siy0l")
+theme_type_variation = &"MainButton"
 text = "Play (VR)"
-script = ExtResource("2_d52i2")
 
-[node name="Play3D" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Play3D" type="CustomMenuButton" parent="VBoxContainer"]
 action = 1
 physics_interpolation_mode = 0
 layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_siy0l")
 text = "Play (3D)"
 
-[node name="Tutorial" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Tutorial" type="CustomMenuButton" parent="VBoxContainer"]
 action = 2
 physics_interpolation_mode = 0
 layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_siy0l")
 text = "Tutorial"
 
-[node name="Options" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Options" type="CustomMenuButton" parent="VBoxContainer"]
 action = 3
 physics_interpolation_mode = 0
 layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_siy0l")
 text = "Options"
 
-[node name="Credits" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Credits" type="CustomMenuButton" parent="VBoxContainer"]
 action = 4
 physics_interpolation_mode = 0
 layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_siy0l")
 text = "Credits"
 
-[node name="Quit" type="CustomMenuButton" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Quit" type="CustomMenuButton" parent="VBoxContainer"]
 action = 5
 physics_interpolation_mode = 0
 layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_siy0l")
 text = "Quit"
-
-[connection signal="pressed" from="UI/MarginContainer/VBoxContainer/PlayVR" to="UI/MarginContainer/VBoxContainer/PlayVR" method="_on_pressed"]
