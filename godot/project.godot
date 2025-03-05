@@ -12,10 +12,10 @@ config_version=5
 
 config/name="ibm_vr"
 run/main_scene="res://scenes/root.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-boot_splash/image="res://assets/boot_splash.png"
 boot_splash/use_filter=false
+boot_splash/image="res://assets/boot_splash.png"
 config/icon="res://assets/icon.svg"
 
 [autoload]
