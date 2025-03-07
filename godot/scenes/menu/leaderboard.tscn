@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://ceu4v20xfutaf"]
 
-[ext_resource type="Texture2D" uid="uid://6y1akdum45yy" path="res://assets/skybox.hdr" id="1_dryny"]
+[ext_resource type="Texture2D" uid="uid://6y1akdum45yy" path="res://assets/skybox.hdr" id="1_gdag7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8u1m2"]
 bg_color = Color(0.03, 0.07, 0.15, 0.92)
@@ -189,7 +189,7 @@ grow_vertical = 2
 
 [node name="TextureRect" type="TextureRect" parent="MarginContainer"]
 layout_mode = 2
-texture = ExtResource("1_dryny")
+texture = ExtResource("1_gdag7")
 expand_mode = 1
 metadata/_edit_use_anchors_ = true
 

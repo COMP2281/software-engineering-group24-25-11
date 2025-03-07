@@ -1,4 +1,4 @@
-use std::{f32::consts::PI, str::FromStr};
+use std::f32::consts::PI;
 
 use godot::{
     classes::{
@@ -9,7 +9,7 @@ use godot::{
     prelude::*,
 };
 
-use crate::{question_bank::Question, scenes::world::WorldScene};
+use crate::{question_bank::Question, resources::materials, scene_manager::SceneManager};
 
 #[derive(GodotClass)]
 #[class(init, base=StaticBody3D)]
@@ -62,11 +62,11 @@ impl QuestionPanel {
         let mut panel_mesh = MeshInstance3D::new_alloc();
         let mut panel_collision = CollisionShape3D::new_alloc();
 
-        let hot_blued_steel = load::<StandardMaterial3D>(crate::resources::MAT_HOT_BLUED_STEEL);
+        let background = load::<StandardMaterial3D>(materials::QP_BACKGROUND);
 
         let mut panel_mesh_inner = BoxMesh::new_gd();
         panel_mesh_inner.set_size(PANEL_SIZE);
-        panel_mesh_inner.set_material(&hot_blued_steel);
+        panel_mesh_inner.set_material(&background);
         panel_mesh.set_mesh(&panel_mesh_inner);
 
         let mut panel_collision_inner = BoxShape3D::new_gd();
@@ -92,9 +92,9 @@ impl QuestionPanel {
 
     #[func]
     fn add_choices(&mut self) {
-        let gold = load::<StandardMaterial3D>(crate::resources::MAT_COPPER);
+        let normal = load::<StandardMaterial3D>(materials::QP_NORMAL);
         for (idx, choice) in self.question.choices.clone().iter().enumerate() {
-            let mut btn = self.create_button(gold.clone(), GString::from(choice), BUTTON_SIZE);
+            let mut btn = self.create_button(normal.clone(), GString::from(choice), BUTTON_SIZE);
             btn.set_position(Vector3::new(
                 0.,
                 (PANEL_SIZE.y / 2.) - 2.5 - ((BUTTON_SIZE.y + BUTTON_SPACER) * idx as f32),
@@ -107,8 +107,8 @@ impl QuestionPanel {
     }
     #[func]
     fn add_submit_button(&mut self) {
-        let gold = load::<StandardMaterial3D>(crate::resources::MAT_GOLD);
-        let mut btn = self.create_button(gold, SUBMIT_TEXT.into(), BUTTON_SIZE);
+        let submit = load::<StandardMaterial3D>(materials::QP_SUBMIT);
+        let mut btn = self.create_button(submit, SUBMIT_TEXT.into(), BUTTON_SIZE);
 
         btn.set_position(Vector3::new(0., -(PANEL_SIZE.y / 2.) + 1., 0.));
 
@@ -162,11 +162,10 @@ impl QuestionPanel {
         if self.currently_selected.len() != self.question.answers.len() {
             return;
         }
-        let scene_tree = self
-            .base()
-            .get_tree()
-            .expect("question panel is in scene tree");
-        let mut world = WorldScene::get_world(scene_tree).expect("question panel is in world");
+        let mut world = SceneManager::get_manager(self.base().clone().upcast())
+            .bind()
+            .get_world_scene()
+            .expect("question panel is in world");
 
         self.submitted = true;
 
@@ -174,13 +173,60 @@ impl QuestionPanel {
             .question
             .to_answered(self.currently_selected.clone(), 0);
 
+        for answer in answered_question.given_answers.iter_shared() {
+            let material =
+                load::<StandardMaterial3D>(if answered_question.correct_answers.contains(answer) {
+                    materials::QP_CHOICE_CORRECT
+                } else {
+                    materials::QP_CHOICE_INCORRECT
+                });
+
+            self.get_button_mesh(self.get_button_from_idx(answer).expect("button exists"))
+                .set_material_override(&material);
+        }
+
         world.bind_mut().question_answered(answered_question);
     }
-
+    #[func]
+    pub fn clear_looking_at(&mut self) {
+        if let Some(previous_looking) = self.looking_at {
+            let material_prev = load::<StandardMaterial3D>(
+                if previous_looking == self.question.choices.len() as i64 {
+                    materials::QP_SUBMIT
+                } else if self.currently_selected.contains(previous_looking) {
+                    materials::QP_SELECTED
+                } else {
+                    materials::QP_NORMAL
+                },
+            );
+            self.get_button_mesh(
+                self.get_button_from_idx(previous_looking)
+                    .expect("button exists"),
+            )
+            .set_material_override(&material_prev);
+        }
+    }
     #[func]
     pub fn set_looking_at(&mut self, obj: Gd<Object>) {
+        if self.submitted {
+            return;
+        }
         let button_index = self.button_objects.iter_shared().position(|x| obj.eq(&x));
-        self.looking_at = button_index.map(|x| x as i64);
+        if let Some(idx) = button_index.map(|x| x as i64) {
+            self.clear_looking_at();
+            let material_new =
+                load::<StandardMaterial3D>(if idx == self.question.choices.len() as i64 {
+                    materials::QP_SUBMIT
+                } else if self.currently_selected.contains(idx) {
+                    materials::QP_SELECTED
+                } else {
+                    materials::QP_HOVERED
+                });
+
+            self.get_button_mesh(self.get_button_from_idx(idx).expect("button exists"))
+                .set_material_override(&material_new);
+            self.looking_at = Some(idx);
+        }
     }
 
     #[func]
@@ -198,17 +244,21 @@ impl QuestionPanel {
         } else {
             if self.currently_selected.len() >= self.question.answers.len() {
                 let removed = self.currently_selected.pop_front();
-                if let Some(removed) = removed {
-                    let empty = load::<StandardMaterial3D>(crate::resources::MAT_EMPTY);
-                    self.get_button_mesh(self.get_button_from_idx(removed).expect("button exists"))
-                        .set_material_override(&empty);
+                if let Some(idx) = removed {
+                    let material = load::<StandardMaterial3D>(if removed == self.looking_at {
+                        materials::QP_HOVERED
+                    } else {
+                        materials::QP_NORMAL
+                    });
+                    self.get_button_mesh(self.get_button_from_idx(idx).expect("button exists"))
+                        .set_material_override(&material);
                 }
             }
             self.currently_selected.push(looking_at);
 
             godot_print!("currently selected {:?}", self.currently_selected);
 
-            let selected = load::<StandardMaterial3D>(crate::resources::MAT_SELECTED);
+            let selected = load::<StandardMaterial3D>(materials::QP_SELECTED);
             self.get_button_mesh(self.get_button_from_idx(looking_at).expect("button exists"))
                 .set_material_override(&selected);
         }

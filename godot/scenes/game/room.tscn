@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://bpbgtrjl3m7jt"]
 
-[ext_resource type="PackedScene" path="res://scenes/game/room_window_wall.tscn" id="2_2ac3s"]
+[ext_resource type="PackedScene" uid="uid://cxykhg7cewjji" path="res://scenes/game/room_window_wall.tscn" id="2_2ac3s"]
 [ext_resource type="PackedScene" uid="uid://cmjgw5fyeb3l8" path="res://scenes/game/room_door_wall.tscn" id="3_yo3lp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2qsxh"]

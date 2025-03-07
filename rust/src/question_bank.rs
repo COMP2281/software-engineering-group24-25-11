@@ -5,7 +5,6 @@ use godot::{
 };
 use serde::Deserialize;
 
-use crate::scenes::question_panel::QuestionPanel;
 #[derive(Debug, Default, GodotConvert, Var, Export, Copy, Clone)]
 #[godot(via = u8)]
 pub enum Course {

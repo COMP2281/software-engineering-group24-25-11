@@ -1,18 +1,16 @@
-use godot::classes::xr_positional_tracker::TrackerHand;
-use godot::classes::{
-    CharacterBody3D, ICharacterBody3D, IXrController3D, InputEvent, RayCast3D, XrCamera3D,
-    XrController3D,
-};
+use godot::classes::{CharacterBody3D, ICharacterBody3D, RayCast3D, XrCamera3D, XrController3D};
 use godot::prelude::*;
 
-use crate::scenes::question_panel::QuestionPanel;
-use crate::scenes::world::WorldScene;
+use crate::scene_manager::SceneManager;
 
 #[derive(GodotClass)]
 #[class(init, base=CharacterBody3D)]
 pub struct PlayerVR {
     base: Base<CharacterBody3D>,
 }
+
+// FIXME: see if the actions can be listened to with those from the openxr action map through an
+// input singleton.
 
 const MOVEMENT_SPEED: f64 = 5.;
 const GRAVITY: f64 = 9.8;
@@ -29,10 +27,10 @@ impl PlayerVR {
         let ray_cast = self
             .base()
             .get_node_as::<RayCast3D>("XROrigin3D/RightController/RayCast3D");
-        let Some(scene_tree) = self.base().get_tree() else {
-            return;
-        };
-        let Some(mut world) = WorldScene::get_world(scene_tree) else {
+        let Some(mut world) = SceneManager::get_manager(self.base().clone().upcast())
+            .bind()
+            .get_world_scene()
+        else {
             return;
         };
         let Some(collider) = ray_cast.get_collider() else {
@@ -60,10 +58,6 @@ impl PlayerVR {
 
 #[godot_api]
 impl ICharacterBody3D for PlayerVR {
-    // fn init(base: Base<CharacterBody3D>) -> Self {
-    //     godot_print!("VR character created...");
-    //     Self { base }
-    // }
     fn physics_process(&mut self, delta: f64) {
         let right = self
             .base()
@@ -73,7 +67,7 @@ impl ICharacterBody3D for PlayerVR {
             .get_node_as::<VRController>("XROrigin3D/LeftController");
 
         let movement = right.get_vector2("thumbstick");
-        let mut head = self
+        let head = self
             .base()
             .get_node_as::<XrCamera3D>("XROrigin3D/XRCamera3D");
         let direction =
@@ -106,9 +100,6 @@ impl ICharacterBody3D for PlayerVR {
             .base()
             .get_node_as::<XrCamera3D>("XROrigin3D/XRCamera3D");
         camera.set_current(true);
-    }
-    fn unhandled_input(&mut self, _: Gd<InputEvent>) {
-        // self.ray_cast();
     }
 }
 

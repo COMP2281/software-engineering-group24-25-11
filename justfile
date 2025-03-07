@@ -29,7 +29,7 @@ godot:
 
 [windows]
 godot:
-    cd godot; Godot_v4.3-stable_win64.exe -e
+    cd godot; Godot_v4.4-stable_win64.exe -e
 
 @env $BIN_NAME:
     cd godot; $BIN_NAME
@@ -61,7 +61,7 @@ release: release-web
 [windows]
 @release-web: rust-release
     New-Item -ItemType Directory -Path '{{join(justfile_directory(), "target", "web")}}' -Force | Out-Null
-    cd godot; Godot_v4.3-stable_win64.exe --export-release Web ../target/web/index.html
+    cd godot; Godot_v4.4-stable_win64.exe --export-release Web ../target/web/index.html
 
 # TODO: add export presets for other platforms.
 
@@ -171,12 +171,12 @@ release: release-web
 
 [windows]
 @install-godot:
-    Write-Host "Downloading godot 4.3 to {{GODOT_PATH}}" -ForegroundColor Yellow
+    Write-Host "Downloading godot 4.4 to {{GODOT_PATH}}" -ForegroundColor Yellow
     New-Item -ItemType Directory -Path "{{GODOT_PATH}}" -Force | Out-Null
-    Invoke-WebRequest -Uri "https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_win64.exe.zip" -OutFile '{{join(DEPS_PATH, "Godot_v4.3-stable_win64.exe.zip")}}'
-    Expand-Archive -Path '{{join(DEPS_PATH, "Godot_v4.3-stable_win64.exe.zip")}}' -DestinationPath "{{GODOT_PATH}}"
-    Remove-Item '{{join(DEPS_PATH, "Godot_v4.3-stable_win64.exe.zip")}}'
-    Write-Host "Godot 4.3 downloaded successfully" -ForegroundColor Yellow
+    Invoke-WebRequest -Uri "https://github.com/godotengine/godot/releases/download/4.4-stable/Godot_v4.4-stable_win64.exe.zip" -OutFile '{{join(DEPS_PATH, "Godot_v4.4-stable_win64.exe.zip")}}'
+    Expand-Archive -Path '{{join(DEPS_PATH, "Godot_v4.4-stable_win64.exe.zip")}}' -DestinationPath "{{GODOT_PATH}}"
+    Remove-Item '{{join(DEPS_PATH, "Godot_v4.4-stable_win64.exe.zip")}}'
+    Write-Host "Godot 4.4 downloaded successfully" -ForegroundColor Yellow
 
 
 [macos]
@@ -185,10 +185,10 @@ release: release-web
 
 [linux]
 @install-godot:
-    echo -e "{{BOLD+YELLOW}}Downloading godot 4.3 to {{GODOT_PATH}}...{{NORMAL}}"
+    echo -e "{{BOLD+YELLOW}}Downloading godot 4.4 to {{GODOT_PATH}}...{{NORMAL}}"
     mkdir -p "{{GODOT_PATH}}"
-    curl --progress-bar -Lo '{{join(DEPS_PATH, "Godot_v4.3-stable_linux.x86_64.zip")}}' https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_linux.x86_64.zip
-    unzip '{{join(DEPS_PATH, "Godot_v4.3-stable_linux.x86_64.zip")}}' -d "{{GODOT_PATH}}"
-    mv '{{join(GODOT_PATH, "Godot_v4.3-stable_linux.x86_64")}}' '{{join(GODOT_PATH, "godot")}}'
-    rm '{{join(DEPS_PATH, "Godot_v4.3-stable_linux.x86_64.zip")}}'
+    curl --progress-bar -Lo '{{join(DEPS_PATH, "Godot_v4.4-stable_linux.x86_64.zip")}}' https://github.com/godotengine/godot/releases/download/4.4-stable/Godot_v4.4-stable_linux.x86_64.zip
+    unzip '{{join(DEPS_PATH, "Godot_v4.4-stable_linux.x86_64.zip")}}' -d "{{GODOT_PATH}}"
+    mv '{{join(GODOT_PATH, "Godot_v4.4-stable_linux.x86_64")}}' '{{join(GODOT_PATH, "godot")}}'
+    rm '{{join(DEPS_PATH, "Godot_v4.4-stable_linux.x86_64.zip")}}'
     echo -e "{{BOLD+YELLOW}}Godot downloaded successfully.{{NORMAL}}"

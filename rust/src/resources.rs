@@ -12,11 +12,15 @@ pub const COURSE_WEB_DEV: &str = "res://question_bank/web_dev.json";
 pub const COURSE_AI_MODULES: &str = "res://question_bank/ai_modules.json";
 
 // Material  paths
-pub const MAT_EMPTY: &str = "res://assets/empty_mat.tres";
-pub const MAT_SELECTED: &str = "res://assets/btn_selected_mat.tres";
-
-pub const MAT_GOLD: &str = MAT_EMPTY;
-pub const MAT_COPPER: &str = MAT_EMPTY;
-pub const MAT_HOT_BLUED_STEEL: &str = MAT_EMPTY;
-// pub const MAT_GOLD: &str = "res://assets/gold/gold.tres";
-// pub const MAT_COPPER: &str = "res://assets/copper/copper.tres";
+#[allow(unused)]
+pub mod materials {
+    pub const EMPTY: &str = "res://assets/empty_mat.tres";
+    // Question Panel Materials
+    pub const QP_BACKGROUND: &str = "res://assets/question_panel/background.tres";
+    pub const QP_NORMAL: &str = "res://assets/question_panel/normal.tres";
+    pub const QP_SUBMIT: &str = "res://assets/question_panel/submit.tres";
+    pub const QP_SELECTED: &str = "res://assets/question_panel/selected.tres";
+    pub const QP_HOVERED: &str = "res://assets/question_panel/hovered.tres";
+    pub const QP_CHOICE_CORRECT: &str = "res://assets/question_panel/correct.tres";
+    pub const QP_CHOICE_INCORRECT: &str = "res://assets/question_panel/incorrect.tres";
+}

@@ -4,7 +4,7 @@ use godot::{
     prelude::*,
 };
 
-#[derive(Debug, Default, Clone, Copy, GodotConvert, Var, Export)]
+#[derive(Debug, Default, Clone, Copy, GodotConvert, Var, Export, PartialEq, Eq)]
 #[godot(via = u8)]
 enum Action {
     #[default]
@@ -18,7 +18,7 @@ enum Action {
 }
 
 #[derive(GodotClass)]
-#[class(base=Button)]
+#[class(init, base=Button)]
 struct CustomMenuButton {
     #[export]
     action: Action,
@@ -27,12 +27,11 @@ struct CustomMenuButton {
 
 #[godot_api]
 impl IButton for CustomMenuButton {
-    fn init(base: Base<Self::Base>) -> Self {
-        Self {
-            // tween: None,
-            action: Default::default(),
-            base,
-        }
+    #[cfg(target_arch = "wasm32")]
+    fn ready(&mut self) {
+        if self.action == Action::Quit {
+            self.base_mut().hide();
+        };
     }
 
     fn pressed(&mut self) {

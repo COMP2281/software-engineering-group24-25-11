@@ -7,7 +7,7 @@ use godot::classes::{
 };
 use godot::prelude::*;
 
-use crate::scenes::world::WorldScene;
+use crate::scene_manager::SceneManager;
 
 #[derive(GodotClass)]
 #[class(base=CharacterBody3D)]
@@ -30,23 +30,29 @@ impl Player3D {
         // looking at a button on the quiz panel.
 
         let ray_cast = self.base().get_node_as::<RayCast3D>("Head/RayCast3D");
-        let Some(scene_tree) = self.base().get_tree() else {
-            return;
-        };
-        let Some(mut world) = WorldScene::get_world(scene_tree) else {
-            return;
-        };
-        let Some(collider) = ray_cast.get_collider() else {
-            return;
-        };
-
         let input = Input::singleton();
+        let Some(mut world) = SceneManager::get_manager(self.base().clone().upcast())
+            .bind()
+            .get_world_scene()
+        else {
+            godot_warn!("failed to find world");
+            return;
+        };
 
         // world bind needs to be dropped before QuestionPanel::handle_click() since it also takes
         // a binding of world.
         let world_bind = world.bind_mut();
         let rooms = &world_bind.rooms.duplicate_shallow();
         drop(world_bind);
+
+        let Some(collider) = ray_cast.get_collider() else {
+            for mut room in rooms.iter_shared() {
+                if let Some(ref mut panel) = room.bind_mut().panel {
+                    panel.bind_mut().clear_looking_at();
+                }
+            }
+            return;
+        };
 
         for mut room in rooms.iter_shared() {
             if let Some(ref mut panel) = room.bind_mut().panel {

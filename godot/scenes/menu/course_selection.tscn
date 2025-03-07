@@ -1,31 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://d37w3meqvg7hp"]
+[gd_scene load_steps=4 format=3 uid="uid://d37w3meqvg7hp"]
 
+[ext_resource type="Theme" uid="uid://boybj2s5fyoqi" path="res://assets/standout_button.tres" id="1_n3age"]
 [ext_resource type="Theme" uid="uid://dos5qkbbul75v" path="res://assets/general_button.tres" id="1_tgmk5"]
 [ext_resource type="Theme" uid="uid://b2dhbdb6c0g38" path="res://assets/red_button.tres" id="2_1vdwn"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qgh0p"]
-bg_color = Color(0.03, 0.07, 0.15, 0.92)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 7
-border_width_bottom = 8
-border_color = Color(0, 0.85, 1, 0.7)
-border_blend = true
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-corner_detail = 20
-expand_margin_left = 1.0
-expand_margin_top = 1.0
-expand_margin_right = 1.0
-expand_margin_bottom = 1.0
-shadow_color = Color(0, 0.72, 1, 0.4)
-shadow_size = 2
-shadow_offset = Vector2(5, 2)
-
-[sub_resource type="Theme" id="Theme_3qx8l"]
-Label/styles/normal = SubResource("StyleBoxFlat_qgh0p")
 
 [node name="CourseSelector" type="Control"]
 layout_mode = 3
@@ -68,8 +45,8 @@ alignment = 1
 
 [node name="RichTextLabel" type="Label" parent="Control/VBoxContainer"]
 layout_mode = 2
-theme = SubResource("Theme_3qx8l")
-text = "SPACEDROID NAVIGATION SYSTEM "
+theme = ExtResource("1_n3age")
+text = "SELECT COURSE"
 horizontal_alignment = 1
 
 [node name="AI Modules" type="CourseSelectionButton" parent="Control/VBoxContainer"]

@@ -1,14 +1,10 @@
 use std::str::FromStr;
 
-use godot::{
-    classes::{input::MouseMode, Time},
-    obj::WithBaseField,
-    prelude::*,
-};
+use godot::{classes::input::MouseMode, obj::WithBaseField, prelude::*};
 
 use crate::question_bank::{AnsweredQuestion, Course, Mode, QuestionBank};
 
-use super::{question_panel::QuestionPanel, question_room::QuestionRoom};
+use crate::scenes::question_room::QuestionRoom;
 
 #[derive(GodotClass)]
 #[class(init, base=Node)]
@@ -33,6 +29,8 @@ impl WorldScene {
     pub fn create_world_with_bank(course: Course, mode: Mode) -> Gd<Self> {
         let mut world_scene =
             load::<PackedScene>(crate::resources::WORLD_SCENE).instantiate_as::<WorldScene>();
+        world_scene.set_name("World");
+
         let mut question_bank =
             QuestionBank::new(course, mode, Some(15)).expect("failed to create question bank");
 

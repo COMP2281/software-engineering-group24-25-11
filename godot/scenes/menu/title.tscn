@@ -1,9 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://d0ib61j4007ft"]
+[gd_scene load_steps=5 format=3 uid="uid://d0ib61j4007ft"]
 
-[ext_resource type="Texture2D" path="res://assets/skybox.webp" id="1_13ukm"]
-[ext_resource type="PackedScene" path="res://scenes/menu/course_selection.tscn" id="2_fqxnr"]
-[ext_resource type="Theme" path="res://assets/course_select_button.tres" id="2_hc8f3"]
-[ext_resource type="Theme" path="res://assets/red_button.tres" id="3_6s72b"]
+[ext_resource type="Texture2D" uid="uid://bhos422jd8qde" path="res://assets/skybox.webp" id="1_13ukm"]
+[ext_resource type="Theme" uid="uid://dos5qkbbul75v" path="res://assets/general_button.tres" id="2_bmn1k"]
+[ext_resource type="PackedScene" uid="uid://d37w3meqvg7hp" path="res://scenes/menu/course_selection.tscn" id="2_fqxnr"]
+[ext_resource type="Theme" uid="uid://b2dhbdb6c0g38" path="res://assets/red_button.tres" id="3_6s72b"]
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3
@@ -28,51 +28,57 @@ metadata/_edit_use_anchors_ = true
 
 [node name="MainMenu" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.1
+anchors_preset = 8
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 0.2
-anchor_bottom = 0.9
-grow_vertical = 0
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -109.5
+offset_right = 100.0
+offset_bottom = 109.5
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MainMenu"]
 layout_mode = 2
+size_flags_vertical = 4
 alignment = 1
 
 [node name="PlayVR" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
 physics_interpolation_mode = 0
 layout_mode = 2
-theme = ExtResource("2_hc8f3")
+theme = ExtResource("2_bmn1k")
 text = "Play (VR)"
 
 [node name="Play3D" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
 action = 1
 physics_interpolation_mode = 0
 layout_mode = 2
-theme = ExtResource("2_hc8f3")
+theme = ExtResource("2_bmn1k")
 text = "Play (3D)"
 
 [node name="Tutorial" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
 action = 2
 physics_interpolation_mode = 0
 layout_mode = 2
-theme = ExtResource("2_hc8f3")
+theme = ExtResource("2_bmn1k")
 text = "Tutorial"
 
 [node name="Options" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
 action = 3
 physics_interpolation_mode = 0
 layout_mode = 2
-theme = ExtResource("2_hc8f3")
+theme = ExtResource("2_bmn1k")
 text = "Options"
 
 [node name="Credits" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
 action = 4
 physics_interpolation_mode = 0
 layout_mode = 2
-theme = ExtResource("2_hc8f3")
+theme = ExtResource("2_bmn1k")
 text = "Credits"
 
 [node name="Quit" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]

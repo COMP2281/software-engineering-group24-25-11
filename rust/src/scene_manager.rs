@@ -46,12 +46,13 @@ impl INode for SceneManager {
             if #[cfg(not(target_arch = "wasm32"))] {
                 self.xr_interface = XrServer::singleton().find_interface(&GString::from("OpenXR"));
             } else {
-                let mut webxr_interface = XrServer::singleton().find_interface(&GString::from("WebXR"));
-                if let Some(mut webxr_interface) = webxr_interface {
+                let webxr_interface = XrServer::singleton().find_interface(&GString::from("WebXR"));
+                if let Some(webxr_interface) = webxr_interface {
                     let mut webxr_interface = webxr_interface
                         .try_cast::<WebXrInterface>()
                         .expect("should be a webxr interface");
 
+                    // WebXR works with signals, so we need to deal with them as they are triggered.
                     let session_supported = self.base().callable("webxr_session_supported");
                     let session_started = self.base().callable("webxr_session_started");
                     let session_ended = self.base().callable("webxr_session_ended");
@@ -71,19 +72,18 @@ impl INode for SceneManager {
 #[godot_api]
 impl SceneManager {
     #[func]
-    fn create_alert(&mut self, message: GString) {
-        godot_warn!("todo: alert! message: {}", message);
+    pub fn get_root_base(base: Gd<Node>) -> Gd<Node> {
+        base.get_node_as::<Node>("/root/Root")
     }
+
+    #[func]
+    pub fn get_manager(base: Gd<Node>) -> Gd<SceneManager> {
+        Self::get_root_base(base).get_node_as::<SceneManager>("SceneManager")
+    }
+
     #[func]
     fn get_root(&self) -> Gd<Node> {
-        let scene_tree = self
-            .base()
-            .get_tree()
-            .expect("scene manager is in the scene tree");
-        scene_tree
-            .get_root()
-            .unwrap()
-            .get_node_as::<Node>("/root/Root")
+        Self::get_root_base(self.base().clone().upcast())
     }
     #[func]
     pub fn set_input_mode(&mut self, target: InputMode) {
@@ -191,9 +191,6 @@ impl SceneManager {
             return;
         };
 
-        // WebXR works with signals, so we need to deal with them as they are triggered.
-        // TODO: make custom class for these
-
         webxr_interface.set_requested_reference_space_types(&GString::from("local-floor, local"));
         webxr_interface.set_required_features(&GString::from("local-floor"));
         webxr_interface.set_session_mode(&GString::from("immersive-vr"));
@@ -218,7 +215,6 @@ impl SceneManager {
     #[func]
     #[cfg(target_arch = "wasm32")]
     fn webxr_session_started(&mut self) {
-        let mut os = godot::classes::Os::singleton();
         godot_print!("immersive-vr session started, attempting to enter world...");
 
         self.enter_vr_world();
@@ -231,10 +227,9 @@ impl SceneManager {
         godot_print!("immersive-vr session ended, attempting to exit world...");
         self.exit_vr_world();
 
-        // if let Some(ref mut webxr_interface) = self.webxr_interface {
-        //     webxr_interface.uninitialize();
-        //     self.webxr_interface = None
-        // };
+        if let Some(ref mut webxr_interface) = self.webxr_interface {
+            webxr_interface.uninitialize();
+        };
     }
 
     #[func]
@@ -249,23 +244,41 @@ impl SceneManager {
 
         if let Some(ref mut webxr_interface) = self.webxr_interface {
             webxr_interface.uninitialize();
-            self.webxr_interface = None
         }
+    }
+
+    #[func]
+    fn create_title_screen(&self) -> Gd<Control> {
+        let mut title_scene =
+            load::<PackedScene>(crate::resources::TITLE_SCENE).instantiate_as::<Control>();
+        title_scene.set_name(&GString::from("TitleScreen"));
+        title_scene
+    }
+
+    #[func]
+    pub fn get_title_screen(&self) -> Option<Gd<Control>> {
+        self.get_root()
+            .get_node_or_null(&NodePath::from("/root/Root/TitleScreen"))?
+            .try_cast::<Control>()
+            .ok()
+    }
+    #[func]
+    pub fn get_world_scene(&self) -> Option<Gd<WorldScene>> {
+        self.get_root()
+            .get_node_or_null(&NodePath::from("World"))?
+            .try_cast::<WorldScene>()
+            .ok()
     }
 
     #[func]
     fn swap_scene(&mut self, scene: Gd<Node>) {
         godot_print!("swapping scenes");
         let mut root_node = self.get_root();
-        if let Some(world_scene) =
-            root_node.get_node_or_null(&NodePath::from("/root/Root/WorldScene"))
-        {
+        if let Some(world_scene) = self.get_world_scene() {
             godot_print!("removing world scene");
             root_node.remove_child(&world_scene);
         }
-        if let Some(title_screen) =
-            root_node.get_node_or_null(&NodePath::from("/root/Root/TitleScreen"))
-        {
+        if let Some(title_screen) = self.get_title_screen() {
             godot_print!("removing title scene");
             root_node.remove_child(&title_screen);
         }
