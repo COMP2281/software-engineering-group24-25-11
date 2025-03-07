@@ -7,9 +7,11 @@ pub const WORLD_SCENE: &str = "res://scenes/game/world.tscn";
 pub const QUESTION_ROOM_SCENE: &str = "res://scenes/game/room.tscn";
 
 // Databank paths
-pub const COURSE_DATA_FUNDAMENTALS: &str = "res://question_bank/data_fundamentals.json";
-pub const COURSE_WEB_DEV: &str = "res://question_bank/web_dev.json";
-pub const COURSE_AI_MODULES: &str = "res://question_bank/ai_modules.json";
+pub mod courses {
+    pub const DATA_FUNDAMENTALS: &str = "res://question_bank/data_fundamentals.json";
+    pub const WEB_DEV: &str = "res://question_bank/web_dev.json";
+    pub const AI_MODULES: &str = "res://question_bank/ai_modules.json";
+}
 
 // Material  paths
 #[allow(unused)]

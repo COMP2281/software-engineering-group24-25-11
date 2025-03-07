@@ -1,0 +1,78 @@
+[gd_scene load_steps=9 format=3 uid="uid://cm45ks7xuxv7m"]
+
+[ext_resource type="StyleBox" uid="uid://bmdhpahgp1cwb" path="res://assets/standout_stylebox.tres" id="1_1yj34"]
+[ext_resource type="FontFile" uid="uid://d3v8xryfbq6sn" path="res://assets/Space_Mono/SpaceMono-Bold.ttf" id="2_s5fwx"]
+[ext_resource type="FontFile" uid="uid://ba7r83x6g278j" path="res://assets/Space_Mono/SpaceMono-Regular.ttf" id="3_fhcqw"]
+[ext_resource type="Theme" uid="uid://dos5qkbbul75v" path="res://assets/general_button.tres" id="4_s5fwx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s5fwx"]
+bg_color = Color(0, 0, 0, 0.784314)
+
+[sub_resource type="Theme" id="Theme_cd6p5"]
+PanelContainer/styles/panel = ExtResource("1_1yj34")
+
+[sub_resource type="LabelSettings" id="LabelSettings_vilbo"]
+font = ExtResource("2_s5fwx")
+font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_witcq"]
+font = ExtResource("3_fhcqw")
+font_size = 18
+
+[node name="MessageBox" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_neighbor_top = NodePath("MarginContainer/PanelContainer/VBoxContainer/MarginContainer/ReturnButton")
+focus_neighbor_bottom = NodePath("MarginContainer/PanelContainer/VBoxContainer/MarginContainer/ReturnButton")
+focus_next = NodePath("MarginContainer/PanelContainer/VBoxContainer/MarginContainer/ReturnButton")
+focus_previous = NodePath("MarginContainer/PanelContainer/VBoxContainer/MarginContainer/ReturnButton")
+focus_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_s5fwx")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.4
+anchor_right = 0.7
+anchor_bottom = 0.6
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+theme = SubResource("Theme_cd6p5")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "MESSAGE"
+label_settings = SubResource("LabelSettings_vilbo")
+horizontal_alignment = 1
+
+[node name="Message" type="Label" parent="MarginContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+size_flags_vertical = 3
+text = "placeholder message here"
+label_settings = SubResource("LabelSettings_witcq")
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 12
+
+[node name="ReturnButton" type="ReturnButton" parent="MarginContainer/PanelContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("4_s5fwx")
+text = "CLOSE"

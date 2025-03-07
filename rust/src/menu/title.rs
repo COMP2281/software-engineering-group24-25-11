@@ -6,7 +6,7 @@ use godot::{
 
 #[derive(Debug, Default, Clone, Copy, GodotConvert, Var, Export, PartialEq, Eq)]
 #[godot(via = u8)]
-enum Action {
+enum MainMenuAction {
     #[default]
     EnterVR,
     Enter3D,
@@ -19,17 +19,17 @@ enum Action {
 
 #[derive(GodotClass)]
 #[class(init, base=Button)]
-struct CustomMenuButton {
+struct MainMenuButton {
     #[export]
-    action: Action,
+    action: MainMenuAction,
     base: Base<Button>,
 }
 
 #[godot_api]
-impl IButton for CustomMenuButton {
+impl IButton for MainMenuButton {
     #[cfg(target_arch = "wasm32")]
     fn ready(&mut self) {
-        if self.action == Action::Quit {
+        if self.action == MainMenuAction::Quit {
             self.base_mut().hide();
         };
     }
@@ -50,28 +50,30 @@ impl IButton for CustomMenuButton {
         let mut scene_manager = scene_manager.bind_mut();
 
         match self.action {
-            Action::EnterVR => {
+            MainMenuAction::EnterVR => {
                 scene_manager.set_input_mode(InputMode::VR);
                 title_screen
                     .get_node_as::<MarginContainer>("MainMenu")
                     .hide();
-                title_screen
-                    .get_node_as::<Control>("CourseSelection")
-                    .show();
+                let mut course_selection = title_screen.get_node_as::<Control>("CourseSelection");
+                course_selection.show();
+                course_selection.grab_focus();
             }
-            Action::Enter3D => {
+            MainMenuAction::Enter3D => {
                 scene_manager.set_input_mode(InputMode::Normal);
                 title_screen
                     .get_node_as::<MarginContainer>("MainMenu")
                     .hide();
-                title_screen
-                    .get_node_as::<Control>("CourseSelection")
-                    .show();
+                let mut course_selection = title_screen.get_node_as::<Control>("CourseSelection");
+                course_selection.show();
+                course_selection.grab_focus();
             }
-            Action::Quit => {
+            MainMenuAction::Quit => {
                 scene_tree.quit();
             }
-            _ => {}
+            _ => {
+                godot_print!("called unimplemented main menu button");
+            }
         }
     }
 }

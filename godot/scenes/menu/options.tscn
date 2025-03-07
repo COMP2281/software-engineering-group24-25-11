@@ -1,4 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://dqb5uyhcg3846"]
+[gd_scene load_steps=11 format=3 uid="uid://dqb5uyhcg3846"]
+
+[ext_resource type="FontFile" uid="uid://d3v8xryfbq6sn" path="res://assets/Space_Mono/SpaceMono-Bold.ttf" id="1_kixs7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_racy6"]
 bg_color = Color(0.03, 0.07, 0.15, 0.92)
@@ -23,6 +25,10 @@ shadow_offset = Vector2(5, 2)
 
 [sub_resource type="Theme" id="Theme_pod2m"]
 Label/styles/normal = SubResource("StyleBoxFlat_racy6")
+
+[sub_resource type="LabelSettings" id="LabelSettings_5ak6t"]
+font = ExtResource("1_kixs7")
+font_size = 24
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lhpkl"]
 bg_color = Color(0.04, 0.08, 0.15, 0.85)
@@ -92,10 +98,10 @@ grow_vertical = 2
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.256
-anchor_top = 0.378
-anchor_right = 0.739
-anchor_bottom = 0.783
+anchor_left = 0.3
+anchor_top = 0.35
+anchor_right = 0.7
+anchor_bottom = 0.75
 offset_left = 0.319977
 offset_top = -0.160004
 offset_right = 0.0799561
@@ -109,7 +115,8 @@ layout_mode = 2
 [node name="RichTextLabel" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = SubResource("Theme_pod2m")
-text = "SPACEDROID CONTROL SYSTEM "
+text = "SETTINGS"
+label_settings = SubResource("LabelSettings_5ak6t")
 horizontal_alignment = 1
 
 [node name="HSeparator4" type="HSeparator" parent="MarginContainer/VBoxContainer"]
@@ -121,7 +128,7 @@ layout_mode = 2
 [node name="RichTextLabel2" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = SubResource("Theme_3tn5l")
-text = "QUANTUM VOLUME POWER"
+text = "VOLUME"
 horizontal_alignment = 1
 vertical_alignment = 2
 
@@ -140,4 +147,4 @@ layout_mode = 2
 [node name="Exit" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme = SubResource("Theme_7yt32")
-text = "EMERGENCY SHUTDOWN "
+text = "RETURN "

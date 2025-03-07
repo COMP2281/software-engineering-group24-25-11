@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://d0ib61j4007ft"]
+[gd_scene load_steps=6 format=3 uid="uid://d0ib61j4007ft"]
 
 [ext_resource type="Texture2D" uid="uid://bhos422jd8qde" path="res://assets/skybox.webp" id="1_13ukm"]
 [ext_resource type="Theme" uid="uid://dos5qkbbul75v" path="res://assets/general_button.tres" id="2_bmn1k"]
 [ext_resource type="PackedScene" uid="uid://d37w3meqvg7hp" path="res://scenes/menu/course_selection.tscn" id="2_fqxnr"]
 [ext_resource type="Theme" uid="uid://b2dhbdb6c0g38" path="res://assets/red_button.tres" id="3_6s72b"]
+[ext_resource type="PackedScene" uid="uid://cm45ks7xuxv7m" path="res://scenes/menu/message_box.tscn" id="5_jn0s6"]
 
 [node name="TitleScreen" type="Control"]
 layout_mode = 3
@@ -14,6 +15,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+focus_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -47,47 +49,57 @@ layout_mode = 2
 size_flags_vertical = 4
 alignment = 1
 
-[node name="PlayVR" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
-physics_interpolation_mode = 0
+[node name="PlayVR" type="MainMenuButton" parent="MainMenu/VBoxContainer"]
 layout_mode = 2
+focus_neighbor_top = NodePath("../Quit")
+focus_neighbor_bottom = NodePath("../Play3D")
 theme = ExtResource("2_bmn1k")
 text = "Play (VR)"
 
-[node name="Play3D" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
+[node name="Play3D" type="MainMenuButton" parent="MainMenu/VBoxContainer"]
 action = 1
-physics_interpolation_mode = 0
 layout_mode = 2
+focus_neighbor_top = NodePath("../PlayVR")
+focus_neighbor_bottom = NodePath("../Tutorial")
 theme = ExtResource("2_bmn1k")
 text = "Play (3D)"
 
-[node name="Tutorial" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
+[node name="Tutorial" type="MainMenuButton" parent="MainMenu/VBoxContainer"]
 action = 2
-physics_interpolation_mode = 0
 layout_mode = 2
+focus_neighbor_top = NodePath("../Play3D")
+focus_neighbor_bottom = NodePath("../Options")
 theme = ExtResource("2_bmn1k")
 text = "Tutorial"
 
-[node name="Options" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
+[node name="Options" type="MainMenuButton" parent="MainMenu/VBoxContainer"]
 action = 3
-physics_interpolation_mode = 0
 layout_mode = 2
+focus_neighbor_top = NodePath("../Tutorial")
+focus_neighbor_bottom = NodePath("../Credits")
 theme = ExtResource("2_bmn1k")
 text = "Options"
 
-[node name="Credits" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
+[node name="Credits" type="MainMenuButton" parent="MainMenu/VBoxContainer"]
 action = 4
-physics_interpolation_mode = 0
 layout_mode = 2
+focus_neighbor_top = NodePath("../Options")
+focus_neighbor_bottom = NodePath("../Quit")
 theme = ExtResource("2_bmn1k")
 text = "Credits"
 
-[node name="Quit" type="CustomMenuButton" parent="MainMenu/VBoxContainer"]
+[node name="Quit" type="MainMenuButton" parent="MainMenu/VBoxContainer"]
 action = 5
-physics_interpolation_mode = 0
 layout_mode = 2
+focus_neighbor_top = NodePath("../Credits")
+focus_neighbor_bottom = NodePath("../PlayVR")
 theme = ExtResource("3_6s72b")
 text = "Quit"
 
 [node name="CourseSelection" parent="." instance=ExtResource("2_fqxnr")]
+visible = false
+layout_mode = 1
+
+[node name="MessageBox" parent="." instance=ExtResource("5_jn0s6")]
 visible = false
 layout_mode = 1

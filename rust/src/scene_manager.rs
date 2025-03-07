@@ -67,6 +67,9 @@ impl INode for SceneManager {
                 }
             }
         );
+        self.get_title_screen()
+            .expect("initial game should have a title screen")
+            .grab_focus();
     }
 }
 #[godot_api]
@@ -161,10 +164,7 @@ impl SceneManager {
 
         godot_print!("exiting the vr world");
 
-        let mut title_scene =
-            load::<PackedScene>(crate::resources::TITLE_SCENE).instantiate_as::<Control>();
-        title_scene.set_name(&GString::from("TitleScreen"));
-
+        let title_scene = self.create_title_screen();
         self.swap_scene(title_scene.upcast());
 
         root_node
@@ -252,6 +252,7 @@ impl SceneManager {
         let mut title_scene =
             load::<PackedScene>(crate::resources::TITLE_SCENE).instantiate_as::<Control>();
         title_scene.set_name(&GString::from("TitleScreen"));
+        title_scene.grab_focus();
         title_scene
     }
 

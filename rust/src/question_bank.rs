@@ -5,6 +5,10 @@ use godot::{
 };
 use serde::Deserialize;
 
+use crate::resources;
+
+// FIXME: maybe dynamic course loading + selection based of the question bank json
+// this would make it easier to add new question banks, therefore improving maintainability.
 #[derive(Debug, Default, GodotConvert, Var, Export, Copy, Clone)]
 #[godot(via = u8)]
 pub enum Course {
@@ -17,9 +21,9 @@ pub enum Course {
 impl From<Course> for GString {
     fn from(value: Course) -> Self {
         match value {
-            Course::DataFundamentals => crate::resources::COURSE_DATA_FUNDAMENTALS.into(),
-            Course::WebDev => crate::resources::COURSE_WEB_DEV.into(),
-            Course::AiModules => crate::resources::COURSE_AI_MODULES.into(),
+            Course::DataFundamentals => resources::courses::DATA_FUNDAMENTALS.into(),
+            Course::WebDev => resources::courses::WEB_DEV.into(),
+            Course::AiModules => resources::courses::AI_MODULES.into(),
         }
     }
 }

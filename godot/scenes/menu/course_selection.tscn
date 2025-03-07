@@ -1,8 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://d37w3meqvg7hp"]
+[gd_scene load_steps=6 format=3 uid="uid://d37w3meqvg7hp"]
 
 [ext_resource type="Theme" uid="uid://boybj2s5fyoqi" path="res://assets/standout_button.tres" id="1_n3age"]
 [ext_resource type="Theme" uid="uid://dos5qkbbul75v" path="res://assets/general_button.tres" id="1_tgmk5"]
 [ext_resource type="Theme" uid="uid://b2dhbdb6c0g38" path="res://assets/red_button.tres" id="2_1vdwn"]
+[ext_resource type="FontFile" uid="uid://d3v8xryfbq6sn" path="res://assets/Space_Mono/SpaceMono-Bold.ttf" id="2_o05s8"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4u282"]
+font = ExtResource("2_o05s8")
+font_size = 24
 
 [node name="CourseSelector" type="Control"]
 layout_mode = 3
@@ -13,6 +18,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
+focus_mode = 2
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
@@ -47,11 +53,16 @@ alignment = 1
 layout_mode = 2
 theme = ExtResource("1_n3age")
 text = "SELECT COURSE"
+label_settings = SubResource("LabelSettings_4u282")
 horizontal_alignment = 1
 
 [node name="AI Modules" type="CourseSelectionButton" parent="Control/VBoxContainer"]
 course = 2
 layout_mode = 2
+focus_neighbor_top = NodePath("../Exit")
+focus_neighbor_bottom = NodePath("../Data Fundamentals")
+focus_next = NodePath("../Exit")
+focus_previous = NodePath("../Exit")
 theme = ExtResource("1_tgmk5")
 text = "AI Modules"
 icon_alignment = 1
@@ -59,6 +70,8 @@ icon_alignment = 1
 [node name="Data Fundamentals" type="CourseSelectionButton" parent="Control/VBoxContainer"]
 layout_mode = 2
 size_flags_stretch_ratio = 0.1
+focus_neighbor_top = NodePath("../AI Modules")
+focus_neighbor_bottom = NodePath("../Wed Dev Fundamentals")
 theme = ExtResource("1_tgmk5")
 text = "Data Fundamentals"
 
@@ -66,11 +79,16 @@ text = "Data Fundamentals"
 course = 1
 layout_mode = 2
 size_flags_stretch_ratio = 11.76
+focus_neighbor_top = NodePath("../Data Fundamentals")
+focus_neighbor_bottom = NodePath("../Exit")
 theme = ExtResource("1_tgmk5")
 text = "Web Dev Fundamentals"
 
-[node name="Exit" type="CourseSelectionButton" parent="Control/VBoxContainer"]
-back_button = true
+[node name="Exit" type="ReturnButton" parent="Control/VBoxContainer"]
 layout_mode = 2
+focus_neighbor_top = NodePath("../Wed Dev Fundamentals")
+focus_neighbor_bottom = NodePath("../AI Modules")
+focus_next = NodePath("../AI Modules")
+focus_previous = NodePath("../AI Modules")
 theme = ExtResource("2_1vdwn")
-text = "EMERGENCY SHUTDOWN "
+text = "RETURN"

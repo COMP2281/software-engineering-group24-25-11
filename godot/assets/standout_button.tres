@@ -1,25 +1,6 @@
 [gd_resource type="Theme" load_steps=2 format=3 uid="uid://boybj2s5fyoqi"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qgh0p"]
-bg_color = Color(0.03, 0.07, 0.15, 0.92)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 7
-border_width_bottom = 8
-border_color = Color(0, 0.85, 1, 0.7)
-border_blend = true
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-corner_detail = 20
-expand_margin_left = 1.0
-expand_margin_top = 1.0
-expand_margin_right = 1.0
-expand_margin_bottom = 1.0
-shadow_color = Color(0, 0.72, 1, 0.4)
-shadow_size = 2
-shadow_offset = Vector2(5, 2)
+[ext_resource type="StyleBox" uid="uid://bmdhpahgp1cwb" path="res://assets/standout_stylebox.tres" id="1_7sb07"]
 
 [resource]
-Label/styles/normal = SubResource("StyleBoxFlat_qgh0p")
+Label/styles/normal = ExtResource("1_7sb07")
