@@ -17,6 +17,8 @@ align(center + horizon, [
   #text(size: 1.5em, weight: 450, [IBM SkillsBuild VR Game])
   
   #text(size: 1.25em, weight: 450, [Group 11])
+
+  #text(size: 1.25em, weight: 450, [12/3/2025])
   
   #box(width: 70%, 
     grid(columns: (1fr, 1fr), align: center, column-gutter: 2em, row-gutter: 1em,
@@ -125,7 +127,31 @@ Client asked us to use the courses within IBM SkillsBuild to source our question
 
 #image("systemarchitecture.png")
 
+#pagebreak()
 
+=== Design Principles and Patterns Used
+
+1. *Accessibility*
+
+- Besides the VR aspect of the game, made the game accessible through traditional 3D viewport, allowing users even without a VR headset to play and enjoy the game.
+
+- Drafted an example for an options menu that can cater to the colourblind, as well as adjusting font size.
+
+- Created an adaptive difficulty for displaying quiz questions in order to cater difficulty to all types of players, no matter their experience in the topic.
+
+2. *Extensibility*
+
+- Created question bank tool to allow for creating and modifying question banks for the game.
+
+- Written code that encourages future expansion of the game in terms of adding new questions.
+
+- Data collected about user that completes game, allowing for further analysis on question difficulty, allowing for a more advanced adaptive difficulty to be attempted to be developed.
+
+3. *Simplicity*
+
+- During discussion phase, scope of product kept getting larger and larger, team realised this issue and dealt with it by focusing on creating a base product, then building from there.
+
+- Promoted building simple framework before adding more features on top, ensuring solid foundation before anything new is added.
 
 
 === Technologies Used
@@ -199,23 +225,85 @@ Head-mounted RayCast3D for object interaction, with collision layer 8 filtering 
 
 === System Functionality 3: Question Bank Tooling
 
-=== System Functionality 4: Question Display
+A desktop GUI application for managing quiz question bank, implemented with Python/Tkinter and CSV integration, including script to turn CSV into JSON for easier handling with game environment:
 
-=== System Functionality 5: Answering Questions
+*Base Architecture:*
 
-=== System Functionality 6: Adaptive Quiz Difficulty
+Tool uses Tkinter framework for cross-platform GUI development using CSV-based storage system with UTF-8 encoding support.
 
-When loading the dataset of questions into the game initially, if difficulty is unset by the question bank creator, a default value of 0.5 (difficulty scales from 0 to 1) is assigned.
+*CSV Operations:*
 
-Whenever a user answers a 
+CSV uses standardized 7-column format: Question, 4 choices, Answer, Difficulty, with csv.DictReader/DictWriter for structured data handling. There is automatic header generation on file creation and file dialog integration for path selection (save/load)
 
-=== System Functionality 7: User Class
+*Question Management:*
 
-=== System Functionality 8: Displaying End Score
+Question bank CRUD operations are implemented by having Add/Edit unified through modal dialog interface, using index-based selection management for updates/deletes and in-place list modification with immediate UI refresh as well as a difficulty field with theoretical 0-1 range. 
 
-=== System Functionality 9: Time Limit
+Data is validated through selection checks for edit/delete operations, basic error prevention through input dialogs, and type preservation via dictionary storage
 
-=== System Functionality 10: Review Questions
+*User Interface Components:*
+
+Main window contains listbox for question preview (question text only), action buttons with vertical flow layout and file status label with path display.
+
+When editing. there is a toplevel window for detailed editing, which uses a grid-layout form with 7 entry fields as well as a unified save handler for create/update
+
+*CSV to JSON Conversion Script:*
+
+Converts CSV formatting to JSON formatting for easier integration within existing quiz logic system within game backend.
+
+=== System Functionality 4: Adaptive Quiz Difficulty
+A dynamic question difficulty adjustment system integrated with Godot's engine, implemented in Rust with JSON data integration:
+
+*Base Architecture:*
+
+There is Godot-Rust binding via GDExtension, system uses Serde JSON parsing for question data and has a Enum-driven configuration for course and initial difficulty selection.
+
+*Core Components:*
+
+For the course system, there are predefined courses (Data Fundamentals/Web Dev/AI Modules) with JSON file loading via Godot's FileAccess.
+
+System contains preset difficulty levels (Easy/Normal/Hard) with base difficulty coefficients (0.3/0.5/0.7)
+
+*Dynamic Difficulty System:*
+
+The question is selected by first taking the user's current difficulty level, applying a ±15% random jitter on it, then finding a question with difficulty closest to that specific level, ensuring some random elements while ensuring appropriate difficulty for user.
+
+When initially loading questions into the game, if there is no difficulty assigned to the question, it is initially set at 0.5 to ensure appropriate adjustment later.
+
+When question is answered correctly/wrongly, based on time taken and question difficulty, the users' difficulty is increased/lowered accordingly, the difficulty of the questions would also be adjusted based on this, ensuring that the question's difficulty is not arbitrarily set and instead is based on users answering the questions.
+
+*Performance Tracking:*
+
+For scoring, the correctness of answer, the time taken for user to answer, as well as the difficulty of the questions is taken into account.
+
+=== The Role of Behavioural-Driven Development in Implementation Phase
+
+The Behavior-Driven Development (BDD) methodology played a critical role in aligning technical implementation with pedagogical requirements during the project’s implementation phase. Key contributions included:
+
+1. *Feature Isolation*
+
+BDD’s focus on vertical slices enabled parallel development of:
+
+    - VR Interaction Layer: Movement in game and question displays in room
+
+    - Adaptive Difficulty Backend: Difficulty jitter (±15%), nearest-match selection and constantly changing user and question difficulties
+
+    - Data Pipeline: Python Question Bank Tool -> CSV -> JSON -> Rust Backend 
+
+2. *Iterative Validation*
+
+BDD cycles enabled:
+
+    - Early feedback on VR comfort (movement sensitivity thresholds)
+
+    - Progressive refinement of adaptive algorithms based on test-runner metrics
+
+    - Notice to change CSV files to JSON files for better parsing
+
+
+BDD ensured the final system met both technical correctness and educational validity (adaptive pacing matching cognitive load theories), while maintaining traceability between stakeholder requirements and code commits.
+
+
 
 == Clearly describe how the system's usability and user experience aspects were addressed, providing an appropriate level of detail. // 5%
 === Concern 1: User might not have VR headset, limiting access to playing the game
@@ -233,6 +321,8 @@ Users may not find that questions vary a lot in difficulty and they may not be a
 === Concern 4: Question bank needs to be maintainable in order to add/edit/remove questions
 
 To facilitate further learning, question banks need to be added or updated in order for more questions and topics to be selected by the user for the game. As such, our team made a developer-side tool that allows for creating and editing question banks, which then can be selected by the user in game, allowing for seamless updating of question banks.
+
+#pagebreak()
 
 = Use Instructions // subtotal: 20%
 == Installation: Describe system requirements, including the minimum and recommended hardware requirements (e.g., CPU, RAM, and storage) and operating systems. Provide step-by-step instructions for installing and configuring the software. // 5% 
@@ -312,7 +402,7 @@ Settings aim for 60+ frames per second to reduce induced motion sickness.
      - Alternatively, you may choose to select *Options* to adjust some settings to your liking, or view *credits*.
 
 
-== Deployment: Explain how to deploy the system on a local machine and how to set up the database. If relevant, include instructions for setting up virtual machines, containers or cloud functions. // 5%
+== Deployment: Explain how to deploy the system on a local machine and how to set up the database. // 5%
 
 === 3.2.1 Automatic Installation of Environment:
   === Windows:
@@ -348,7 +438,7 @@ Settings aim for 60+ frames per second to reduce induced motion sickness.
        
      - If the setup is successful, you will see a confirmation message.
 
-  === Linux & Mac:
+  === Linux & Mac (TODO $arrow.r$ alex):
 
     1. *Ensure Your System Packages are Installed and Up To Date*:
      - Ensure the following system packages are up to date with the latest versions to avoid compatibility issues (they should be available in your package manager):
@@ -417,7 +507,7 @@ If you wish to automatically compile the rust extension when you make changes, s
 
 
 
-== Launching: Provide instructions on creating a user account or logging into the system. Explain different user roles (if applicable). Guide users through any first-time setup steps, such as creating admin accounts or configuring user settings. // 5%
+== Launching: Provide instructions on creating a user account or logging into the system. Guide users through any first-time setup steps, such as creating admin accounts or configuring user settings. // 5%
 
   1. Navigate to the game's URL and wait for the game to load.
   
@@ -427,12 +517,33 @@ If you wish to automatically compile the rust extension when you make changes, s
 
 
 == Troubleshooting: List common error messages and solutions for resolving them. Explain where users can find logs or diagnostic information to troubleshoot issues. // 5%
+
+Users may commonly encounter the following errors as listed below with their causes and solutions:
+
 - Devtools -> Console, shows any debug messages and errors in the web builds. 
 
-- Trying to use VR without having a compatible browser or headset, shows a message screen stating could not start VR.
-- Loading the website from a non secure environment, an error message stating the missing requirement is printed in a red box on the screen.
-- When an error occurs when loading the game, it is displayed in a red message box on the screen with the error message. Further information can be found in the devtools console.
-- When running through godot, errors and warning are printed inside the editor.
+1. *VR Compatibility Issues:*
+- *Error Message:* `Could not start VR`
+- *Cause:* Attempting to use VR features without a compatible browser or headset.
+- *Solution:* Verify that your browser supports WebVR/WebXR and ensure your VR headset is correctly connected and configured.
+
+2. *Non-Secure Environment:*
+- *Error Message:* `Secure Environment Required.`
+- *Cause:* Loading the website from an insecure (HTTP) environment instead of HTTPS.
+- *Solution:* Ensure you access the website using an HTTPS connection.
+
+3. *Godot Errors:*
+- *Error Message:* When running through Godot, errors and warnings printed within the Godot editor.
+- *Cause:* Issues related to scripts, nodes, resources, or scene configuration.
+- *Solution:* Examine error and warning messages within the Godot editor console. Adjust scripts or resources as necessary based on detailed feedback.
+
+4. *Game Loading Errors:*
+- *Error Message:* loading errors displayed in a red message box on-screen.
+- *Cause:* Network issues, script errors, or resource loading failures.
+- *Solution:* Review the specific error message displayed. Further information can be found in the devtools console.
+
+#pagebreak()
+
 = Maintenance and Implications // subtotal: 20%
 == Provide useful and usable information how the system can be maintained // 5%
 - *Regular Content Updates*
@@ -473,6 +584,8 @@ If you wish to automatically compile the rust extension when you make changes, s
 
     - Accessibility Divide:
         - VR hardware costs may exclude low-income users, exacerbating inequities in tech education.
+
+        - To combat this, team has created a 3D version accessible through traditional web, so that any user with a modern computer would be able to access and play the game
         
     - Data Privacy Risks:
         - User performance data (e.g., quiz scores, learning patterns) must be anonymised and encrypted to prevent misuse.
