@@ -120,31 +120,84 @@ This formed the basis of our development, as well as giving us a goal to work to
 No initial source code or database was given to us, so we had to create everything from scratch.
 
 Client asked us to use the courses within IBM SkillsBuild to source our questions to display on the game. We initially tried asking for a JSON or a database of the questions and answers used within the SkillsBuild website, which was denied due to security reasons, as well as the client wanting the team do source the questions by doing the SkillsBuild courses ourselves, so this added an additional hurdle in our game design.
-== Provide a clear and appropriately detailed technical description of how each system functionality was developed. Include, where relevant, some or all of the following aspects: // 30%
+== Provide a clear and appropriately detailed technical description of how each system functionality was developed: // 30%
 === System Architecture
 
-TODO: Make Diagram and Insert Here
+#image("systemarchitecture.png")
+
 
 
 
 === Technologies Used
-For the game engine, we chose to use GODOT due to the open source nature, extensive documentation and it being a relatively lightweight development environment.
+For the game engine, we chose to use Godot due to the open source nature, extensive documentation and it being a relatively lightweight development environment.
 
-Natively, GODOT used its own language, GDScript for everything, both frontend and backend. However, we chose to use Rust for most of the game, due to the team wanting the game to be on webxr for accessibility reasons, Rust gave us the performance boost we needed to run the game in a web environment without losing too much framerate.
+Natively, Godot used its own language, GDScript for everything, both frontend and backend. However, we chose to use Rust for most of the game, which Godot has plenty of support for. As the team wants the game to be on webxr for accessibility reasons, Rust gave us the performance boost we needed to run the game in a web environment without losing too much framerate.
 
 Python was also used for the question bank tool, which is not a part of the game itself, but acts as a developer tool to create and edit question databases.
 
-The question banks are stored as csv files which is then read by either the python tool for editing or by the rust backend of the VR game.
+The question banks are stored as csv files which is then read by either the Python tool for editing or by the Rust backend of the VR game.
 
 Git and Github was used for version control and typst was used for all the docs.
 
 === Development Process
 
+During our requirements gathering for the project, we decided on using Scrum as our development approach. During actual production, we attempted and succeeded in applying this approach to our development.
+
+Sprints were one week long, and they start at the end of our software engineering practical on Wednesdays 11am, and end at the beginning of the practical at 9am, with the time in between spent doing retrospectives between the team members, as well as deciding each other's tasks for the week.
+
+Tasks assigned for each other during the week is not always technical in nature. Although a good portion of it is coding game systems and menus, some time and man-hours were also spent finding music, textures, as well as typing up testing plans and reports, showcasing all facets of the software development cycle.
+
+On Fridays at 5pm, our team has a standup in which our team members have an allotted time to develop together and update each other on our progress. This assisted a lot in development due to certain sections of the game requiring integrating systems that two separate team members have made. Having an allotted time slot in which team members work on the product together also ensures that they are all on task and can finish their tasks by the end of the sprint.
+
 === System Functionality 1: VR Environment and Movement
+
+Using Godot's native VR support (the Godot XR Tools Library), as well as connecting it with our Rust backend using the Godot API, the viewmodel and movement system of the player is developed:
+
+*Base Architecture:*
+
+Inherits from Godot's CharacterBody3D for physics-based movement, utilizes GDExtension binding with #[godot_api] and #[derive(GodotClass)], system also implements ICharacterBody3D interface for physics processing.,
+
+*Movement System:*
+
+Input is handled by using XR controllers via XrController3D nodes, with right thumbstick for directional movement (via get_vector2("thumbstick"))and left thumbstick for horizontal rotation. "A" button was used for jumping and the right trigger was used for interactions with the scene.
+
+Movement direction is derived from HMD orientation (XrCamera3D basis), which then converts 2D thumbstick input to 3D movement vector and applies speed multiplier (5m/s) and normalizes direction
+
+For jumping physics, there is a gravity simulation (9.8m/s²) when airborne, and jumping has impulse (5m/s vertical velocity)and velocity updates with move_and_slide() for collision handling.
+
+*Rotation System:*
+
+Left thumbstick controls y-axis rotation, which applies sensitivity scaling (0.025) for smooth turning. System directly modifies character body rotation while maintaining HMD-independent view
+
+*Interaction System:*
+
+For interacting with objects, there is a right controller-mounted RayCast3D with collision layer filtering (layer 8 for quiz buttons) using trigger-based interaction detection, integrating with SceneManager for world state access.
 
 === System Functionality 2: 3D Environment and Movement
 
-=== System Functionality 3: Question Bank
+A traditional first-person movement system implemented through Rust/Godot integration with these components:
+
+*Base Architecture:*
+
+    Inherits from CharacterBody3D for physics-based movement and uses GDExtension binding with #[godot_api] and #[derive(GodotClass)]. System implements ICharacterBody3D interface for physics processing and utilizes Godot's input system with web platform considerations
+
+*Movement System:*
+
+Input is handled by using WASD keyboard input via Input::get_vector() for directional movement, spacebar for jumping action ("jump" input action) and mouse capture handling for web builds with auto-recapture on click.
+
+Direction is derived from movement direction from head node orientation and converts 2D input vector to 3D movement relative to view direction while applying consistent movement speed (5m/s) across all axes
+
+For jumping physics, there is a gravity simulation (9.8m/s²) when airborne, and jumping has impulse (5m/s vertical velocity)and velocity updates with move_and_slide() for collision handling.
+
+*Rotation System:*
+
+Mouse is controlled with horizontal (yaw) and vertical (pitch) rotation via mouse motion, sensitivity scaling (0.001) with cubic curve potential, and pitch clamping to ±90 degrees to prevent over-rotation
+
+*Interaction System:*
+
+Head-mounted RayCast3D for object interaction, with collision layer 8 filtering for quiz buttons, using "interact" input action (default E key) for activation. Also includes automatic collision clearing when not targeting interactables, integrating with SceneManager for world state access.
+
+=== System Functionality 3: Question Bank Tooling
 
 === System Functionality 4: Question Display
 
