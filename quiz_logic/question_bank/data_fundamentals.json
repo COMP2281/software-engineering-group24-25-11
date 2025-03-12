@@ -142,7 +142,7 @@
 		"choices": [
 			"Communicate results and help people understand the insights to make decisions.",
 			"Explore and interpret data during analysis to identify patterns or trends.",
-			"Organize data in a usable format, such as a spreadsheet, for people to easily access.",
+			"Organize data in a usable format, such as a spreadsheet, for people to easily access."
 		],
 		"answers": [0,1],
 		"difficulty": 0
