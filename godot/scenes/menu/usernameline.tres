@@ -1,0 +1,24 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bu75kd8ohwgkk"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6yxdp"]
+bg_color = Color(0.0352941, 0.603922, 0.231373, 0.945098)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 7
+border_width_bottom = 8
+border_color = Color(0.436838, 0.99792, 0.530491, 1)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 20
+shadow_color = Color(0.235294, 0.839216, 0.231373, 1)
+shadow_size = 2
+shadow_offset = Vector2(5, 2)
+
+[resource]
+LineEdit/colors/font_color = Color(1, 1, 1, 1)
+LineEdit/colors/font_placeholder_color = Color(1, 1, 1, 0.913725)
+LineEdit/font_sizes/font_size = 20
+LineEdit/styles/normal = SubResource("StyleBoxFlat_6yxdp")
