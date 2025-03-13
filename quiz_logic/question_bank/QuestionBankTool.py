@@ -7,7 +7,6 @@ class QuestionBankTool:
         self.root = root
         self.root.title("Question Bank Tool")
 
-        # UI Components
         self.file_label = tk.Label(root, text="No file selected")
         self.file_label.pack()
 
@@ -72,30 +71,25 @@ class QuestionBankTool:
 
     def edit_question(self, new=False):
         def update_answer_ui():
-            # Show/hide answer widgets based on question type
             if question_type.get() == "single":
                 single_answer_frame.grid()
                 multiple_answer_frame.grid_remove()
             else:
                 single_answer_frame.grid_remove()
                 multiple_answer_frame.grid()
-                # Clear previous selections
                 multiple_answer_listbox.selection_clear(0, tk.END)
 
         def save():
-            # Validate question text
             question_text = question_entry.get("1.0", tk.END).strip()
             if not question_text:
                 messagebox.showerror("Error", "Question cannot be empty.")
                 return
-
-            # Validate choices
+            
             choices = [choice_entry.get("1.0", tk.END).strip() for choice_entry in choice_entries]
             if not all(choices):
                 messagebox.showerror("Error", "All choices must be filled.")
                 return
 
-            # Validate difficulty
             try:
                 difficulty = float(difficulty_entry.get())
                 if not (0.0 <= difficulty <= 1.0):
@@ -104,7 +98,6 @@ class QuestionBankTool:
                 messagebox.showerror("Error", "Difficulty must be a float between 0.0 and 1.0")
                 return
 
-            # Get answer(s)
             if question_type.get() == "single":
                 answer = single_answer_var.get()
                 if not (0 <= answer < len(choices)):
@@ -116,7 +109,6 @@ class QuestionBankTool:
                     messagebox.showerror("Error", "Select at least one answer")
                     return
 
-            # Build question object
             question = {
                 "type": question_type.get(),
                 "question": question_text,
@@ -125,7 +117,6 @@ class QuestionBankTool:
                 "difficulty": difficulty
             }
 
-            # Update list
             if new:
                 self.questions.append(question)
                 self.question_listbox.insert(tk.END, question["question"])
@@ -137,7 +128,6 @@ class QuestionBankTool:
             
             editor.destroy()
 
-        # --- UI Setup ---
         if not new and not self.question_listbox.curselection():
             messagebox.showwarning("Warning", "No question selected.")
             return
@@ -145,19 +135,16 @@ class QuestionBankTool:
         editor = tk.Toplevel(self.root)
         editor.title("Question Editor")
         
-        # Question Type
         tk.Label(editor, text="Question Type:").grid(row=0, column=0, sticky=tk.W)
         question_type = ttk.Combobox(editor, values=["single", "multiple"], state="readonly")
         question_type.grid(row=0, column=1)
         question_type.set("single")
         question_type.bind("<<ComboboxSelected>>", lambda _: update_answer_ui())
 
-        # Question Text
         tk.Label(editor, text="Question:").grid(row=1, column=0, sticky=tk.W)
         question_entry = tk.Text(editor, width=60, height=3)
         question_entry.grid(row=1, column=1, columnspan=2)
 
-        # Choices
         choice_entries = []
         for i in range(4):
             tk.Label(editor, text=f"Choice {i+1}:").grid(row=2+i, column=0, sticky=tk.W)
@@ -165,24 +152,21 @@ class QuestionBankTool:
             entry.grid(row=2+i, column=1, columnspan=2)
             choice_entries.append(entry)
 
-        # Answer Selectors
         answer_frame = tk.Frame(editor)
         answer_frame.grid(row=6, column=0, columnspan=3, sticky=tk.W)
 
-        # Single Answer
         single_answer_frame = tk.Frame(answer_frame)
         tk.Label(single_answer_frame, text="Correct Answer:").pack(side=tk.LEFT)
         single_answer_var = tk.IntVar()
         single_answer_combobox = ttk.Combobox(
             single_answer_frame, 
             textvariable=single_answer_var, 
-            values=list(range(1, 5)),  # Display 1-4 to users
+            values=list(range(1, 5)), 
             state="readonly"
         )
         single_answer_combobox.pack(side=tk.LEFT)
         single_answer_combobox.current(0)
 
-        # Multiple Answer
         multiple_answer_frame = tk.Frame(answer_frame)
         tk.Label(multiple_answer_frame, text="Correct Answers:").pack(side=tk.LEFT)
         multiple_answer_listbox = tk.Listbox(
@@ -194,26 +178,24 @@ class QuestionBankTool:
         multiple_answer_listbox.pack(side=tk.LEFT)
         multiple_answer_listbox.insert(tk.END, "Choice 1", "Choice 2", "Choice 3", "Choice 4")
 
-        # Difficulty
         tk.Label(editor, text="Difficulty (0.0-1.0):").grid(row=7, column=0, sticky=tk.W)
         difficulty_entry = tk.Entry(editor)
         difficulty_entry.grid(row=7, column=1, sticky=tk.W)
 
-        # Load existing data
         if not new:
             index = self.question_listbox.curselection()[0]
             question = self.questions[index]
             question_type.set(question["type"])
             question_entry.insert("1.0", question["question"])
             for i, entry in enumerate(choice_entries):
-                if i < len(question["choices"]):  # Ensure we don't access out-of-bounds indices
+                if i < len(question["choices"]):
                     entry.insert("1.0", question["choices"][i])
                 else:
-                    entry.insert("1.0", "")  # Clear any unused choice fields
+                    entry.insert("1.0", "") 
             difficulty_entry.insert(0, str(question["difficulty"]))
             
             if question["type"] == "single":
-                single_answer_var.set(question["answer"] + 1)  # Show 1-4 to users
+                single_answer_var.set(question["answer"] + 1) 
             else:
                 for idx in question["answer"]:
                     multiple_answer_listbox.selection_set(idx)
