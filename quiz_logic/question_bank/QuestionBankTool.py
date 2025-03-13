@@ -206,7 +206,10 @@ class QuestionBankTool:
             question_type.set(question["type"])
             question_entry.insert("1.0", question["question"])
             for i, entry in enumerate(choice_entries):
-                entry.insert("1.0", question["choices"][i])
+                if i < len(question["choices"]):  # Ensure we don't access out-of-bounds indices
+                    entry.insert("1.0", question["choices"][i])
+                else:
+                    entry.insert("1.0", "")  # Clear any unused choice fields
             difficulty_entry.insert(0, str(question["difficulty"]))
             
             if question["type"] == "single":

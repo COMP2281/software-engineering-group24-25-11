@@ -1,163 +1,221 @@
 [
-	{
-		"type": "single",
-		"question": "While reviewing a spreadsheet with customer information, you see that one of the columns contains data for the marital status of the customers. What type of data is this?",
-		"choices": ["Nominal", "Continuous", "Ordinal", "Discrete"],
-		"answer": 0,
-		"difficulty": 0
-	},
-	{
-		"type": "multiple",
-		"question": "Which of the following conclusions can you make about structured data? Select the two that apply.",
-		"choices": [
-			" \"It\u2019s organized into rows and columns in a spreadsheet or database. \"",
-			"It\u2019s raw data that is stored in its original, undefined format. ",
-			"Examples can include images, text messages, and social media posts. ",
-			"Examples can include names, dates, and addresses. "
-		],
-		"answers": [0, 3],
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "What type of data is on a driver's license that records a person's eye color and hair color?",
-		"choices": ["Qualitative data", "Quantitative data"],
-		"answer": 0,
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "Fill in the blank. Text in a book, audio files, and social media posts are examples of _______________ data.",
-		"choices": ["database", "structured", "unstructured", "complex"],
-		"answer": 2,
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "Fill in the blank. With big data, the __________ is the quality and trustworthiness of the data.",
-		"choices": ["Veracity", "Value", "Volume", "Velocity"],
-		"answer": 0,
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "What is the speed at which new data is generated and moves around?",
-		"choices": ["Velocity", "Value", "Veracity", "Volume"],
-		"answer": 0,
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "Fill in the blank. The __________ of big data refers to the ability to obtain monetary, medical, social, or personal benefits from the data.",
-		"choices": ["Value", "Velocity", "Veracity", "Volume"],
-		"answer": 0,
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "A company uses data analytics to get a \u201csnapshot\u201d of its business and to identify issues. The company\u2019s data sources are past and present revenue reports and stock prices.Which type of analytics uses this type of data?",
-		"choices": [
-			"Diagnostic analytics",
-			"Predictive analytics",
-			"Prescriptive analytics",
-			"Descriptive analytics"
-		],
-		"answer": 3,
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "Which type of analytics recommends actions to take to eliminate a future problem or take advantage of a promising trend?",
-		"choices": [
-			"Prescriptive analytics",
-			"Diagnostic analytics",
-			"Predictive analytics",
-			"Descriptive analytics"
-		],
-		"answer": 0,
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "Which type of analytics makes forecasts about the future?",
-		"choices": [
-			"Diagnostic analytics",
-			"Descriptive analytics",
-			"Predictive analytics",
-			"Prescriptive analytics"
-		],
-		"answer": 2,
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "Which type of analytics drills down the trends and patterns to identify the causes of problems?",
-		"choices": [
-			"Predictive analytics",
-			"Descriptive analytics",
-			"Diagnostic analytics",
-			"Prescriptive analytics"
-		],
-		"answer": 2,
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "In which step did Charles share that he spends most of his time, nearly 80%?",
-		"choices": ["Analyze", "Collect", "Visualize", "Clean"],
-		"answer": 3,
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "In which step did Charles share he figures out the best way to depict his results in a team presentation?",
-		"choices": ["Collect", "Visualize", "Clean", "Analyze"],
-		"answer": 1,
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "In which step did Charles share that he gets excited to investigate and use the right analytical methods to find root causes?",
-		"choices": ["Visualize", "Clean", "Analyze", "Collect"],
-		"answer": 2,
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "In which step did Charles share that he is careful to follow the company guidelines when storing data for security purposes?",
-		"choices": ["Clean", "Analyze", "Collect", "Visualize"],
-		"answer": 2,
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "Which type of visualization is best-suited for ranking a large number of categories, showing correlation, and using for before-after analysis?",
-		"choices": ["Line chart", "Bar chart", "Pie chart", "Scatter plot chart"],
-		"answer": 1,
-		"difficulty": 0
-	},
-	{
-		"type": "multiple",
-		"question": "What is the purpose of a data visualization? Select the two that apply.",
-		"choices": [
-			"Communicate results and help people understand the insights to make decisions.",
-			"Explore and interpret data during analysis to identify patterns or trends.",
-			"Organize data in a usable format, such as a spreadsheet, for people to easily access."
-		],
-		"answers": [0,1],
-		"difficulty": 0
-	},
-	{
-		"type": "single",
-		"question": "Which of the following statements about data visualizations is correct?",
-		"choices": [
-			"Data visualizations turn narratives into numbers.",
-			"The goal is to have a visual that is effective, attractive, and impactive. ",
-			"The audience should be confused when they first see a visualization.",
-			"Data analysts typically use one of four types of visualizations."
-		],
-		"answer": 1,
-		"difficulty": 0
-	}
+    {
+        "type": "single",
+        "question": "While reviewing a spreadsheet with customer information, you see that one of the columns contains data for the marital status of the customers. What type of data is this?",
+        "choices": [
+            "Nominal",
+            "Continuous",
+            "Ordinal",
+            "Discrete"
+        ],
+        "answer": 0,
+        "difficulty": 0
+    },
+    {
+        "type": "multiple",
+        "question": "Which of the following conclusions can you make about structured data? Select the two that apply.",
+        "choices": [
+            " \"It\u2019s organized into rows and columns in a spreadsheet or database. \"",
+            "It\u2019s raw data that is stored in its original, undefined format. ",
+            "Examples can include images, text messages, and social media posts. ",
+            "Examples can include names, dates, and addresses. "
+        ],
+        "answer": [
+            0,
+            3
+        ],
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "What type of data is on a driver's license that records a person's eye color and hair color?",
+        "choices": [
+            "Qualitative data",
+            "Quantitative data"
+        ],
+        "answer": 0,
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "Fill in the blank. Text in a book, audio files, and social media posts are examples of _______________ data.",
+        "choices": [
+            "database",
+            "structured",
+            "unstructured",
+            "complex"
+        ],
+        "answer": 2,
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "Fill in the blank. With big data, the __________ is the quality and trustworthiness of the data.",
+        "choices": [
+            "Veracity",
+            "Value",
+            "Volume",
+            "Velocity"
+        ],
+        "answer": 0,
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "What is the speed at which new data is generated and moves around?",
+        "choices": [
+            "Velocity",
+            "Value",
+            "Veracity",
+            "Volume"
+        ],
+        "answer": 0,
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "Fill in the blank. The __________ of big data refers to the ability to obtain monetary, medical, social, or personal benefits from the data.",
+        "choices": [
+            "Value",
+            "Velocity",
+            "Veracity",
+            "Volume"
+        ],
+        "answer": 0,
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "A company uses data analytics to get a \u201csnapshot\u201d of its business and to identify issues. The company\u2019s data sources are past and present revenue reports and stock prices.Which type of analytics uses this type of data?",
+        "choices": [
+            "Diagnostic analytics",
+            "Predictive analytics",
+            "Prescriptive analytics",
+            "Descriptive analytics"
+        ],
+        "answer": 3,
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "Which type of analytics recommends actions to take to eliminate a future problem or take advantage of a promising trend?",
+        "choices": [
+            "Prescriptive analytics",
+            "Diagnostic analytics",
+            "Predictive analytics",
+            "Descriptive analytics"
+        ],
+        "answer": 0,
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "Which type of analytics makes forecasts about the future?",
+        "choices": [
+            "Diagnostic analytics",
+            "Descriptive analytics",
+            "Predictive analytics",
+            "Prescriptive analytics"
+        ],
+        "answer": 2,
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "Which type of analytics drills down the trends and patterns to identify the causes of problems?",
+        "choices": [
+            "Predictive analytics",
+            "Descriptive analytics",
+            "Diagnostic analytics",
+            "Prescriptive analytics"
+        ],
+        "answer": 2,
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "In which step did Charles share that he spends most of his time, nearly 80%?",
+        "choices": [
+            "Analyze",
+            "Collect",
+            "Visualize",
+            "Clean"
+        ],
+        "answer": 3,
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "In which step did Charles share he figures out the best way to depict his results in a team presentation?",
+        "choices": [
+            "Collect",
+            "Visualize",
+            "Clean",
+            "Analyze"
+        ],
+        "answer": 1,
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "In which step did Charles share that he gets excited to investigate and use the right analytical methods to find root causes?",
+        "choices": [
+            "Visualize",
+            "Clean",
+            "Analyze",
+            "Collect"
+        ],
+        "answer": 2,
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "In which step did Charles share that he is careful to follow the company guidelines when storing data for security purposes?",
+        "choices": [
+            "Clean",
+            "Analyze",
+            "Collect",
+            "Visualize"
+        ],
+        "answer": 2,
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "Which type of visualization is best-suited for ranking a large number of categories, showing correlation, and using for before-after analysis?",
+        "choices": [
+            "Line chart",
+            "Bar chart",
+            "Pie chart",
+            "Scatter plot chart"
+        ],
+        "answer": 1,
+        "difficulty": 0
+    },
+    {
+        "type": "multiple",
+        "question": "What is the purpose of a data visualization? Select the two that apply.",
+        "choices": [
+            "Communicate results and help people understand the insights to make decisions.",
+            "Explore and interpret data during analysis to identify patterns or trends.",
+            "Organize data in a usable format, such as a spreadsheet, for people to easily access."
+        ],
+        "answer": [
+            0,
+            1
+        ],
+        "difficulty": 0
+    },
+    {
+        "type": "single",
+        "question": "Which of the following statements about data visualizations is correct?",
+        "choices": [
+            "Data visualizations turn narratives into numbers.",
+            "The goal is to have a visual that is effective, attractive, and impactive. ",
+            "The audience should be confused when they first see a visualization.",
+            "Data analysts typically use one of four types of visualizations."
+        ],
+        "answer": 1,
+        "difficulty": 0
+    }
 ]
-
