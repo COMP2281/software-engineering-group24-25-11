@@ -1,6 +1,45 @@
-[gd_scene load_steps=8 format=3 uid="uid://dpvq1y4qsswa6"]
+[gd_scene load_steps=12 format=3 uid="uid://dpvq1y4qsswa6"]
 
+[ext_resource type="FontFile" uid="uid://d3v8xryfbq6sn" path="res://assets/Space_Mono/SpaceMono-Bold.ttf" id="1_g5t8f"]
 [ext_resource type="Texture2D" uid="uid://bhos422jd8qde" path="res://assets/skybox.webp" id="2_plw8s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d8brc"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.2178, 0.33, 0.33, 1)
+border_blend = true
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g5t8f"]
+bg_color = Color(0.239216, 0.858824, 0.85098, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.619608, 0.941176, 0.941176, 1)
+border_blend = true
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="Theme" id="Theme_d8brc"]
+ProgressBar/styles/background = SubResource("StyleBoxFlat_d8brc")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_g5t8f")
+
+[sub_resource type="LabelSettings" id="LabelSettings_qd3kh"]
+font = ExtResource("1_g5t8f")
+font_size = 24
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w1nur"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q5tta"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_k4qd3"]
 panorama = ExtResource("2_plw8s")
@@ -18,26 +57,69 @@ glow_strength = 1.3
 glow_hdr_scale = 4.0
 glow_hdr_luminance_cap = 32.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t4al5"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g5t8f"]
-bg_color = Color(0.239216, 0.858824, 0.85098, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(0.619608, 0.941176, 0.941176, 1)
-border_blend = true
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
-[sub_resource type="Theme" id="Theme_d8brc"]
-ProgressBar/styles/background = SubResource("StyleBoxEmpty_t4al5")
-ProgressBar/styles/fill = SubResource("StyleBoxFlat_g5t8f")
-
 [node name="World" type="WorldScene"]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.05
+anchor_right = 0.4
+anchor_bottom = 0.1
+
+[node name="ProgressBar" type="ProgressBar" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme = SubResource("Theme_d8brc")
+step = 0.001
+show_percentage = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Completed" type="Label" parent="Control/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0/15"
+label_settings = SubResource("LabelSettings_qd3kh")
+
+[node name="HSeparator" type="HSeparator" parent="Control/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/separator = SubResource("StyleBoxTexture_w1nur")
+
+[node name="Points" type="Label" parent="Control/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0pts"
+label_settings = SubResource("LabelSettings_qd3kh")
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="Control/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/separator = SubResource("StyleBoxEmpty_q5tta")
+
+[node name="Time" type="Label" parent="Control/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0s"
+label_settings = SubResource("LabelSettings_qd3kh")
+horizontal_alignment = 2
+
+[node name="Timer" type="Timer" parent="."]
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -2)
@@ -59,31 +141,3 @@ omni_range = 4096.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_3cmne")
-
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="Control"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 16.0
-grow_horizontal = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
-
-[node name="ProgressBar" type="ProgressBar" parent="Control/MarginContainer"]
-layout_mode = 2
-size_flags_vertical = 4
-theme = SubResource("Theme_d8brc")
-value = 50.0
-show_percentage = false

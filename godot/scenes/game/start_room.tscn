@@ -1,17 +1,11 @@
-[gd_scene load_steps=42 format=3 uid="uid://wrdo1ahnfqfv"]
+[gd_scene load_steps=38 format=3 uid="uid://wrdo1ahnfqfv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2qsxh"]
 size = Vector3(30, 1, 30)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_bcaug"]
-load_path = "res://.godot/imported/skcxcfhc_8K_Albedo.jpg-9c11ae319677a34c126bdbac6d383aa8.s3tc.ctex"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_t5nn4"]
-load_path = "res://.godot/imported/skcxcfhc_8K_Roughness.jpg-927cb8799e4bba6c88f3bb889585da4c.s3tc.ctex"
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wndie"]
-albedo_texture = SubResource("CompressedTexture2D_bcaug")
-roughness_texture = SubResource("CompressedTexture2D_t5nn4")
+albedo_color = Color(0.480427, 0.480427, 0.480427, 1)
+metallic = 1.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_ks1af"]
 material = SubResource("StandardMaterial3D_wndie")
@@ -119,13 +113,7 @@ size = Vector3(13, 7, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_37bod"]
 size = Vector3(13, 7, 1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_tobsp"]
-size = Vector3(4, 7, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_ae0ly"]
-size = Vector3(4, 7, 1)
-
-[node name="Start Room" type="Node3D"]
+[node name="StartRoom" type="Node3D"]
 
 [node name="Floor" type="StaticBody3D" parent="."]
 
@@ -314,16 +302,6 @@ shape = SubResource("BoxShape3D_v7ej2")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Wall4-RightSide"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 3, -15)
 mesh = SubResource("BoxMesh_37bod")
-
-[node name="Wall4-Door" type="StaticBody3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall4-Door"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -15)
-shape = SubResource("BoxShape3D_tobsp")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Wall4-Door"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -15)
-mesh = SubResource("BoxMesh_ae0ly")
 
 [node name="Corner1" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 9, 14)

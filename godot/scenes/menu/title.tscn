@@ -1,13 +1,105 @@
-[gd_scene load_steps=6 format=3 uid="uid://d0ib61j4007ft"]
+[gd_scene load_steps=18 format=3 uid="uid://d0ib61j4007ft"]
 
 [ext_resource type="Texture2D" uid="uid://bhos422jd8qde" path="res://assets/skybox.webp" id="1_13ukm"]
 [ext_resource type="Theme" uid="uid://dos5qkbbul75v" path="res://assets/general_button.tres" id="2_bmn1k"]
-[ext_resource type="PackedScene" uid="uid://d37w3meqvg7hp" path="res://scenes/menu/course_selection.tscn" id="2_fqxnr"]
 [ext_resource type="Theme" uid="uid://b2dhbdb6c0g38" path="res://assets/red_button.tres" id="3_6s72b"]
-[ext_resource type="PackedScene" uid="uid://cm45ks7xuxv7m" path="res://scenes/menu/message_box.tscn" id="5_jn0s6"]
+[ext_resource type="Theme" uid="uid://boybj2s5fyoqi" path="res://assets/standout_button.tres" id="4_jwf5l"]
+[ext_resource type="FontFile" uid="uid://d3v8xryfbq6sn" path="res://assets/Space_Mono/SpaceMono-Bold.ttf" id="5_sfhh4"]
+[ext_resource type="StyleBox" uid="uid://bmdhpahgp1cwb" path="res://assets/standout_stylebox.tres" id="6_5pq1v"]
+[ext_resource type="FontFile" uid="uid://ba7r83x6g278j" path="res://assets/Space_Mono/SpaceMono-Regular.ttf" id="7_fs8pb"]
 
-[node name="TitleScreen" type="Control"]
-layout_mode = 3
+[sub_resource type="LabelSettings" id="LabelSettings_bk47l"]
+font = ExtResource("5_sfhh4")
+font_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqdtx"]
+bg_color = Color(0, 0, 0, 0.784314)
+
+[sub_resource type="Theme" id="Theme_mypj0"]
+PanelContainer/styles/panel = ExtResource("6_5pq1v")
+
+[sub_resource type="LabelSettings" id="LabelSettings_gxfi0"]
+font = ExtResource("5_sfhh4")
+font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_j1024"]
+font = ExtResource("7_fs8pb")
+font_size = 18
+
+[sub_resource type="LabelSettings" id="LabelSettings_jwf5l"]
+font = ExtResource("5_sfhh4")
+font_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3lugv"]
+bg_color = Color(0.25, 0.08, 0.09, 0.9)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 7
+border_width_bottom = 8
+border_color = Color(1, 0.4, 0.3, 0.9)
+border_blend = true
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 1
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+shadow_color = Color(1, 0.2, 0.1, 0.5)
+shadow_size = 3
+shadow_offset = Vector2(6, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qubns"]
+bg_color = Color(0.15, 0.04, 0.05, 0.9)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 7
+border_width_bottom = 8
+border_color = Color(1, 0.2, 0.1, 0.7)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 1
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+shadow_color = Color(1, 0.2, 0.1, 0.3)
+shadow_size = 2
+shadow_offset = Vector2(5, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wcuhn"]
+bg_color = Color(0.1, 0.02, 0.03, 0.9)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 7
+border_width_bottom = 8
+border_color = Color(1, 0.1, 0.05, 0.7)
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
+expand_margin_left = 0.5
+expand_margin_top = 0.5
+expand_margin_right = 0.5
+expand_margin_bottom = 0.5
+shadow_color = Color(1, 0.2, 0.1, 0.2)
+shadow_size = 1
+shadow_offset = Vector2(3, 1)
+
+[sub_resource type="Theme" id="Theme_sfhh4"]
+Button/font_sizes/font_size = 16
+Button/styles/hover = SubResource("StyleBoxFlat_3lugv")
+Button/styles/normal = SubResource("StyleBoxFlat_qubns")
+Button/styles/pressed = SubResource("StyleBoxFlat_wcuhn")
+
+[node name="TitleScreen" type="TitleScreen"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -65,15 +157,15 @@ theme = ExtResource("2_bmn1k")
 text = "Play (3D)"
 
 [node name="Tutorial" type="MainMenuButton" parent="MainMenu/VBoxContainer"]
-action = 2
+action = 3
 layout_mode = 2
 focus_neighbor_top = NodePath("../Play3D")
 focus_neighbor_bottom = NodePath("../Options")
 theme = ExtResource("2_bmn1k")
-text = "Tutorial"
+text = "Leaderboard"
 
 [node name="Options" type="MainMenuButton" parent="MainMenu/VBoxContainer"]
-action = 3
+action = 2
 layout_mode = 2
 focus_neighbor_top = NodePath("../Tutorial")
 focus_neighbor_bottom = NodePath("../Credits")
@@ -96,10 +188,181 @@ focus_neighbor_bottom = NodePath("../PlayVR")
 theme = ExtResource("3_6s72b")
 text = "Quit"
 
-[node name="CourseSelection" parent="." instance=ExtResource("2_fqxnr")]
+[node name="CourseSelection" type="Control" parent="."]
 visible = false
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
 
-[node name="MessageBox" parent="." instance=ExtResource("5_jn0s6")]
+[node name="VBoxContainer" type="VBoxContainer" parent="CourseSelection"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="RichTextLabel" type="Label" parent="CourseSelection/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_jwf5l")
+text = "SELECT COURSE"
+label_settings = SubResource("LabelSettings_bk47l")
+horizontal_alignment = 1
+
+[node name="AI Modules" type="CourseSelectionButton" parent="CourseSelection/VBoxContainer"]
+course = 2
+layout_mode = 2
+focus_neighbor_top = NodePath("../Return")
+focus_neighbor_bottom = NodePath("../Data Fundamentals")
+focus_next = NodePath("../Return")
+focus_previous = NodePath("../Return")
+theme = ExtResource("2_bmn1k")
+text = "AI Modules"
+icon_alignment = 1
+
+[node name="Data Fundamentals" type="CourseSelectionButton" parent="CourseSelection/VBoxContainer"]
+layout_mode = 2
+size_flags_stretch_ratio = 0.1
+focus_neighbor_top = NodePath("../AI Modules")
+focus_neighbor_bottom = NodePath("../Wed Dev Fundamentals")
+theme = ExtResource("2_bmn1k")
+text = "Data Fundamentals"
+
+[node name="Wed Dev Fundamentals" type="CourseSelectionButton" parent="CourseSelection/VBoxContainer"]
+course = 1
+layout_mode = 2
+size_flags_stretch_ratio = 11.76
+focus_neighbor_top = NodePath("../Data Fundamentals")
+focus_neighbor_bottom = NodePath("../Return")
+theme = ExtResource("2_bmn1k")
+text = "Web Dev Fundamentals"
+
+[node name="Return" type="ReturnButton" parent="CourseSelection/VBoxContainer" node_paths=PackedStringArray("prev")]
+prev = NodePath("../../../MainMenu")
+layout_mode = 2
+focus_neighbor_top = NodePath("../Wed Dev Fundamentals")
+focus_neighbor_bottom = NodePath("../AI Modules")
+focus_next = NodePath("../AI Modules")
+focus_previous = NodePath("../AI Modules")
+theme = ExtResource("3_6s72b")
+text = "RETURN"
+
+[node name="MessageBox" type="Panel" parent="."]
 visible = false
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wqdtx")
+
+[node name="MarginContainer" type="MarginContainer" parent="MessageBox"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.4
+anchor_right = 0.7
+anchor_bottom = 0.6
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="PanelContainer" type="PanelContainer" parent="MessageBox/MarginContainer"]
+layout_mode = 2
+theme = SubResource("Theme_mypj0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MessageBox/MarginContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MessageBox/MarginContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "MESSAGE"
+label_settings = SubResource("LabelSettings_gxfi0")
+horizontal_alignment = 1
+
+[node name="Message" type="Label" parent="MessageBox/MarginContainer/PanelContainer/VBoxContainer"]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+size_flags_vertical = 3
+text = "placeholder message here"
+label_settings = SubResource("LabelSettings_j1024")
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MessageBox/MarginContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 12
+
+[node name="Return" type="ReturnButton" parent="MessageBox/MarginContainer/PanelContainer/VBoxContainer/MarginContainer" node_paths=PackedStringArray("prev")]
+prev = NodePath("../../../../../../MainMenu")
+layout_mode = 2
+theme = ExtResource("2_bmn1k")
+text = "CLOSE"
+
+[node name="Leaderboard" type="Leaderboard" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.3
+anchor_right = 0.65
+anchor_bottom = 0.7
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Leaderboard"]
+layout_mode = 2
+offset_right = 576.0
+offset_bottom = 432.0
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Leaderbord" type="Label" parent="Leaderboard/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_jwf5l")
+theme_override_font_sizes/font_size = 25
+text = "LEADERBOARD"
+label_settings = SubResource("LabelSettings_jwf5l")
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Leaderboard/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Leaderboard/VBoxContainer/ScrollContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="IsEmpty" type="Button" parent="Leaderboard/VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Leaderboard is currenty empty"
+
+[node name="Exit" type="ReturnButton" parent="Leaderboard/VBoxContainer" node_paths=PackedStringArray("prev")]
+prev = NodePath("../../../MainMenu")
+layout_mode = 2
+theme = SubResource("Theme_sfhh4")
+text = "RETURN"

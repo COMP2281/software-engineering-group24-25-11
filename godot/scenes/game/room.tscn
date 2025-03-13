@@ -46,10 +46,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.25, 5, 0)
 [node name="LeftWindowWall" parent="." instance=ExtResource("2_2ac3s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.25, 5, 0)
 
-[node name="FrontDoorWall" parent="." instance=ExtResource("3_yo3lp")]
+[node name="BackDoorWall" parent="." instance=ExtResource("3_yo3lp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 15.25)
 
-[node name="BackDoorWall" parent="." instance=ExtResource("3_yo3lp")]
+[node name="FrontDoorWall" parent="." instance=ExtResource("3_yo3lp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -15.25)
 
 [node name="Pedestal-Top" type="StaticBody3D" parent="."]
@@ -72,12 +72,20 @@ mesh = SubResource("BoxMesh_hdnwr")
 
 [node name="Corner1" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 8, 13)
+omni_range = 30.0
+omni_attenuation = 0.5
 
 [node name="Corner2" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 8, 13)
+omni_range = 30.0
+omni_attenuation = 0.5
 
 [node name="Corner3" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 8, -13)
+omni_range = 30.0
+omni_attenuation = 0.5
 
 [node name="Corner4" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 8, -13)
+omni_range = 30.0
+omni_attenuation = 0.5

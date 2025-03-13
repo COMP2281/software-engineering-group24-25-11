@@ -1,77 +1,96 @@
-[gd_scene load_steps=4 format=3 uid="uid://wlgwyhowu05r"]
+[gd_scene load_steps=5 format=3 uid="uid://wlgwyhowu05r"]
 
 [ext_resource type="Theme" uid="uid://boybj2s5fyoqi" path="res://assets/standout_button.tres" id="1_eyufy"]
 [ext_resource type="Theme" uid="uid://dos5qkbbul75v" path="res://assets/general_button.tres" id="2_nvmu6"]
 [ext_resource type="Theme" uid="uid://b2dhbdb6c0g38" path="res://assets/red_button.tres" id="3_2whuo"]
 
-[node name="Popupmenu" type="Control"]
-layout_mode = 3
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1mvc1"]
+bg_color = Color(0, 0, 0, 0.980392)
+
+[node name="PanelContainer" type="Panel"]
+process_mode = 2
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+focus_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1mvc1")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="PauseMenu" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.256
-anchor_top = 0.378
-anchor_right = 0.739
-anchor_bottom = 0.783
-offset_left = 0.319977
-offset_top = -0.160004
-offset_right = 0.0799561
-offset_bottom = 0.23999
+anchor_left = 0.4
+anchor_top = 0.4
+anchor_right = 0.6
+anchor_bottom = 0.6
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseMenu"]
 layout_mode = 2
+alignment = 1
 
-[node name="RichTextLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="RichTextLabel" type="Label" parent="PauseMenu/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_eyufy")
-text = "SPACEDROID NAVIGATION SYSTEM "
+text = "PAUSE MENU"
 horizontal_alignment = 1
 
-[node name="HSeparator4" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="HSeparator4" type="HSeparator" parent="PauseMenu/VBoxContainer"]
 layout_mode = 2
 
-[node name="HSeparator6" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="HSeparator6" type="HSeparator" parent="PauseMenu/VBoxContainer"]
 layout_mode = 2
 
-[node name="Resume" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Resume" type="PauseMenuButton" parent="PauseMenu/VBoxContainer"]
 layout_mode = 2
 size_flags_stretch_ratio = 11.76
+focus_neighbor_top = NodePath("../Exit")
+focus_neighbor_bottom = NodePath("../Options")
+focus_next = NodePath("../Exit")
+focus_previous = NodePath("../Exit")
 theme = ExtResource("2_nvmu6")
 text = "Resume"
 
-[node name="HSeparator3" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="HSeparator3" type="HSeparator" parent="PauseMenu/VBoxContainer"]
 layout_mode = 2
 
-[node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Options" type="PauseMenuButton" parent="PauseMenu/VBoxContainer"]
+action = 2
 layout_mode = 2
 size_flags_stretch_ratio = 11.76
+focus_neighbor_top = NodePath("../Resume")
+focus_neighbor_right = NodePath("../Change_course")
 theme = ExtResource("2_nvmu6")
 text = "Options"
 
-[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="PauseMenu/VBoxContainer"]
 layout_mode = 2
 
-[node name="Change_course" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Change_course" type="PauseMenuButton" parent="PauseMenu/VBoxContainer"]
+action = 1
 layout_mode = 2
 size_flags_stretch_ratio = 11.76
+focus_neighbor_top = NodePath("../Options")
+focus_neighbor_bottom = NodePath("../Exit")
 theme = ExtResource("2_nvmu6")
 text = "Change Course"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="PauseMenu/VBoxContainer"]
 layout_mode = 2
 
-[node name="HSeparator5" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+[node name="HSeparator5" type="HSeparator" parent="PauseMenu/VBoxContainer"]
 layout_mode = 2
 
-[node name="Exit" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Exit" type="PauseMenuButton" parent="PauseMenu/VBoxContainer"]
+action = 3
 layout_mode = 2
+focus_neighbor_top = NodePath("../Change_course")
+focus_neighbor_bottom = NodePath("../Resume")
 theme = ExtResource("3_2whuo")
-text = "EMERGENCY SHUTDOWN "
+text = "RETURN TO MAIN MENU"

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://lvv1na0c52wk"
+path="res://.godot/imported/tunetank.com_walking-on-metal-surface.wav-469af2a28ca2fe02fc5002f2108c00fa.sample"
+
+[deps]
+
+source_file="res://assets/Audio effects/walking/tunetank.com_walking-on-metal-surface.wav"
+dest_files=["res://.godot/imported/tunetank.com_walking-on-metal-surface.wav-469af2a28ca2fe02fc5002f2108c00fa.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -5,6 +5,7 @@ use godot::classes::{input::MouseMode, InputEventMouseButton};
 use godot::classes::{
     CharacterBody3D, ICharacterBody3D, InputEvent, InputEventMouseMotion, RayCast3D,
 };
+use godot::obj::WithBaseField;
 use godot::prelude::*;
 
 use crate::scene_manager::SceneManager;
@@ -31,7 +32,7 @@ impl Player3D {
 
         let ray_cast = self.base().get_node_as::<RayCast3D>("Head/RayCast3D");
         let input = Input::singleton();
-        let Some(mut world) = SceneManager::get_manager(self.base().clone().upcast())
+        let Some(world) = SceneManager::get_manager(self.base().clone().upcast())
             .bind()
             .get_world_scene()
         else {
@@ -39,28 +40,29 @@ impl Player3D {
             return;
         };
 
-        // world bind needs to be dropped before QuestionPanel::handle_click() since it also takes
-        // a binding of world.
-        let world_bind = world.bind_mut();
-        let rooms = &world_bind.rooms.duplicate_shallow();
-        drop(world_bind);
+        let rooms = &world.bind().rooms.duplicate_shallow();
 
         let Some(collider) = ray_cast.get_collider() else {
-            for mut room in rooms.iter_shared() {
-                if let Some(ref mut panel) = room.bind_mut().panel {
-                    panel.bind_mut().clear_looking_at();
+            for room in rooms.iter_shared() {
+                if let Some(ref panel) = room.bind().panel {
+                    panel.bind().clear_looking_at();
                 }
             }
             return;
         };
 
-        for mut room in rooms.iter_shared() {
-            if let Some(ref mut panel) = room.bind_mut().panel {
-                panel.bind_mut().set_looking_at(collider.clone());
-                if input.is_action_just_pressed(&StringName::from("interact")) {
-                    panel.bind_mut().handle_click();
+        for room in rooms.iter_shared() {
+            let room = room.bind();
+            if let Some(ref panel) = room.panel {
+                panel.bind().set_looking_at(collider.clone());
+                if input.is_action_just_pressed("interact") {
+                    panel.bind().handle_click();
                 };
             }
+        }
+
+        if input.is_action_just_pressed("interact") {
+            world.bind().is_end_button(collider);
         }
     }
 }
@@ -74,14 +76,9 @@ impl ICharacterBody3D for Player3D {
     fn physics_process(&mut self, delta: f64) {
         let input = Input::singleton();
         // 2D direction input for horizontal movement
-        let horizontal_input = input.get_vector(
-            &StringName::from("move_left"),
-            &StringName::from("move_right"),
-            &StringName::from("move_forward"),
-            &StringName::from("move_back"),
-        );
-        let mut head = self.base().get_node_as::<Node3D>("Head");
-        let direction = (head.get_basis()
+        let horizontal_input =
+            input.get_vector("move_left", "move_right", "move_forward", "move_back");
+        let direction = (self.base().get_basis()
             * Vector3::new(horizontal_input.x, 0., horizontal_input.y))
         .normalized_or_zero();
 
@@ -100,20 +97,27 @@ impl ICharacterBody3D for Player3D {
         self.base_mut().set_velocity(velocity);
         self.base_mut().move_and_slide();
 
+        let scene_manager = SceneManager::get_manager(self.base().clone().upcast());
+        let sfx = scene_manager.bind().get_sfx_controller();
+        // FIXME: remove walking sound when ended
+        if velocity.is_zero_approx() {
+            sfx.bind().stop_walking()
+        } else {
+            sfx.bind().start_walking(self.base().get_global_position())
+        }
+
         // handle joystick looking
-        let rel = input.get_vector(
-            &StringName::from("look_left"),
-            &StringName::from("look_right"),
-            &StringName::from("look_forward"),
-            &StringName::from("look_back"),
-        );
+        let rel = input.get_vector("look_left", "look_right", "look_forward", "look_back");
         let rel = -rel * JOYSTICK_SENSITIVITY as f32;
-        // let relabs = rel.abs();
-        // let rel = Vector2::new(relabs.x.powi(3), relabs.y.powi(3)) * rel.sign();
+
+        let mut rot = self.base().get_rotation();
+        rot.y = (rot.y + rel.x) % (2. * std::f32::consts::PI);
+        self.base_mut().set_rotation(rot);
+
+        let mut head = self.base().get_node_as::<Node3D>("Head");
         let mut head_rot = head.get_rotation();
-        head_rot.y += rel.x;
         head_rot.x =
-            (head_rot.x + rel.y).clamp(-std::f32::consts::FRAC_PI_2, std::f32::consts::FRAC_PI_2);
+            (head_rot.x + (rel.y)).clamp(-std::f32::consts::FRAC_PI_2, std::f32::consts::FRAC_PI_2);
         head.set_rotation(head_rot);
     }
     fn ready(&mut self) {
@@ -124,27 +128,47 @@ impl ICharacterBody3D for Player3D {
         // In the web, we want to recapture the mouse if it has been uncaptured,
         // but only when the user clicks back into the game. Likewise, we should
         // also only respond to mouse events if the mouse is captured.
+        let input = Input::singleton();
         cfg_if! {
             if #[cfg(target_arch="wasm32")] {
-                let input = Input::singleton();
                 if input.get_mouse_mode() != MouseMode::CAPTURED {
                     if event.clone().try_cast::<InputEventMouseButton>().is_ok() {
+                        godot_print!("setting mouse mode to captured");
                         Input::singleton().set_mouse_mode(MouseMode::CAPTURED);
+                    }
+                    if input.is_action_just_pressed("menu_button") {
+                        let scene_manager = SceneManager::get_manager(self.base().clone().upcast());
+                        scene_manager.bind().pause_game();
                     }
                     return;
                 };
             }
         };
+
         let ev = event.try_cast::<InputEventMouseMotion>();
         if let Ok(motion) = ev {
+            // INFO: Firefox mouse capture does not keep mouse locked in center, and dynamically
+            // re-centres the mouse after input, sending another mouse motion event, skewing the
+            // mouse movement on firefox.
+            let rel = -motion.get_screen_relative() * SENSITIVITY as f32;
+
+            let mut rot = self.base().get_rotation();
+            rot.y = (rot.y + rel.x) % (2. * std::f32::consts::PI);
+            self.base_mut().set_rotation(rot);
+
+            // Rotate around local X (pitch), but clamp to avoid flipping
             let mut head = self.base().get_node_as::<Node3D>("Head");
-            let rel = -motion.get_relative() * SENSITIVITY as f32;
             let mut head_rot = head.get_rotation();
-            head_rot.y += rel.x;
-            head_rot.x = (head_rot.x + rel.y)
+            head_rot.x = (head_rot.x + (rel.y))
                 .clamp(-std::f32::consts::FRAC_PI_2, std::f32::consts::FRAC_PI_2);
             head.set_rotation(head_rot);
         }
         self.ray_cast();
+
+        if input.is_action_just_pressed("menu_button") {
+            let scene_manager = SceneManager::get_manager(self.base().clone().upcast());
+            scene_manager.bind().pause_game();
+            return;
+        }
     }
 }

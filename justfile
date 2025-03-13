@@ -43,6 +43,9 @@ godot:
 @dev-all:
     watchexec -r -w rust just rust-debug rust-release
 
+@dev-temp:
+    watchexec -r -w rust -w godot just release-temp
+
 rust-debug:
     cd rust; cargo +nightly build -Zbuild-std
     cd rust; cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten
@@ -55,13 +58,20 @@ release: release-web
 
 # Creates all of the files needed for web
 [unix]
-@release-web: rust-release
+@release-web: rust-release rust-debug
     mkdir -p target/web
-    cd godot && godot --export-release Web ../target/web/index.html
+    cd godot && godot --headless --export-release Web ../target/web/index.html
+
+# FIXME: temp add to nginx
+[unix]
+@release-temp: rust-release
+    mkdir -p target/web
+    cd godot && godot --headless --export-release Web /var/www/ibm/index.html
+
 [windows]
 @release-web: rust-release
     New-Item -ItemType Directory -Path '{{join(justfile_directory(), "target", "web")}}' -Force | Out-Null
-    cd godot; Godot_v4.4-stable_win64.exe --export-release Web ../target/web/index.html
+    cd godot; Godot_v4.4-stable_win64.exe --headless --export-release Web ../target/web/index.html
 
 # TODO: add export presets for other platforms.
 
@@ -69,6 +79,10 @@ release: release-web
 # Installs all of the dependencies needed for the project.
 [unix]
 @setup: install-emscripten install-rust-toolchain install-blender install-godot
+    echo -e "{{BOLD+GREEN}}Installed all dependencies successfully.{{NORMAL}}"
+
+[unix]
+@setup-ci-cd: install-emscripten install-rust-toolchain-noconfirm install-blender install-godot install-godot-export-templates
     echo -e "{{BOLD+GREEN}}Installed all dependencies successfully.{{NORMAL}}"
 
 [windows]
@@ -143,6 +157,29 @@ release: release-web
     fi
     echo -e "{{BOLD+YELLOW}}Rust toolchain installed successfully.{{NORMAL}}"
 
+[unix]
+@install-rust-toolchain-noconfirm:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p "{{DEPS_PATH}}"
+    if command -v rustup 2>&1 >/dev/null; then
+        echo -e "{{BOLD+YELLOW}}Rustup already installed, installing globally...{{NORMAL}}"
+        rustup toolchain install nightly
+        rustup target add --toolchain nightly wasm32-unknown-emscripten
+        rustup target add --toolchain nightly x86_64-unknown-linux-gnu
+        rustup component add --toolchain nightly rust-src
+    else
+        echo -e "{{BOLD+YELLOW}}Rust toolchain not found, installing to {{DEPS_PATH}}{{NORMAL}}"
+        echo 'RUSTUP_HOME="{{LOCAL_RUSTUP_PATH}}"' > {{ENV_PATH}}
+        echo "CARGO_HOME={{LOCAL_CARGO_PATH}}" >> {{ENV_PATH}}
+        export RUSTUP_HOME="{{LOCAL_RUSTUP_PATH}}"
+        export CARGO_HOME="{{LOCAL_CARGO_PATH}}"
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly --no-modify-path -y
+        rustup target add --toolchain nightly wasm32-unknown-emscripten
+        rustup component add --toolchain nightly rust-src
+    fi
+    echo -e "{{BOLD+YELLOW}}Rust toolchain installed successfully.{{NORMAL}}"
+
 @install-watchexec: install-rust-toolchain
     cargo install watchexec-cli
 
@@ -192,3 +229,13 @@ release: release-web
     mv '{{join(GODOT_PATH, "Godot_v4.4-stable_linux.x86_64")}}' '{{join(GODOT_PATH, "godot")}}'
     rm '{{join(DEPS_PATH, "Godot_v4.4-stable_linux.x86_64.zip")}}'
     echo -e "{{BOLD+YELLOW}}Godot downloaded successfully.{{NORMAL}}"
+
+[linux]
+@install-godot-export-templates:
+    echo -e "{{BOLD+YELLOW}}Downloading godot 4.4 export templates to .local/share/godot"
+    mkdir -p "$HOME/.local/share/godot/export_templates/4.4.stable/"
+    curl --progress-bar -Lo '{{join(DEPS_PATH, "Godot_v4.4-stable_export_templates.tpz")}}' "https://github.com/godotengine/godot-builds/releases/download/4.4-stable/Godot_v4.4-stable_export_templates.tpz"
+    unzip '{{join(DEPS_PATH, "Godot_v4.4-stable_export_templates.tpz")}}' -d '{{GODOT_PATH}}'
+    mv '{{join(GODOT_PATH, "templates")}}'/* "$HOME/.local/share/godot/export_templates/4.4.stable/"
+    rm '{{join(DEPS_PATH, "Godot_v4.4-stable_export_templates.tpz")}}'
+    echo -e "{{BOLD+YELLOW}}Godot export templates downloaded successfully.{{NORMAL}}"

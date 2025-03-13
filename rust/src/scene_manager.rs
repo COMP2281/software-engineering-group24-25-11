@@ -4,14 +4,19 @@ use godot::classes::WebXrInterface;
 #[cfg(not(target_arch = "wasm32"))]
 use godot::classes::XrInterface;
 use godot::{
-    classes::{Control, XrServer},
+    classes::{input::MouseMode, Control, Time, XrServer},
     prelude::*,
 };
 
 use crate::{
     character::{normal::Player3D, vr::PlayerVR},
-    question_bank::{Course, Mode},
+    menu::{
+        completion_screen::{self, CompletionScreen},
+        title::TitleScreen,
+    },
+    question_bank::{AnsweredQuestion, Course, Mode, QuestionBank},
     scenes::world::WorldScene,
+    sfx::SFXController,
 };
 
 #[derive(Debug, Default, Clone, Copy, GodotConvert, Var, Export)]
@@ -23,7 +28,7 @@ pub enum InputMode {
 }
 
 #[derive(GodotClass)]
-#[class(init, base=Node)]
+#[class( base=Node)]
 pub struct SceneManager {
     #[cfg(not(target_arch = "wasm32"))]
     xr_interface: Option<Gd<XrInterface>>,
@@ -40,33 +45,48 @@ pub struct SceneManager {
 
 #[godot_api]
 impl INode for SceneManager {
-    fn ready(&mut self) {
-        self.vr_supported = false;
-        cfg_if!(
-            if #[cfg(not(target_arch = "wasm32"))] {
-                self.xr_interface = XrServer::singleton().find_interface(&GString::from("OpenXR"));
-            } else {
-                let webxr_interface = XrServer::singleton().find_interface(&GString::from("WebXR"));
-                if let Some(webxr_interface) = webxr_interface {
-                    let mut webxr_interface = webxr_interface
+    fn init(base: Base<Self::Base>) -> Self {
+        let mut manager = Self {
+            #[cfg(not(target_arch = "wasm32"))]
+            xr_interface: XrServer::singleton().find_interface("OpenXR"),
+            #[cfg(target_arch = "wasm32")]
+            webxr_interface: XrServer::singleton()
+                .find_interface("WebXR")
+                .map(|interface| {
+                    interface
                         .try_cast::<WebXrInterface>()
-                        .expect("should be a webxr interface");
+                        .expect("should be a webxr interface")
+                }),
+
+            vr_supported: false,
+            input_mode: None,
+            course: None,
+            difficulty: None,
+            base,
+        };
+
+        cfg_if!(
+            if #[cfg(target_arch = "wasm32")] {
+                let session_supported = manager.base().callable("webxr_session_supported");
+                let session_started = manager.base().callable("webxr_session_started");
+                let session_ended = manager.base().callable("webxr_session_ended");
+                let session_failed = manager.base().callable("webxr_session_failed");
+                if let Some(ref mut webxr_interface) = manager.webxr_interface {
 
                     // WebXR works with signals, so we need to deal with them as they are triggered.
-                    let session_supported = self.base().callable("webxr_session_supported");
-                    let session_started = self.base().callable("webxr_session_started");
-                    let session_ended = self.base().callable("webxr_session_ended");
-                    let session_failed = self.base().callable("webxr_session_failed");
-                    webxr_interface.connect(&StringName::from("session_supported"), &session_supported);
-                    webxr_interface.connect(&StringName::from("session_started"), &session_started);
-                    webxr_interface.connect(&StringName::from("session_ended"), &session_ended);
-                    webxr_interface.connect(&StringName::from("session_failed"), &session_failed);
+                    webxr_interface.connect("session_supported", &session_supported);
+                    webxr_interface.connect("session_started", &session_started);
+                    webxr_interface.connect("session_ended", &session_ended);
+                    webxr_interface.connect("session_failed", &session_failed);
 
-                    webxr_interface.is_session_supported(&GString::from("immersive-vr"));
-                    self.webxr_interface = Some(webxr_interface);
+                    webxr_interface.is_session_supported("immersive-vr");
                 }
             }
         );
+
+        manager
+    }
+    fn ready(&mut self) {
         self.get_title_screen()
             .expect("initial game should have a title screen")
             .grab_focus();
@@ -85,9 +105,10 @@ impl SceneManager {
     }
 
     #[func]
-    fn get_root(&self) -> Gd<Node> {
+    pub fn get_root(&self) -> Gd<Node> {
         Self::get_root_base(self.base().clone().upcast())
     }
+
     #[func]
     pub fn set_input_mode(&mut self, target: InputMode) {
         self.input_mode = Some(target);
@@ -119,9 +140,73 @@ impl SceneManager {
     }
 
     #[func]
+    pub fn exit_world(&self) {
+        let root_node = self.get_root();
+        godot_print!("exiting the world");
+        let mut title_scene = self.create_title_screen();
+        self.swap_scene(title_scene.clone().upcast());
+        title_scene.grab_focus();
+
+        match self.input_mode {
+            Some(InputMode::VR) => {
+                root_node
+                    .get_viewport()
+                    .expect("game scene has a viewport")
+                    .set_use_xr(false);
+                godot_print!("Viewport no longer using XR.");
+            }
+            None => godot_warn!("called exit world without setting a target mode"),
+            _ => {}
+        }
+    }
+
+    #[func]
+    pub fn resume_game(&self) {
+        let mut world = self
+            .get_world_scene()
+            .expect("resume called with a valid world");
+        world.bind_mut().previous_time = Time::singleton().get_ticks_msec();
+        world.get_tree().expect("is in scene tree").set_pause(false);
+
+        self.hide_pause_menu();
+        let mut input = Input::singleton();
+        input.set_mouse_mode(MouseMode::CAPTURED);
+    }
+    #[func]
+    pub fn pause_game(&self) {
+        self.get_world_scene()
+            .expect("resume called with a valid world")
+            .get_tree()
+            .expect("is in scene tree")
+            .set_pause(true);
+        self.show_pause_menu();
+        let mut input = Input::singleton();
+        input.set_mouse_mode(MouseMode::VISIBLE);
+    }
+
+    // FIXME: make these load the scene maybe
+    #[func]
+    pub fn show_pause_menu(&self) {
+        let mut pause_screen = self.create_pause_screen();
+        self.get_root().add_child(&pause_screen);
+        pause_screen.grab_focus();
+    }
+    #[func]
+    pub fn hide_pause_menu(&self) {
+        if let Some(pause_screen) = self.get_pause_screen() {
+            self.get_root().remove_child(&pause_screen);
+        } else {
+            godot_warn!(
+                "scene manager: called hide_pause_menu without a pause menu being available"
+            );
+        }
+    }
+
+    #[func]
     pub fn init_3d(&mut self) {
         if let (Some(course), Some(mode)) = (self.course, self.difficulty) {
             let world_scene = WorldScene::create_world_with_bank(course, mode);
+
             let character_3d = load::<PackedScene>(crate::resources::NORMAL_CHARACTER)
                 .instantiate_as::<Player3D>();
             let mut player = world_scene.get_node_as::<Node>("Player");
@@ -135,7 +220,7 @@ impl SceneManager {
     }
 
     #[func]
-    pub fn enter_vr_world(&mut self) {
+    pub fn enter_vr_world(&self) {
         if let (Some(course), Some(mode)) = (self.course, self.difficulty) {
             let root_node = self.get_root();
 
@@ -158,21 +243,6 @@ impl SceneManager {
         }
     }
 
-    #[func]
-    pub fn exit_vr_world(&mut self) {
-        let root_node = self.get_root();
-
-        godot_print!("exiting the vr world");
-
-        let title_scene = self.create_title_screen();
-        self.swap_scene(title_scene.upcast());
-
-        root_node
-            .get_viewport()
-            .expect("game scene has a viewport")
-            .set_use_xr(false);
-        godot_print!("Viewport no longer using XR.");
-    }
     // OpenXR
     #[func]
     #[cfg(not(target_arch = "wasm32"))]
@@ -183,6 +253,7 @@ impl SceneManager {
     pub fn init_web_xr(&mut self) {
         let mut os = godot::classes::Os::singleton();
         if !self.vr_supported {
+            if let Some(title_screen) = self.get_title_screen() {}
             os.alert(&GString::from("vr is not supported"));
             return;
         }
@@ -205,7 +276,7 @@ impl SceneManager {
     #[cfg(target_arch = "wasm32")]
     fn webxr_session_supported(&mut self, session_mode: GString, supported: bool) {
         if !supported || session_mode != "immersive-vr".into() {
-            godot_warn!(
+            godot_print!(
                 "immersive-vr is not supported for this session, disabling vr functionality."
             );
             return;
@@ -214,22 +285,26 @@ impl SceneManager {
     }
     #[func]
     #[cfg(target_arch = "wasm32")]
-    fn webxr_session_started(&mut self) {
+    fn webxr_session_started(&self) {
         godot_print!("immersive-vr session started, attempting to enter world...");
 
         self.enter_vr_world();
     }
+
     #[func]
     #[cfg(target_arch = "wasm32")]
     fn webxr_session_ended(&mut self) {
         let mut os = godot::classes::Os::singleton();
         os.alert(&GString::from("session ended"));
-        godot_print!("immersive-vr session ended, attempting to exit world...");
-        self.exit_vr_world();
+        self.exit_world();
 
         if let Some(ref mut webxr_interface) = self.webxr_interface {
             webxr_interface.uninitialize();
         };
+        self.get_title_screen()
+            .expect("should be in title screen")
+            .bind()
+            .show_message("WebXR session has ended.".into())
     }
 
     #[func]
@@ -251,37 +326,104 @@ impl SceneManager {
     fn create_title_screen(&self) -> Gd<Control> {
         let mut title_scene =
             load::<PackedScene>(crate::resources::TITLE_SCENE).instantiate_as::<Control>();
-        title_scene.set_name(&GString::from("TitleScreen"));
-        title_scene.grab_focus();
+        title_scene.set_name("TitleScreen");
         title_scene
     }
 
     #[func]
-    pub fn get_title_screen(&self) -> Option<Gd<Control>> {
+    fn create_pause_screen(&self) -> Gd<Control> {
+        let mut pause_scene =
+            load::<PackedScene>(crate::resources::PAUSE_SCENE).instantiate_as::<Control>();
+        pause_scene.set_name("PauseMenu");
+        pause_scene
+    }
+
+    pub fn show_completion_screen(&self, question_bank: QuestionBank, time_elapsed: u64) {
+        let mut completion_scene = CompletionScreen::new_screen(question_bank, time_elapsed);
+        self.swap_scene(completion_scene.clone().upcast());
+        completion_scene.grab_focus();
+
+        match self.input_mode {
+            Some(InputMode::VR) => {
+                self.get_root()
+                    .get_viewport()
+                    .expect("game scene has a viewport")
+                    .set_use_xr(false);
+                godot_print!("Viewport no longer using XR.");
+            }
+            None => godot_warn!("called exit world without setting a target mode"),
+            _ => {}
+        }
+    }
+
+    #[func]
+    pub fn get_title_screen(&self) -> Option<Gd<TitleScreen>> {
         self.get_root()
-            .get_node_or_null(&NodePath::from("/root/Root/TitleScreen"))?
+            .get_node_or_null("TitleScreen")?
+            .try_cast::<TitleScreen>()
+            .ok()
+    }
+
+    #[func]
+    pub fn get_pause_screen(&self) -> Option<Gd<Control>> {
+        self.get_root()
+            .get_node_or_null("PauseMenu")?
             .try_cast::<Control>()
             .ok()
     }
     #[func]
+    pub fn get_completion_screen(&self) -> Option<Gd<CompletionScreen>> {
+        self.get_root()
+            .get_node_or_null("CompletionScreen")?
+            .try_cast::<CompletionScreen>()
+            .ok()
+    }
+    #[func]
+    pub fn close_completion_screen(&self) {
+        let mut title_scene = self.create_title_screen();
+        self.swap_scene(title_scene.clone().upcast());
+        title_scene.grab_focus();
+    }
+
+    #[func]
     pub fn get_world_scene(&self) -> Option<Gd<WorldScene>> {
         self.get_root()
-            .get_node_or_null(&NodePath::from("World"))?
+            .get_node_or_null("World")?
             .try_cast::<WorldScene>()
             .ok()
     }
 
     #[func]
-    fn swap_scene(&mut self, scene: Gd<Node>) {
-        godot_print!("swapping scenes");
+    pub fn get_sfx_controller(&self) -> Gd<SFXController> {
+        self.get_root()
+            .get_node_as::<SFXController>("SFXController")
+    }
+
+    #[func]
+    fn swap_scene(&self, scene: Gd<Node>) {
+        godot_print!("swapping scenes to: {}", scene.get_name());
         let mut root_node = self.get_root();
+        root_node
+            .get_tree()
+            .expect("root node is in scene tree")
+            .set_pause(false);
+
+        let mut input = Input::singleton();
+        input.set_mouse_mode(MouseMode::VISIBLE);
+
         if let Some(world_scene) = self.get_world_scene() {
             godot_print!("removing world scene");
             root_node.remove_child(&world_scene);
+            // stop walking sfx if it is still playing.
+            self.get_sfx_controller().bind().stop_walking();
         }
         if let Some(title_screen) = self.get_title_screen() {
             godot_print!("removing title scene");
             root_node.remove_child(&title_screen);
+        }
+        if let Some(completion_screen) = self.get_completion_screen() {
+            godot_print!("removing title scene");
+            root_node.remove_child(&completion_screen);
         }
         root_node.add_child(&scene);
     }

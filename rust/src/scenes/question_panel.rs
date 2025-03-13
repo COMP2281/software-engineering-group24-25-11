@@ -1,28 +1,38 @@
-use std::f32::consts::PI;
+use std::{
+    cell::RefCell,
+    collections::VecDeque,
+    f32::consts::PI,
+    sync::{Arc, Mutex, RwLock},
+};
 
 use godot::{
     classes::{
         label_3d::DrawFlags, text_server::AutowrapMode, AnimatableBody3D, BoxMesh, BoxShape3D,
-        CollisionShape3D, Label3D, MeshInstance3D, StandardMaterial3D, StaticBody3D,
+        CollisionShape3D, Label3D, MeshInstance3D, StandardMaterial3D, StaticBody3D, Time,
     },
     obj::WithBaseField,
     prelude::*,
 };
 
-use crate::{question_bank::Question, resources::materials, scene_manager::SceneManager};
+use crate::{
+    question_bank::Question,
+    resources::materials,
+    scene_manager::{self, SceneManager},
+};
 
 #[derive(GodotClass)]
 #[class(init, base=StaticBody3D)]
 pub struct QuestionPanel {
     question: Question,
+    start_time_ms: u64,
 
-    currently_selected: Array<i64>,
+    currently_selected: Arc<RwLock<VecDeque<i64>>>,
     /// 0..n-1 are the choices buttons, whereas the last object is the submit button.
-    button_objects: Array<Gd<Object>>,
+    button_objects: Vec<Gd<Object>>,
     // index of the button currently being looked at
-    looking_at: Option<i64>,
+    looking_at: Arc<Mutex<Option<i64>>>,
     // whether the panel has already been submitted, if it has no actions are allowed on it.
-    submitted: bool,
+    submitted: Arc<Mutex<bool>>,
     base: Base<StaticBody3D>,
 }
 
@@ -36,14 +46,15 @@ const SUBMIT_TEXT: &str = "Submit";
 
 #[godot_api]
 impl QuestionPanel {
-    pub fn create_panel(question: Question) -> Gd<Self> {
+    pub fn create_panel(question: Question, time_elapsed: u64) -> Gd<Self> {
         let mut panel = Gd::from_init_fn(|base| Self {
             question,
+            start_time_ms: time_elapsed,
 
-            currently_selected: Array::default(),
-            button_objects: Array::default(),
-            looking_at: None,
-            submitted: false,
+            currently_selected: Arc::new(RwLock::new(VecDeque::new())),
+            button_objects: Vec::new(),
+            looking_at: Arc::new(Mutex::new(None)),
+            submitted: Arc::new(Mutex::new(false)),
 
             base,
         });
@@ -101,7 +112,7 @@ impl QuestionPanel {
                 0.,
             ));
 
-            self.button_objects.push(&btn.clone().upcast());
+            self.button_objects.push(btn.clone().upcast());
             self.base_mut().add_child(&btn);
         }
     }
@@ -112,7 +123,7 @@ impl QuestionPanel {
 
         btn.set_position(Vector3::new(0., -(PANEL_SIZE.y / 2.) + 1., 0.));
 
-        self.button_objects.push(&btn.clone().upcast());
+        self.button_objects.push(btn.clone().upcast());
         self.base_mut().add_child(&btn);
     }
 
@@ -155,97 +166,164 @@ impl QuestionPanel {
 
         body
     }
-    /// Returns None if an answer has not been selected yet, otherwise return whether
-    /// the answer was correct.
+
     #[func]
-    pub fn submit(&mut self) {
-        if self.currently_selected.len() != self.question.answers.len() {
-            return;
-        }
-        let mut world = SceneManager::get_manager(self.base().clone().upcast())
-            .bind()
-            .get_world_scene()
-            .expect("question panel is in world");
-
-        self.submitted = true;
-
-        let answered_question = self
-            .question
-            .to_answered(self.currently_selected.clone(), 0);
-
-        for answer in answered_question.given_answers.iter_shared() {
-            let material =
-                load::<StandardMaterial3D>(if answered_question.correct_answers.contains(answer) {
-                    materials::QP_CHOICE_CORRECT
-                } else {
-                    materials::QP_CHOICE_INCORRECT
-                });
-
-            self.get_button_mesh(self.get_button_from_idx(answer).expect("button exists"))
-                .set_material_override(&material);
-        }
-
-        world.bind_mut().question_answered(answered_question);
-    }
-    #[func]
-    pub fn clear_looking_at(&mut self) {
-        if let Some(previous_looking) = self.looking_at {
-            let material_prev = load::<StandardMaterial3D>(
-                if previous_looking == self.question.choices.len() as i64 {
+    pub fn clear_looking_at(&self) {
+        let looking_at = self
+            .looking_at
+            .lock()
+            .expect("failed to get looking_at lock");
+        if let Some(looking_at) = *looking_at {
+            let currently_selected = self
+                .currently_selected
+                .read()
+                .expect("failed to read QuestionPanel::currently_selected");
+            let material_prev =
+                load::<StandardMaterial3D>(if looking_at == self.question.choices.len() as i64 {
                     materials::QP_SUBMIT
-                } else if self.currently_selected.contains(previous_looking) {
+                } else if currently_selected.contains(&looking_at) {
                     materials::QP_SELECTED
                 } else {
                     materials::QP_NORMAL
-                },
-            );
-            self.get_button_mesh(
-                self.get_button_from_idx(previous_looking)
-                    .expect("button exists"),
-            )
-            .set_material_override(&material_prev);
+                });
+            self.get_button_mesh(self.get_button_from_idx(looking_at).expect("button exists"))
+                .set_material_override(&material_prev);
         }
     }
     #[func]
-    pub fn set_looking_at(&mut self, obj: Gd<Object>) {
-        if self.submitted {
+    pub fn set_looking_at(&self, obj: Gd<Object>) {
+        if *self.submitted.lock().expect("failed to get submitted lock") {
             return;
         }
-        let button_index = self.button_objects.iter_shared().position(|x| obj.eq(&x));
+        let button_index = self.button_objects.iter().position(|x| obj.eq(&x));
         if let Some(idx) = button_index.map(|x| x as i64) {
             self.clear_looking_at();
+            let currently_selected = self
+                .currently_selected
+                .read()
+                .expect("failed to read QuestionPanel::currently_selected");
             let material_new =
                 load::<StandardMaterial3D>(if idx == self.question.choices.len() as i64 {
                     materials::QP_SUBMIT
-                } else if self.currently_selected.contains(idx) {
+                } else if currently_selected.contains(&idx) {
                     materials::QP_SELECTED
                 } else {
                     materials::QP_HOVERED
                 });
 
-            self.get_button_mesh(self.get_button_from_idx(idx).expect("button exists"))
+            let button = self.get_button_from_idx(idx).expect("button exists");
+            self.get_button_mesh(button.clone())
                 .set_material_override(&material_new);
-            self.looking_at = Some(idx);
+
+            let mut looking_at = self
+                .looking_at
+                .lock()
+                .expect("failed to get looking_at lock");
+            // play hover sound if they just started looking at the button
+            if *looking_at != Some(idx) {
+                let scene_manager = SceneManager::get_manager(self.base().clone().upcast());
+                let scene_manager = scene_manager.bind();
+                let sfx = scene_manager.get_sfx_controller();
+                let sfx = sfx.bind();
+                sfx.play_qp_hover(button.get_global_position());
+
+                *looking_at = Some(idx);
+            }
         }
     }
 
-    #[func]
-    pub fn handle_click(&mut self) {
-        let Some(looking_at) = self.looking_at else {
+    pub fn submit(&self) {
+        let currently_selected = self
+            .currently_selected
+            .read()
+            .expect("failed to read QuestionPanel::currently_selected");
+
+        if currently_selected.len() != self.question.answers.len() {
+            return;
+        }
+
+        let scene_manager = SceneManager::get_manager(self.base().clone().upcast());
+        let scene_manager = scene_manager.bind();
+        let sfx = scene_manager.get_sfx_controller();
+        let sfx = sfx.bind();
+
+        let mut world = scene_manager
+            .get_world_scene()
+            .expect("question panel is in world");
+
+        {
+            let mut submitted = self.submitted.lock().expect("failed to get submitted lock");
+            *submitted = true
+        }
+
+        let time_taken = world.bind().time_elapsed - self.start_time_ms;
+        let answered_question = self
+            .question
+            .to_answered(currently_selected.clone(), time_taken);
+
+        for answer in answered_question.given_answers.iter_shared() {
+            let correct = answered_question.correct_answers.contains(answer);
+            let button = self.get_button_from_idx(answer).expect("button exists");
+
+            if correct {
+                sfx.play_qp_correct(button.get_global_position());
+            } else {
+                sfx.play_qp_incorrect(button.get_global_position());
+            }
+
+            let material = load::<StandardMaterial3D>(if correct {
+                materials::QP_CHOICE_CORRECT
+            } else {
+                materials::QP_CHOICE_INCORRECT
+            });
+
+            sfx.play_qp_select(button.get_global_position());
+
+            self.get_button_mesh(button)
+                .set_material_override(&material);
+        }
+
+        world.bind_mut().question_answered(answered_question);
+    }
+
+    pub fn handle_click(&self) {
+        let looking_at = self
+            .looking_at
+            .lock()
+            .expect("failed to get looking_at lock");
+        let Some(looking_at) = *looking_at else {
             return;
         };
-        if self.submitted {
+        if *self.submitted.lock().expect("failed to get submitted lock") {
             return;
-        };
+        }
+
+        let button = self.get_button_from_idx(looking_at).expect("button exists");
+
+        let scene_manager = SceneManager::get_manager(self.base().clone().upcast());
+        let scene_manager = scene_manager.bind();
+        let sfx = scene_manager.get_sfx_controller();
+        let sfx = sfx.bind();
+        sfx.play_qp_select(button.get_global_position());
 
         if looking_at == (self.button_objects.len() as i64 - 1) {
             godot_print!("attempting to submit");
             self.submit();
         } else {
-            if self.currently_selected.len() >= self.question.answers.len() {
-                let removed = self.currently_selected.pop_front();
+            let mut currently_selected = self
+                .currently_selected
+                .write()
+                .expect("failed to get writer for QuestionPanel::currently_selected");
+
+            // dont allow selecting the same thing twice.
+            if currently_selected.contains(&looking_at) {
+                return;
+            }
+
+            if currently_selected.len() >= self.question.answers.len() {
+                let removed = currently_selected.pop_front();
                 if let Some(idx) = removed {
-                    let material = load::<StandardMaterial3D>(if removed == self.looking_at {
+                    let material = load::<StandardMaterial3D>(if removed == Some(looking_at) {
                         materials::QP_HOVERED
                     } else {
                         materials::QP_NORMAL
@@ -254,12 +332,9 @@ impl QuestionPanel {
                         .set_material_override(&material);
                 }
             }
-            self.currently_selected.push(looking_at);
-
-            godot_print!("currently selected {:?}", self.currently_selected);
-
+            currently_selected.push_back(looking_at);
             let selected = load::<StandardMaterial3D>(materials::QP_SELECTED);
-            self.get_button_mesh(self.get_button_from_idx(looking_at).expect("button exists"))
+            self.get_button_mesh(button)
                 .set_material_override(&selected);
         }
     }
@@ -280,6 +355,7 @@ impl QuestionPanel {
     pub fn get_button_from_idx(&self, button: i64) -> Option<Gd<AnimatableBody3D>> {
         self.button_objects
             .get(button as usize)?
+            .clone()
             .try_cast::<AnimatableBody3D>()
             .ok()
     }

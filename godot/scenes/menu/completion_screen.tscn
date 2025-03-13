@@ -1,8 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://bo6waq710o67y"]
+[gd_scene load_steps=16 format=3 uid="uid://bo6waq710o67y"]
 
+[ext_resource type="Texture2D" uid="uid://bhos422jd8qde" path="res://assets/skybox.webp" id="1_3jn3r"]
 [ext_resource type="Theme" uid="uid://boybj2s5fyoqi" path="res://assets/standout_button.tres" id="1_ptovr"]
 [ext_resource type="FontFile" uid="uid://d3v8xryfbq6sn" path="res://assets/Space_Mono/SpaceMono-Bold.ttf" id="2_3jn3r"]
-[ext_resource type="Theme" uid="uid://dos5qkbbul75v" path="res://assets/general_button.tres" id="3_1qsn0"]
+[ext_resource type="Theme" uid="uid://dos5qkbbul75v" path="res://assets/general_button.tres" id="4_3jn3r"]
+[ext_resource type="Theme" uid="uid://bu75kd8ohwgkk" path="res://scenes/menu/usernameline.tres" id="5_1qsn0"]
+[ext_resource type="Theme" uid="uid://b2dhbdb6c0g38" path="res://assets/red_button.tres" id="6_5a8go"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_5a8go"]
 font = ExtResource("2_3jn3r")
@@ -77,7 +80,95 @@ Button/styles/hover = SubResource("StyleBoxFlat_hover_exit")
 Button/styles/normal = SubResource("StyleBoxFlat_o5ir0")
 Button/styles/pressed = SubResource("StyleBoxFlat_pressed_exit")
 
-[node name="MarginContainer" type="MarginContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c4ixy"]
+bg_color = Color(0.25, 0.08, 0.09, 0.9)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 7
+border_width_bottom = 8
+border_color = Color(1, 0.4, 0.3, 0.9)
+border_blend = true
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 1
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+shadow_color = Color(1, 0.2, 0.1, 0.5)
+shadow_size = 3
+shadow_offset = Vector2(6, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bu06m"]
+bg_color = Color(0.15, 0.04, 0.05, 0.9)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 7
+border_width_bottom = 8
+border_color = Color(1, 0.2, 0.1, 0.7)
+border_blend = true
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 1
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+shadow_color = Color(1, 0.2, 0.1, 0.3)
+shadow_size = 2
+shadow_offset = Vector2(5, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hc0d0"]
+bg_color = Color(0.1, 0.02, 0.03, 0.9)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 7
+border_width_bottom = 8
+border_color = Color(1, 0.1, 0.05, 0.7)
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
+expand_margin_left = 0.5
+expand_margin_top = 0.5
+expand_margin_right = 0.5
+expand_margin_bottom = 0.5
+shadow_color = Color(1, 0.2, 0.1, 0.2)
+shadow_size = 1
+shadow_offset = Vector2(3, 1)
+
+[sub_resource type="Theme" id="Theme_yqbvm"]
+Button/font_sizes/font_size = 16
+Button/styles/hover = SubResource("StyleBoxFlat_c4ixy")
+Button/styles/normal = SubResource("StyleBoxFlat_bu06m")
+Button/styles/pressed = SubResource("StyleBoxFlat_hc0d0")
+
+[node name="CompletionScreen" type="CompletionScreen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_3jn3r")
+expand_mode = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="Overview" type="MarginContainer" parent="."]
+layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.35
 anchor_top = 0.3
@@ -86,12 +177,71 @@ anchor_bottom = 0.7
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="Overview"]
 layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="Leaderbord" type="Label" parent="VBoxContainer"]
+[node name="SUMMARY" type="Label" parent="Overview/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_ptovr")
+theme_override_font_sizes/font_size = 25
+text = "SUMMARY"
+label_settings = SubResource("LabelSettings_5a8go")
+horizontal_alignment = 1
+
+[node name="Score" type="Label" parent="Overview/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_3jn3r")
+text = "6/60"
+horizontal_alignment = 1
+
+[node name="Points" type="Label" parent="Overview/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_3jn3r")
+text = "600pts"
+horizontal_alignment = 1
+
+[node name="Time" type="Label" parent="Overview/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_3jn3r")
+text = "1m 2s 500ms"
+horizontal_alignment = 1
+
+[node name="Review" type="OverviewButton" parent="Overview/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_3jn3r")
+text = "REVIEW QUESTIONS"
+
+[node name="Save" type="OverviewButton" parent="Overview/VBoxContainer"]
+action = 1
+layout_mode = 2
+theme = ExtResource("4_3jn3r")
+text = "SAVE SCORE"
+
+[node name="MainMenu" type="OverviewButton" parent="Overview/VBoxContainer"]
+action = 2
+layout_mode = 2
+theme = SubResource("Theme_c4ixy")
+text = "MAIN MENU"
+
+[node name="QuestionsOverview" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.3
+anchor_right = 0.65
+anchor_bottom = 0.7
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QuestionsOverview"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Title" type="Label" parent="QuestionsOverview/VBoxContainer"]
 layout_mode = 2
 theme = ExtResource("1_ptovr")
 theme_override_font_sizes/font_size = 25
@@ -99,25 +249,119 @@ text = "COMPLETED QUESTIONS"
 label_settings = SubResource("LabelSettings_5a8go")
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="QuestionsOverview/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="QuestionsOverview/VBoxContainer/ScrollContainer"]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 
-[node name="Question 1" type="Button" parent="VBoxContainer/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 4
-size_flags_stretch_ratio = 11.76
-theme = ExtResource("3_1qsn0")
-text = "Some question content here."
-
-[node name="Exit" type="Button" parent="VBoxContainer"]
+[node name="Exit" type="ReturnButton" parent="QuestionsOverview/VBoxContainer" node_paths=PackedStringArray("prev")]
+prev = NodePath("../../../Overview")
 layout_mode = 2
 theme = SubResource("Theme_c4ixy")
 text = "RETURN"
+
+[node name="QuestionDetails" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.3
+anchor_right = 0.65
+anchor_bottom = 0.7
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QuestionDetails"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 13
+alignment = 1
+
+[node name="Question" type="Label" parent="QuestionDetails/VBoxContainer"]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+theme = ExtResource("1_ptovr")
+text = "Some Question"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="CorrectAnswerLabel" type="Label" parent="QuestionDetails/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_3jn3r")
+text = "Correct Answer"
+horizontal_alignment = 1
+
+[node name="CorrectAnswer" type="Label" parent="QuestionDetails/VBoxContainer"]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+text = "Answer here"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="YourAnswerLabel" type="Label" parent="QuestionDetails/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_3jn3r")
+text = "Your Answer"
+horizontal_alignment = 1
+
+[node name="YourAnswer" type="Label" parent="QuestionDetails/VBoxContainer"]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 2
+text = "Answer here"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Exit" type="ReturnButton" parent="QuestionDetails/VBoxContainer" node_paths=PackedStringArray("prev")]
+prev = NodePath("../../../QuestionsOverview")
+layout_mode = 2
+theme = SubResource("Theme_yqbvm")
+text = "RETURN"
+
+[node name="SetUsername" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.35
+anchor_top = 0.3
+anchor_right = 0.65
+anchor_bottom = 0.7
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SetUsername"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Title" type="Label" parent="SetUsername/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_ptovr")
+theme_override_font_sizes/font_size = 25
+text = "LEADERBOARD NAME"
+label_settings = SubResource("LabelSettings_5a8go")
+horizontal_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="SetUsername/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_1qsn0")
+placeholder_text = "YOUR DISPLAY NAME"
+alignment = 1
+
+[node name="Save" type="SaveButton" parent="SetUsername/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_3jn3r")
+text = "SAVE"
+
+[node name="Cancel" type="ReturnButton" parent="SetUsername/VBoxContainer" node_paths=PackedStringArray("prev")]
+prev = NodePath("../../../Overview")
+layout_mode = 2
+theme = ExtResource("6_5a8go")
+text = "CANCEL"

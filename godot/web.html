@@ -68,22 +68,24 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                width: 100%;
+                width: 60%;
                 background: black;
             }
             .initial > .splash > .durham {
-                height: 8rem;
+                visibility: hidden;
+                height: 0px;
+                /* height: 8rem; */
                 width: auto;
-                visibility: collapse;
                 animation-name: splash-flash;
                 animation-duration: 2s;
                 animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
                 animation-delay: 0s;
             }
             .initial > .splash > .ibm {
-                height: 8rem;
+                visibility: hidden;
+                height: 0px;
+                /* height: 8rem; */
                 width: auto;
-                visibility: collapse;
                 animation-name: splash-flash;
                 animation-duration: 2s;
                 animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -91,14 +93,17 @@
             }
 
             .initial > .splash > .credits {
-                visibility: collapse;
+                height: 0px;
+                width: 0px;
+                visibility: hidden;
+
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 2rem;
                 animation-name: splash-forever;
                 animation-duration: 1s;
                 animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-                animation-delay: 6s;
+                animation-delay: 4s;
                 animation-fill-mode: forwards;
             }
 
@@ -114,6 +119,7 @@
             @keyframes splash-flash {
                 0% {
                     visibility: visible;
+                    height: 8rem;
                     opacity: 0;
                 }
                 30% {
@@ -123,18 +129,23 @@
                     opacity: 1;
                 }
                 100% {
-                    visibility: collapse;
+                    visibility: hidden;
                     opacity: 0;
+                    height: 8rem;
                 }
             }
 
             @keyframes splash-forever {
                 from {
                     visibility: visible;
+                    height: inherit;
+                    width: inherit;
                     opacity: 0;
                 }
                 to {
                     visibility: visible;
+                    height: inherit;
+                    width: inherit;
                     opacity: 1;
                 }
             }

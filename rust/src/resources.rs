@@ -1,4 +1,5 @@
 pub const TITLE_SCENE: &str = "res://scenes/menu/title.tscn";
+pub const PAUSE_SCENE: &str = "res://scenes/menu/pause.tscn";
 
 pub const NORMAL_CHARACTER: &str = "res://scenes/character/character_3d.tscn";
 pub const VR_CHARACTER: &str = "res://scenes/character/character_vr.tscn";
@@ -6,11 +7,24 @@ pub const VR_CHARACTER: &str = "res://scenes/character/character_vr.tscn";
 pub const WORLD_SCENE: &str = "res://scenes/game/world.tscn";
 pub const QUESTION_ROOM_SCENE: &str = "res://scenes/game/room.tscn";
 
+pub const START_ROOM_SCENE: &str = "res://scenes/game/start_room.tscn";
+pub const END_ROOM_SCENE: &str = "res://scenes/game/end_room.tscn";
+
+pub const COMPLETION_SCENE: &str = "res://scenes/menu/completion_screen.tscn";
+
 // Databank paths
 pub mod courses {
     pub const DATA_FUNDAMENTALS: &str = "res://question_bank/data_fundamentals.json";
     pub const WEB_DEV: &str = "res://question_bank/web_dev.json";
-    pub const AI_MODULES: &str = "res://question_bank/ai_modules.json";
+    pub const INTRO_TO_AI: &str = "res://question_bank/intro_to_ai.json";
+}
+
+pub mod themes {
+    pub const GENERAL_BUTTON: &str = "res://assets/general_button.tres";
+}
+
+pub mod datapaths {
+    pub const LEADERBOARD: &str = "user://leaderboard.json";
 }
 
 // Material  paths

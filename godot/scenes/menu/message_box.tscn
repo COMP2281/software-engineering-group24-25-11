@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cm45ks7xuxv7m"]
+[gd_scene load_steps=9 format=3 uid="uid://cdatnaopbh7l3"]
 
 [ext_resource type="StyleBox" uid="uid://bmdhpahgp1cwb" path="res://assets/standout_stylebox.tres" id="1_1yj34"]
 [ext_resource type="FontFile" uid="uid://d3v8xryfbq6sn" path="res://assets/Space_Mono/SpaceMono-Bold.ttf" id="2_s5fwx"]

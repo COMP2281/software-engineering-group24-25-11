@@ -1,8 +1,12 @@
 use crate::scene_manager::{InputMode, SceneManager};
+use cfg_if::cfg_if;
 use godot::{
-    classes::{Button, Control, IButton, MarginContainer},
+    classes::{AudioStreamWav, Button, Control, IButton, Label, MarginContainer, Panel},
+    meta::AsArg,
     prelude::*,
 };
+
+use super::{course_selection, leaderboard::Leaderboard};
 
 #[derive(Debug, Default, Clone, Copy, GodotConvert, Var, Export, PartialEq, Eq)]
 #[godot(via = u8)]
@@ -10,8 +14,8 @@ enum MainMenuAction {
     #[default]
     EnterVR,
     Enter3D,
-    Tutorial,
     Options,
+    Leaderboard,
     Credits,
     Quit,
     Unknown,
@@ -27,53 +31,116 @@ struct MainMenuButton {
 
 #[godot_api]
 impl IButton for MainMenuButton {
-    #[cfg(target_arch = "wasm32")]
     fn ready(&mut self) {
-        if self.action == MainMenuAction::Quit {
-            self.base_mut().hide();
-        };
+        cfg_if! {
+            if #[cfg(target_arch="wasm32")] {
+                if self.action == MainMenuAction::Quit {
+                    self.base_mut().hide();
+                };
+            }
+        }
+
+        let mouse_entered = self.base().callable("mouse_entered");
+        self.base_mut().connect("mouse_entered", &mouse_entered);
     }
 
     fn pressed(&mut self) {
-        let mut scene_tree = self.base().get_tree().expect("able to get the scene tree");
-        let root_node = scene_tree
-            .get_root()
-            .unwrap()
-            .get_node_as::<Node>("/root/Root");
+        godot_print!("title screen button clicked");
 
-        let title_screen = root_node.get_node_as::<Control>(&NodePath::from("TitleScreen"));
-        let mut scene_manager = root_node
-            .find_child(&GString::from("SceneManager"))
-            .expect("SceneManager not present at the root of the scene")
-            .try_cast::<SceneManager>()
-            .expect("path /SceneManager is not a SceneManager!");
+        let mut scene_manager = SceneManager::get_manager(self.base().clone().upcast());
         let mut scene_manager = scene_manager.bind_mut();
+        let title_screen = scene_manager
+            .get_title_screen()
+            .expect("currently in title screen");
+        let title_screen = title_screen.bind();
+
+        let sfx = scene_manager.get_sfx_controller();
+        let sfx = sfx.bind();
+        sfx.play_menu_select();
 
         match self.action {
             MainMenuAction::EnterVR => {
                 scene_manager.set_input_mode(InputMode::VR);
-                title_screen
-                    .get_node_as::<MarginContainer>("MainMenu")
-                    .hide();
-                let mut course_selection = title_screen.get_node_as::<Control>("CourseSelection");
-                course_selection.show();
-                course_selection.grab_focus();
+                title_screen.show_course_selection();
             }
             MainMenuAction::Enter3D => {
                 scene_manager.set_input_mode(InputMode::Normal);
-                title_screen
-                    .get_node_as::<MarginContainer>("MainMenu")
-                    .hide();
-                let mut course_selection = title_screen.get_node_as::<Control>("CourseSelection");
-                course_selection.show();
-                course_selection.grab_focus();
+                title_screen.show_course_selection();
+            }
+            MainMenuAction::Options => {}
+            MainMenuAction::Leaderboard => {
+                title_screen.show_leaderboard();
             }
             MainMenuAction::Quit => {
+                let mut scene_tree = self.base().get_tree().expect("able to get the scene tree");
                 scene_tree.quit();
             }
             _ => {
                 godot_print!("called unimplemented main menu button");
             }
         }
+    }
+}
+
+#[godot_api]
+impl MainMenuButton {
+    #[func]
+    pub fn mouse_entered(&mut self) {
+        let scene_manager = SceneManager::get_manager(self.base().clone().upcast());
+        let scene_manager = scene_manager.bind();
+
+        let sfx = scene_manager.get_sfx_controller();
+        let sfx = sfx.bind();
+        sfx.play_menu_hover();
+    }
+}
+
+#[derive(GodotClass)]
+#[class(init, base=Control)]
+pub struct TitleScreen {
+    base: Base<Control>,
+}
+
+#[godot_api]
+impl TitleScreen {
+    // FIXME: move out of functions?
+    #[func]
+    pub fn show_course_selection(&self) {
+        self.swap_to(self.base().get_node_as::<Control>("CourseSelection"));
+    }
+
+    #[func]
+    pub fn show_leaderboard(&self) {
+        let leaderboard = self.base().get_node_as::<Leaderboard>("Leaderboard");
+        leaderboard.bind().update();
+        self.swap_to(leaderboard.upcast());
+    }
+
+    #[func]
+    pub fn return_to_main_menu(&self) {
+        self.swap_to(self.base().get_node_as::<Control>("MainMenu"));
+    }
+
+    #[func]
+    pub fn show_message(&self, message: GString) {
+        let message_box = self.base().get_node_as::<Control>("MessageBox");
+        let mut label = message_box
+            .get_node_as::<Label>("MarginContainer/PanelContainer/VBoxContainer/Message");
+        label.set_text(&message);
+        self.swap_to(message_box);
+    }
+
+    pub fn swap_to(&self, mut obj: Gd<Control>) {
+        for child in self.base().get_children().iter_shared() {
+            if child.get_name() == "TextureRect".into() {
+                continue;
+            }
+            let mut child = child
+                .try_cast::<Control>()
+                .expect("all items in completion screen inherit from control");
+            child.hide()
+        }
+        obj.show();
+        obj.grab_focus();
     }
 }

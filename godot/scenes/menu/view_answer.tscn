@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://boybj2s5fyoqi" path="res://assets/standout_button.tres" id="1_5k00b"]
 [ext_resource type="Theme" uid="uid://dos5qkbbul75v" path="res://assets/general_button.tres" id="2_gae4d"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover_exit"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bcuwi"]
 bg_color = Color(0.25, 0.08, 0.09, 0.9)
 border_width_left = 3
 border_width_top = 3
@@ -24,7 +24,7 @@ shadow_color = Color(1, 0.2, 0.1, 0.5)
 shadow_size = 3
 shadow_offset = Vector2(6, 3)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bu06m"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g8rum"]
 bg_color = Color(0.15, 0.04, 0.05, 0.9)
 border_width_left = 3
 border_width_top = 3
@@ -45,7 +45,7 @@ shadow_color = Color(1, 0.2, 0.1, 0.3)
 shadow_size = 2
 shadow_offset = Vector2(5, 2)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pressed_exit"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_36c18"]
 bg_color = Color(0.1, 0.02, 0.03, 0.9)
 border_width_left = 3
 border_width_top = 3
@@ -68,9 +68,9 @@ shadow_offset = Vector2(3, 1)
 
 [sub_resource type="Theme" id="Theme_llwdw"]
 Button/font_sizes/font_size = 16
-Button/styles/hover = SubResource("StyleBoxFlat_hover_exit")
-Button/styles/normal = SubResource("StyleBoxFlat_bu06m")
-Button/styles/pressed = SubResource("StyleBoxFlat_pressed_exit")
+Button/styles/hover = SubResource("StyleBoxFlat_bcuwi")
+Button/styles/normal = SubResource("StyleBoxFlat_g8rum")
+Button/styles/pressed = SubResource("StyleBoxFlat_36c18")
 
 [node name="ViewAnswer" type="Control"]
 layout_mode = 3

@@ -1,16 +1,15 @@
-[gd_scene load_steps=48 format=3 uid="uid://cxvu80gv221ac"]
+[gd_scene load_steps=50 format=3 uid="uid://cxvu80gv221ac"]
+
+[ext_resource type="Material" uid="uid://bingmf3hrttm0" path="res://assets/question_panel/selected.tres" id="1_jktlp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2qsxh"]
 size = Vector3(30, 1, 30)
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_bcaug"]
-load_path = "res://.godot/imported/skcxcfhc_8K_Albedo.jpg-9c11ae319677a34c126bdbac6d383aa8.s3tc.ctex"
-
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_t5nn4"]
-load_path = "res://.godot/imported/skcxcfhc_8K_Roughness.jpg-927cb8799e4bba6c88f3bb889585da4c.s3tc.ctex"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wndie"]
-albedo_texture = SubResource("CompressedTexture2D_bcaug")
+albedo_color = Color(0.57, 0.57, 0.57, 1)
+metallic = 1.0
 roughness_texture = SubResource("CompressedTexture2D_t5nn4")
 
 [sub_resource type="BoxMesh" id="BoxMesh_ks1af"]
@@ -143,7 +142,14 @@ size = Vector3(20, 6, 0.2)
 [sub_resource type="BoxMesh" id="BoxMesh_t4sso"]
 size = Vector3(20, 6, 0.2)
 
-[node name="End Room" type="Node3D"]
+[sub_resource type="BoxMesh" id="BoxMesh_2l10f"]
+material = ExtResource("1_jktlp")
+size = Vector3(10, 1.5, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4iw4s"]
+size = Vector3(10, 1.5, 1)
+
+[node name="EndRoom" type="Node3D"]
 
 [node name="Floor" type="StaticBody3D" parent="."]
 
@@ -298,9 +304,11 @@ mesh = SubResource("BoxMesh_dxbu1")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Wall3-Door"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 15)
 shape = SubResource("BoxShape3D_hedmc")
+disabled = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Wall3-Door"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 15)
+visible = false
 mesh = SubResource("BoxMesh_cni8j")
 
 [node name="Wall4-UpperFrame" type="StaticBody3D" parent="."]
@@ -364,14 +372,35 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("BoxMesh_hdnwr")
 
 [node name="Display" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Display"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 shape = SubResource("BoxShape3D_yik77")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Display"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
 mesh = SubResource("BoxMesh_t4sso")
+
+[node name="Label3D" type="Label3D" parent="Display"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.101)
+double_sided = false
+text = "Congratulations!"
+font_size = 128
+
+[node name="EndButton" type="AnimatableBody3D" parent="Display"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
+collision_layer = 129
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Display/EndButton"]
+mesh = SubResource("BoxMesh_2l10f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Display/EndButton"]
+shape = SubResource("BoxShape3D_4iw4s")
+
+[node name="Label3D" type="Label3D" parent="Display/EndButton"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.501)
+double_sided = false
+text = "End & Review"
+font_size = 96
 
 [node name="Corner1" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 9, 14)
