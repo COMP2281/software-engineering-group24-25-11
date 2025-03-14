@@ -60,7 +60,7 @@ impl WorldScene {
         world_scene.add_child(&start_room);
 
         let mut question_bank =
-            QuestionBank::new(course, mode, Some(3), world_scene.bind().time_elapsed)
+            QuestionBank::new(course, mode, Some(15), world_scene.bind().time_elapsed)
                 .expect("failed to create question bank");
 
         let first_question = question_bank

@@ -1,0 +1,45 @@
+name: Deploy website
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build-and-deploy:
+    container:
+      image: archlinux:latest
+
+    steps:
+      - name: Install dependencies
+        run: |
+          pacman -Sy --noconfirm just godot git python unzip clang npm
+
+      - name: Cache setup dependencies
+        id: cache-setup
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./.deps
+            ~/.local/share/godot/export_templates
+          key: setup-cache-${{ runner.os }}-${{ hashFiles('justfile') }}
+          restore-keys: |
+            setup-cache-${{ runner.os }}-
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run setup
+        if: steps.cache-setup.outputs.cache-hit != 'true'
+        run: just setup-ci-cd
+
+      - name: Export Web
+        run: just release-web
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Deploy to Netlify
+        run: |
+          export NETLIFY_AUTH_TOKEN=${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify deploy --dir=target/web --prod --site=${{ secrets.NETLIFY_SITE_ID }}
