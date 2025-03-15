@@ -4,17 +4,14 @@ use godot::classes::WebXrInterface;
 #[cfg(not(target_arch = "wasm32"))]
 use godot::classes::XrInterface;
 use godot::{
-    classes::{input::MouseMode, Control, Time, XrServer},
+    classes::{input::MouseMode, Control, DisplayServer, Time, XrServer},
     prelude::*,
 };
 
 use crate::{
     character::{normal::Player3D, vr::PlayerVR},
-    menu::{
-        completion_screen::{self, CompletionScreen},
-        title::TitleScreen,
-    },
-    question_bank::{AnsweredQuestion, Course, Mode, QuestionBank},
+    menu::{completion_screen::CompletionScreen, title::TitleScreen},
+    question_bank::{Course, Mode, QuestionBank},
     scenes::world::WorldScene,
     sfx::SFXController,
 };
@@ -27,6 +24,7 @@ pub enum InputMode {
     Normal,
 }
 
+#[allow(unused)]
 #[derive(GodotClass)]
 #[class( base=Node)]
 pub struct SceneManager {
@@ -46,6 +44,7 @@ pub struct SceneManager {
 #[godot_api]
 impl INode for SceneManager {
     fn init(base: Base<Self::Base>) -> Self {
+        #[allow(unused_mut)]
         let mut manager = Self {
             #[cfg(not(target_arch = "wasm32"))]
             xr_interface: XrServer::singleton().find_interface("OpenXR"),
@@ -64,6 +63,8 @@ impl INode for SceneManager {
             difficulty: None,
             base,
         };
+
+        DisplayServer::singleton().window_set_title("Spacedroid");
 
         cfg_if!(
             if #[cfg(target_arch = "wasm32")] {
@@ -253,8 +254,13 @@ impl SceneManager {
     pub fn init_web_xr(&mut self) {
         let mut os = godot::classes::Os::singleton();
         if !self.vr_supported {
-            if let Some(title_screen) = self.get_title_screen() {}
-            os.alert(&GString::from("vr is not supported"));
+            if let Some(title_screen) = self.get_title_screen() {
+                title_screen
+                    .bind()
+                    .show_message("VR is not supported on this device.".into())
+            } else {
+                os.alert("vr is not supported");
+            }
             return;
         }
 

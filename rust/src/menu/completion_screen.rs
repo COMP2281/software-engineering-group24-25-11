@@ -5,7 +5,7 @@ use crate::{
     scene_manager::SceneManager,
 };
 use godot::{
-    classes::{Button, Control, IButton, IControl, Label, Theme, Time, VBoxContainer},
+    classes::{Button, Control, IButton, IControl, Label, Theme, VBoxContainer},
     prelude::*,
 };
 

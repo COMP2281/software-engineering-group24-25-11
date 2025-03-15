@@ -86,7 +86,8 @@ pub struct AnsweredQuestion {
 #[derive(Debug, Default, Clone)]
 pub struct QuestionBank {
     questions: Vec<Question>,
-    mode: Mode,
+    #[allow(unused)]
+    pub mode: Mode,
     pub question_limit: usize,
 
     pub answered_questions: Vec<AnsweredQuestion>,

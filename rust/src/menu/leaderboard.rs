@@ -1,13 +1,10 @@
 use std::time::Duration;
 
-use crate::{
-    question_bank::{AnsweredQuestion, QuestionBank},
-    scene_manager::SceneManager,
-};
+use crate::scene_manager::SceneManager;
 use godot::{
     classes::{
-        file_access::ModeFlags, Button, Control, FileAccess, IButton, IControl, ILineEdit, Label,
-        LineEdit, Os, Theme, VBoxContainer,
+        file_access::ModeFlags, Button, Control, FileAccess, IButton, IControl, LineEdit, Os,
+        Theme, VBoxContainer,
     },
     prelude::*,
 };

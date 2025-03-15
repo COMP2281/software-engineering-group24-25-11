@@ -16,8 +16,8 @@ jobs:
         run: |
           pacman -Sy --noconfirm just godot git python unzip clang npm
 
-      - name: Cache setup dependencies
-        id: cache-setup
+      - name: Restore cache (before setup)
+        id: cache-restore
         uses: actions/cache@v3
         with:
           path: |
@@ -27,15 +27,23 @@ jobs:
           restore-keys: |
             setup-cache-${{ runner.os }}-
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Run setup
         if: steps.cache-setup.outputs.cache-hit != 'true'
         run: just setup-ci-cd
 
+      - name: Save cache (after setup)
+        id: cache-save
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./.deps
+            ~/.local/share/godot/export_templates
+          key: setup-cache-${{ runner.os }}-${{ hashFiles('justfile') }}
+
       - name: Export Web
-        run: just release-web
+        run: |
+          just release-web
+          cp -r web_assets/* target/web
 
       - name: Install Netlify CLI
         run: npm install -g netlify-cli

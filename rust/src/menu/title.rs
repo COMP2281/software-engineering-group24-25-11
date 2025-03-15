@@ -1,12 +1,11 @@
 use crate::scene_manager::{InputMode, SceneManager};
 use cfg_if::cfg_if;
 use godot::{
-    classes::{AudioStreamWav, Button, Control, IButton, Label, MarginContainer, Panel},
-    meta::AsArg,
+    classes::{Button, Control, IButton, Label},
     prelude::*,
 };
 
-use super::{course_selection, leaderboard::Leaderboard};
+use super::leaderboard::Leaderboard;
 
 #[derive(Debug, Default, Clone, Copy, GodotConvert, Var, Export, PartialEq, Eq)]
 #[godot(via = u8)]

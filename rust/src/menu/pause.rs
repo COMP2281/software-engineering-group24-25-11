@@ -1,4 +1,4 @@
-use crate::scene_manager::{InputMode, SceneManager};
+use crate::scene_manager::SceneManager;
 use godot::{
     classes::{Button, Control, IButton, MarginContainer},
     prelude::*,

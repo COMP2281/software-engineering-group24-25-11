@@ -1,5 +1,4 @@
 use std::{
-    cell::RefCell,
     collections::VecDeque,
     f32::consts::PI,
     sync::{Arc, Mutex, RwLock},
@@ -8,17 +7,13 @@ use std::{
 use godot::{
     classes::{
         label_3d::DrawFlags, text_server::AutowrapMode, AnimatableBody3D, BoxMesh, BoxShape3D,
-        CollisionShape3D, Label3D, MeshInstance3D, StandardMaterial3D, StaticBody3D, Time,
+        CollisionShape3D, Label3D, MeshInstance3D, StandardMaterial3D, StaticBody3D,
     },
     obj::WithBaseField,
     prelude::*,
 };
 
-use crate::{
-    question_bank::Question,
-    resources::materials,
-    scene_manager::{self, SceneManager},
-};
+use crate::{question_bank::Question, resources::materials, scene_manager::SceneManager};
 
 #[derive(GodotClass)]
 #[class(init, base=StaticBody3D)]
