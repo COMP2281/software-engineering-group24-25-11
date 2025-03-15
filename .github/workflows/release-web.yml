@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm just godot git python unzip clang npm
+          pacman -Sy --noconfirm just godot git python unzip clang npm github-cli
 
       - name: Restore cache (before setup)
         id: cache-restore
@@ -52,3 +52,21 @@ jobs:
         run: |
           export NETLIFY_AUTH_TOKEN=${{ secrets.NETLIFY_AUTH_TOKEN }}
           netlify deploy --dir=target/web --prod --site=${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Zip Web Export
+        run: |
+          cd target/web
+          zip -r web-export.zip ./*
+          mv web-export.zip ../..
+
+      - name: Create GitHub Release (if missing)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ github.ref_name }} --title "${{ github.ref_name }}" --notes "Release for ${{ github.ref_name }}" || echo "Release already exists"
+
+      - name: Upload Release Asset
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload ${{ github.ref_name }} web-export.zip
