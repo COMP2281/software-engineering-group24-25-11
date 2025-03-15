@@ -17,7 +17,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pacman -Sy --noconfirm just godot git python unzip clang npm github-cli
+          pacman -Sy --noconfirm just godot git python unzip clang npm github-cli zip
 
       - name: Restore cache (before setup)
         id: cache-restore
