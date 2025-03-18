@@ -36,6 +36,11 @@ jobs:
         if: steps.cache-restore.outputs.cache-hit != 'true'
         run: just _setup-ci-cd
 
+      - name: Export Web
+        run: |
+          just release-web
+          cp -r web_assets/* target/web
+
       - name: Save cache (if missing)
         if: steps.cache-restore.outputs.cache-hit != 'true'
         id: cache-save
@@ -47,10 +52,6 @@ jobs:
             ~/.local/share/godot/export_templates
           key: setup-cache-${{ runner.os }}-${{ hashFiles('justfile') }}
 
-      - name: Export Web
-        run: |
-          just release-web
-          cp -r web_assets/* target/web
 
       - name: Deploy to Netlify
         continue-on-error: true
