@@ -20,76 +20,81 @@ LOCAL_CARGO_PATH := join(DEPS_PATH, "cargo")
 
 export PATH := env("PATH") + PATH_SEP + BLENDER_PATH + PATH_SEP + EMSDK_PATH + PATH_SEP + EMSCRIPTEN_PATH + PATH_SEP + GODOT_PATH + PATH_SEP + RUST_PATH
 
+WEB_EXPORT_PATH:= join(justfile_directory(), "target", "web")
 
-default: rust-debug
+default: rust-debug rust-release
 
+# launches the godot editor
 [unix]
 godot:
     cd godot && godot -e
 
+# launches the godot editor
 [windows]
 godot:
     cd godot; Godot_v4.4-stable_win64.exe -e
 
+# runs the provided argument as an executable with the correct environment variables, this should be used to launch your code editor.
 @env $BIN_NAME:
     cd godot; $BIN_NAME
 
-@dev:
+# calls `rust-debug` on changes to the rust library
+@dev-debug:
     watchexec -r -w rust just rust-debug
 
+# calls `rust-release` on changes to the rust library
 @dev-release:
     watchexec -r -w rust just rust-release
 
+# calls both `rust-debug` and `rust-release` on changes to the rust library
 @dev-all:
     watchexec -r -w rust just rust-debug rust-release
 
-@dev-temp:
-    watchexec -r -w rust -w godot just release-temp
+# automatically calls release-web on changes to the project (rust or godot)
+@dev-web dir=WEB_EXPORT_PATH:
+    watchexec -r -w rust -w godot just release-web {{dir}}
 
+# creates the debug version of the library for the current platform and wasm
 rust-debug:
     cd rust; cargo +nightly build -Zbuild-std
     cd rust; cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten
 
+# creates the release version of the library for the current platform and wasm
 rust-release:
     cd rust; cargo +nightly build -Zbuild-std --release
     cd rust; cargo +nightly build -Zbuild-std --target wasm32-unknown-emscripten --release
 
-release: release-web
-
-# Creates all of the files needed for web
+# creates a web export at target/web or the provided path (relative to the ./godot directory)
 [unix]
-@release-web: rust-release rust-debug
-    mkdir -p target/web
-    cd godot && godot --headless --export-release Web ../target/web/index.html
+@release-web dir=WEB_EXPORT_PATH: rust-release rust-debug
+    mkdir -p {{dir}}
+    cd godot; godot --headless --export-release Web {{join(dir, "index.html")}}
 
-# FIXME: temp add to nginx
-[unix]
-@release-temp: rust-release
-    mkdir -p target/web
-    cd godot && godot --headless --export-release Web /var/www/ibm/index.html
-
+# creates a web export at target/web or the provided path (relative to the ./godot directory)
 [windows]
-@release-web: rust-release
-    New-Item -ItemType Directory -Path '{{join(justfile_directory(), "target", "web")}}' -Force | Out-Null
-    cd godot; Godot_v4.4-stable_win64.exe --headless --export-release Web ../target/web/index.html
-
-# TODO: add export presets for other platforms.
+@release-web dir=WEB_EXPORT_PATH: rust-release rust-debug
+    New-Item -ItemType Directory -Path {{dir}} -Force | Out-Null
+    cd godot; Godot_v4.4-stable_win64.exe --headless --export-release Web {{join(dir, "index.html")}}
 
 
-# Installs all of the dependencies needed for the project.
+
+# installs all of the dependencies needed for the project.
 [unix]
 @setup: install-emscripten install-rust-toolchain install-blender install-godot
     echo -e "{{BOLD+GREEN}}Installed all dependencies successfully.{{NORMAL}}"
 
-[unix]
-@setup-ci-cd: install-emscripten install-rust-toolchain-noconfirm install-blender install-godot install-godot-export-templates
-    echo -e "{{BOLD+GREEN}}Installed all dependencies successfully.{{NORMAL}}"
 
+# Installs all of the dependencies needed for the project.
 [windows]
 @setup: install-emscripten install-rust-toolchain install-blender install-godot
     Write-Host "Installed all dependencies successfully." -ForegroundColor Green
 
-# Installs emscripten into ./.deps/emsdk
+# dont use: for usage with ci/cd to install export templates and rust with no user interaction
+[unix]
+@_setup-ci-cd: install-emscripten _install-rust-toolchain-noconfirm install-blender install-godot _install-godot-export-templates
+    echo -e "{{BOLD+GREEN}}Installed all dependencies successfully.{{NORMAL}}"
+
+# installs emscripten into .deps/emsdk
 [unix]
 @install-emscripten:
     echo -e "{{BOLD+YELLOW}}Installing emscripten...\033{{NORMAL}}"
@@ -100,6 +105,7 @@ release: release-web
     cd {{EMSDK_PATH}} && ./emsdk activate 3.1.74
     echo -e "{{BOLD+YELLOW}}Installed emscripten successfully.{{NORMAL}}"
 
+# installs emscripten into .deps/emsdk
 [windows]
 @install-emscripten:
     Write-Host "Installing emscripten..." -ForegroundColor Yellow
@@ -109,6 +115,7 @@ release: release-web
     {{join(EMSDK_PATH, "emsdk.ps1")}} activate 3.1.74
     Write-Host "Installed emscripten successfully." -ForegroundColor Yellow
 
+# installs rust into .deps if rustup is not found
 [windows]
 @install-rust-toolchain:
     #!pwsh
@@ -134,6 +141,7 @@ release: release-web
     }
     Write-Host "Rust toolchains installed successfully." -ForegroundColor Yellow
 
+# installs rust into .deps if rustup is not found
 [unix]
 @install-rust-toolchain:
     #!/usr/bin/env bash
@@ -157,8 +165,9 @@ release: release-web
     fi
     echo -e "{{BOLD+YELLOW}}Rust toolchain installed successfully.{{NORMAL}}"
 
+# dont use: for use within ci/cd to install rust without user interaction.
 [unix]
-@install-rust-toolchain-noconfirm:
+@_install-rust-toolchain-noconfirm:
     #!/usr/bin/env bash
     set -euo pipefail
     mkdir -p "{{DEPS_PATH}}"
@@ -180,9 +189,11 @@ release: release-web
     fi
     echo -e "{{BOLD+YELLOW}}Rust toolchain installed successfully.{{NORMAL}}"
 
-@install-watchexec: install-rust-toolchain
+# installs watchexec using cargo (requires a rust installation - e.g. from "just setup"), required for dev-* recipes.
+@install-watchexec:
     cargo install watchexec-cli
 
+# installs blender to .deps
 [linux]
 @install-blender:
     echo -e "{{BOLD+YELLOW}}Downloading blender 4.3 to {{BLENDER_PATH}}...{{NORMAL}}"
@@ -192,11 +203,13 @@ release: release-web
     rm '{{join(BLENDER_PATH, "blender-4.3.0-linux-x64.tar.xz")}}'
     echo -e "{{BOLD+YELLOW}}Blender downloaded successfully.{{NORMAL}}"
 
+# installs blender using homebrew
 [macos]
 @install-blender:
     brew install blender
 
 
+# installs blender to .deps
 [windows]
 @install-blender:
     Write-Host "Downloading blender 4.3 to {{BLENDER_PATH}}" -ForegroundColor Yellow
@@ -206,6 +219,7 @@ release: release-web
     Remove-Item '{{join(DEPS_PATH, "blender-4.3.0-windows-x64.zip")}}'
     Write-Host "Blender downloaded successfully" -ForegroundColor Yellow
 
+# installs godot to .deps
 [windows]
 @install-godot:
     Write-Host "Downloading godot 4.4 to {{GODOT_PATH}}" -ForegroundColor Yellow
@@ -216,10 +230,13 @@ release: release-web
     Write-Host "Godot 4.4 downloaded successfully" -ForegroundColor Yellow
 
 
+# installs godot using homebrew
 [macos]
 @install-godot:
     brew install godot
+    echo -e "{{BOLD+YELLOW}}Please ensure that godot is pinned to version v4.4 using homebrew.{{NORMAL}}"
 
+# installs godot to .deps
 [linux]
 @install-godot:
     echo -e "{{BOLD+YELLOW}}Downloading godot 4.4 to {{GODOT_PATH}}...{{NORMAL}}"
@@ -230,8 +247,9 @@ release: release-web
     rm '{{join(DEPS_PATH, "Godot_v4.4-stable_linux.x86_64.zip")}}'
     echo -e "{{BOLD+YELLOW}}Godot downloaded successfully.{{NORMAL}}"
 
+# dont use: for use in ci/cd, installs godot export templates to default location
 [linux]
-@install-godot-export-templates:
+@_install-godot-export-templates:
     echo -e "{{BOLD+YELLOW}}Downloading godot 4.4 export templates to .local/share/godot"
     mkdir -p "$HOME/.local/share/godot/export_templates/4.4.stable/"
     curl --progress-bar -Lo '{{join(DEPS_PATH, "Godot_v4.4-stable_export_templates.tpz")}}' "https://github.com/godotengine/godot-builds/releases/download/4.4-stable/Godot_v4.4-stable_export_templates.tpz"

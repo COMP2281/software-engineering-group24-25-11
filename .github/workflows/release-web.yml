@@ -1,4 +1,4 @@
-name: Deploy website
+name: Create release & Deploy
 
 on:
   push:
@@ -19,27 +19,31 @@ jobs:
         run: |
           pacman -Sy --noconfirm just godot git python unzip clang npm github-cli zip
 
-      - name: Restore cache (before setup)
+      # INFO: Cache information:
+      # .deps includes the rust nightly installation at the time of caching, therefore we can also cache the rust builds
+      # from ./rust/target reducing time taken for subsequent actions.
+      - name: Restore dependencies and previous build from cache
         id: cache-restore
         uses: actions/cache@v3
         with:
           path: |
             ./.deps
+            ./rust/target
             ~/.local/share/godot/export_templates
           key: setup-cache-${{ runner.os }}-${{ hashFiles('justfile') }}
-          restore-keys: |
-            setup-cache-${{ runner.os }}-
 
-      - name: Run setup
+      - name: Run setup (if not cached)
         if: steps.cache-restore.outputs.cache-hit != 'true'
-        run: just setup-ci-cd
+        run: just _setup-ci-cd
 
-      - name: Save cache (after setup)
+      - name: Save cache (if missing)
+        if: steps.cache-restore.outputs.cache-hit != 'true'
         id: cache-save
         uses: actions/cache@v3
         with:
           path: |
             ./.deps
+            ./rust/target
             ~/.local/share/godot/export_templates
           key: setup-cache-${{ runner.os }}-${{ hashFiles('justfile') }}
 
@@ -48,13 +52,16 @@ jobs:
           just release-web
           cp -r web_assets/* target/web
 
-      - name: Install Netlify CLI
-        run: npm install -g netlify-cli
-
       - name: Deploy to Netlify
+        continue-on-error: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         run: |
-          export NETLIFY_AUTH_TOKEN=${{ secrets.NETLIFY_AUTH_TOKEN }}
-          netlify deploy --dir=target/web --prod --site=${{ secrets.NETLIFY_SITE_ID }}
+          npm install -g netlify-cli
+          if ! netlify deploy --dir=target/web --prod --site=${{ secrets.NETLIFY_SITE_ID }}; then
+            echo "⚠️ Netlify deployment failed!" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
 
       - name: Zip Web Export
         run: |
@@ -62,14 +69,9 @@ jobs:
           zip -r web-export.zip ./*
           mv web-export.zip ../..
 
-      - name: Create GitHub Release (if missing)
+      - name: Create GitHub Release & Upload Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: web-export.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create ${{ github.ref_name }} --title "${{ github.ref_name }}" --notes "Release for ${{ github.ref_name }}" || echo "Release already exists"
-
-      - name: Upload Release Asset
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release upload ${{ github.ref_name }} web-export.zip
