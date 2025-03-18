@@ -24,7 +24,8 @@ jobs:
       # from ./rust/target reducing time taken for subsequent actions.
       - name: Restore dependencies and previous build from cache
         id: cache-restore
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v4
+
         with:
           path: |
             ./.deps
@@ -44,7 +45,7 @@ jobs:
       - name: Save cache (if missing)
         if: steps.cache-restore.outputs.cache-hit != 'true'
         id: cache-save
-        uses: actions/cache@v3
+        uses: actions/cache/save@v4
         with:
           path: |
             ./.deps
