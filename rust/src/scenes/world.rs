@@ -68,6 +68,7 @@ impl WorldScene {
             .expect("new world has atleast one question remaining");
 
         world_scene.bind_mut().question_bank = question_bank;
+        world_scene.bind_mut().previous_time = Time::singleton().get_ticks_msec();
 
         let mut room = QuestionRoom::create(first_question, world_scene.bind().time_elapsed);
         world_scene.add_child(&room);
