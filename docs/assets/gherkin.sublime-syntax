@@ -1,0 +1,22 @@
+%YAML 1.2
+---
+name: Gherkin
+file_extensions: [gherkin]
+scope: source.gherkin
+
+contexts:
+  main:
+    - match: '^\s*(Feature|Background|Scenario Outline|Examples).*:'
+      scope: keyword
+    - match: '^\s*Scenario\s+\d+'
+      scope: keyword
+    - match: '^\s*(Given|When|Then|And|But)\s+'
+      scope: keyword
+    - match: '(?!(^\s*Scenario\s+\d+))(\(.*\))(?=:)'
+      scope: comment
+    - match: '^\s*#.*$'
+      scope: comment
+    - match: '^\s*(\d+)\s+(.*)$'
+      scope: constant.numeric
+    - match: '^.*$'
+      scope: text.plain
