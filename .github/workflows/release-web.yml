@@ -53,16 +53,16 @@ jobs:
           key: setup-cache-${{ runner.os }}-${{ hashFiles('justfile') }}
 
 
+      - name: Install Netlify cli
+        continue-on-error: true
+        run: |
+          npm install -g netlify-cli
       - name: Deploy to Netlify
         continue-on-error: true
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         run: |
-          npm install -g netlify-cli
-          if ! netlify deploy --dir=target/web --prod --site=${{ secrets.NETLIFY_SITE_ID }}; then
-            echo "⚠️ Netlify deployment failed!" >> $GITHUB_STEP_SUMMARY
-            exit 1
-          fi
+          netlify deploy --dir=target/web --prod --site=${{ secrets.NETLIFY_SITE_ID }}
 
       - name: Zip Web Export
         run: |
