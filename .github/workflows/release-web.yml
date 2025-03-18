@@ -68,10 +68,3 @@ jobs:
           cd target/web
           zip -r web-export.zip ./*
           mv web-export.zip ../..
-
-      - name: Create GitHub Release & Upload Asset
-        uses: softprops/action-gh-release@v1
-        with:
-          files: web-export.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
