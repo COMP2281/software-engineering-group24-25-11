@@ -1,5 +1,3 @@
-## Project structure
-
 # Getting started
 Please read the instructions at [DEPLOYMENT.md](DEPLOYMENT.md) for how to: install the required dependencies, launch godot and your code editor of choice, and build the game.
 
