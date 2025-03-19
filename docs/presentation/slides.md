@@ -56,10 +56,11 @@ Group 11
 </div>
 
 ---
+layout: center
+---
 
-# Behavioural Requirements
-
-We set out to complete 38 behavioural requirements, and achieved the following:
+# We set out to complete 38 behavioural requirements, and achieved the following: 
+### 22/38 Fully Met. 2 Partially Met, 14 Not Met
 
 
 ---
@@ -93,17 +94,12 @@ BR1.4 (Teleport via VR controller trigger):
 
 ---
 
-# Requirements Specification
-### Accessibility & User Experience
-
-- BR4.3, BR4.4 (Pause and Resume Functions): Fully met
-  - Easy pausing and resuming via VR controller or keyboard.
-
----
 
 # Requirements Specification
 ### Game Experience
 
+- BR4.3, BR4.4 (Pause and Resume Functions): Fully met
+  - Easy pausing and resuming via VR controller or keyboard.
 - BR5.1, BR5.3 (Game Session Completes in 15 Minutes, and returns to main menu after completion): Fully met
   - Session is short in length (10-15 minutes) with return to main menu after completion of game
 - BR6.1, BR6.2 (Select, enter course and exit course menu): Fully met
