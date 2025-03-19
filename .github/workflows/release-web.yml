@@ -28,6 +28,7 @@ jobs:
         with:
           path: |
             ./.deps
+            ./.env.rust
             ./rust/target
             ~/.local/share/godot/export_templates
           key: setup-cache-${{ runner.os }}-${{ hashFiles('justfile') }}
@@ -48,6 +49,7 @@ jobs:
         with:
           path: |
             ./.deps
+            ./.env.rust
             ./rust/target
             ~/.local/share/godot/export_templates
           key: setup-cache-${{ runner.os }}-${{ hashFiles('justfile') }}
