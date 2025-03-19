@@ -25,17 +25,20 @@ jobs:
       - name: Restore dependencies and previous build from cache
         id: cache-restore
         uses: actions/cache/restore@v4
-
         with:
           path: |
             ./.deps
             ./rust/target
             ~/.local/share/godot/export_templates
           key: setup-cache-${{ runner.os }}-${{ hashFiles('justfile') }}
+          restore-keys: |
+            setup-cache-${{ runner.os }}-${{ hashFiles('justfile') }}
+
 
       - name: Run setup (if not cached)
         if: steps.cache-restore.outputs.cache-hit != 'true'
-        run: just _setup-ci-cd
+        run: |
+          [ -d "./.deps" ] && echo "cache was found" || just _setup-ci-cd 
 
       - name: Export Web
         run: |
