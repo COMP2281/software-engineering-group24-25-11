@@ -141,8 +141,7 @@ impl SceneManager {
     }
 
     #[func]
-    pub fn exit_world(&self) {
-        let root_node = self.get_root();
+    pub fn exit_world(&mut self) {
         godot_print!("exiting the world");
         let mut title_scene = self.create_title_screen();
         self.swap_scene(title_scene.clone().upcast());
@@ -150,10 +149,15 @@ impl SceneManager {
 
         match self.input_mode {
             Some(InputMode::VR) => {
-                root_node
-                    .get_viewport()
-                    .expect("game scene has a viewport")
-                    .set_use_xr(false);
+                cfg_if!(
+                    if #[cfg(target_arch = "wasm32")] {
+                        if let Some(ref mut webxr_interface) = self.webxr_interface {
+                            if webxr_interface.is_initialized() {
+                                webxr_interface.uninitialize()
+                            }
+                        }
+                    }
+                );
                 godot_print!("Viewport no longer using XR.");
             }
             None => godot_warn!("called exit world without setting a target mode"),
@@ -235,12 +239,6 @@ impl SceneManager {
 
             self.swap_scene(world_scene.upcast());
             godot_print!("Done entering vr world.");
-
-            root_node
-                .get_viewport()
-                .expect("game scene has a viewport")
-                .set_use_xr(true);
-            godot_print!("Viewport now using XR.");
         }
     }
 
@@ -294,23 +292,42 @@ impl SceneManager {
     fn webxr_session_started(&self) {
         godot_print!("immersive-vr session started, attempting to enter world...");
 
-        self.enter_vr_world();
+        self.get_root()
+            .get_viewport()
+            .expect("game scene has a viewport")
+            .set_use_xr(true);
+
+        if let Some(world) = self.get_world_scene() {
+            self.resume_game();
+        } else {
+            self.enter_vr_world();
+        }
     }
 
     #[func]
     #[cfg(target_arch = "wasm32")]
     fn webxr_session_ended(&mut self) {
-        let mut os = godot::classes::Os::singleton();
-        os.alert(&GString::from("session ended"));
-        self.exit_world();
-
         if let Some(ref mut webxr_interface) = self.webxr_interface {
-            webxr_interface.uninitialize();
+            if webxr_interface.is_initialized() {
+                webxr_interface.uninitialize()
+            }
         };
-        self.get_title_screen()
-            .expect("should be in title screen")
-            .bind()
-            .show_message("WebXR session has ended.".into())
+        self.get_root()
+            .get_viewport()
+            .expect("game scene has a viewport")
+            .set_use_xr(false);
+        godot_print!("Viewport stopped using XR.");
+        if let Some(world) = self.get_world_scene() {
+            self.pause_game();
+        } else if let Some(completion_screen) = self.get_completion_screen() {
+            godot_print!("completed the game");
+        } else {
+            self.exit_world();
+            self.get_title_screen()
+                .expect("should be in title screen")
+                .bind()
+                .show_message("WebXR session has ended.".into())
+        }
     }
 
     #[func]
@@ -324,7 +341,9 @@ impl SceneManager {
         )));
 
         if let Some(ref mut webxr_interface) = self.webxr_interface {
-            webxr_interface.uninitialize();
+            if webxr_interface.is_initialized() {
+                webxr_interface.uninitialize()
+            }
         }
     }
 
@@ -344,13 +363,22 @@ impl SceneManager {
         pause_scene
     }
 
-    pub fn show_completion_screen(&self, question_bank: QuestionBank, time_elapsed: u64) {
+    pub fn show_completion_screen(&mut self, question_bank: QuestionBank, time_elapsed: u64) {
         let mut completion_scene = CompletionScreen::new_screen(question_bank, time_elapsed);
         self.swap_scene(completion_scene.clone().upcast());
         completion_scene.grab_focus();
 
         match self.input_mode {
             Some(InputMode::VR) => {
+                cfg_if!(
+                    if #[cfg(target_arch = "wasm32")] {
+                        if let Some(ref mut webxr_interface) = self.webxr_interface {
+                            if webxr_interface.is_initialized() {
+                                webxr_interface.uninitialize()
+                            }
+                        }
+                    }
+                );
                 self.get_root()
                     .get_viewport()
                     .expect("game scene has a viewport")

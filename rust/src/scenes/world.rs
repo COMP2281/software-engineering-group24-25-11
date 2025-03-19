@@ -60,7 +60,7 @@ impl WorldScene {
         world_scene.add_child(&start_room);
 
         let mut question_bank =
-            QuestionBank::new(course, mode, Some(15), world_scene.bind().time_elapsed)
+            QuestionBank::new(course, mode, Some(3), world_scene.bind().time_elapsed)
                 .expect("failed to create question bank");
 
         let first_question = question_bank
@@ -155,9 +155,9 @@ impl WorldScene {
             .try_get_node_as::<Node3D>("EndRoom/Display/EndButton")
         {
             if obj == end_button.upcast() {
-                let scene_manager = SceneManager::get_manager(self.base().clone().upcast());
+                let mut scene_manager = SceneManager::get_manager(self.base().clone().upcast());
                 scene_manager
-                    .bind()
+                    .bind_mut()
                     .show_completion_screen(self.question_bank.clone(), self.time_elapsed);
                 godot_print!("end button clicked")
             };

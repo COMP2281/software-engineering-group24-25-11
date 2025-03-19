@@ -30,7 +30,7 @@ impl IButton for PauseMenuButton {
     }
 
     fn pressed(&mut self) {
-        let scene_manager = SceneManager::get_manager(self.base().clone().upcast());
+        let mut scene_manager = SceneManager::get_manager(self.base().clone().upcast());
 
         let sfx = scene_manager.bind().get_sfx_controller();
         let sfx = sfx.bind();
@@ -44,7 +44,7 @@ impl IButton for PauseMenuButton {
             PauseMenuAction::ChangeCourse => {
                 godot_print!("clicked: change course");
                 scene_manager.bind().hide_pause_menu();
-                scene_manager.bind().exit_world();
+                scene_manager.bind_mut().exit_world();
                 let title_screen = scene_manager
                     .bind()
                     .get_title_screen()
@@ -64,7 +64,7 @@ impl IButton for PauseMenuButton {
             PauseMenuAction::ReturnToMainMenu => {
                 godot_print!("clicked: return to main menu");
                 scene_manager.bind().hide_pause_menu();
-                scene_manager.bind().exit_world();
+                scene_manager.bind_mut().exit_world();
                 // TODO: make this
             }
         }
