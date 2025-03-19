@@ -240,11 +240,11 @@ icon_alignment = 1
 layout_mode = 2
 size_flags_stretch_ratio = 0.1
 focus_neighbor_top = NodePath("../AI Modules")
-focus_neighbor_bottom = NodePath("../Wed Dev Fundamentals")
+focus_neighbor_bottom = NodePath("../Web Dev Fundamentals")
 theme = ExtResource("2_bmn1k")
 text = "Data Fundamentals"
 
-[node name="Wed Dev Fundamentals" type="CourseSelectionButton" parent="CourseSelection/VBoxContainer"]
+[node name="Web Dev Fundamentals" type="CourseSelectionButton" parent="CourseSelection/VBoxContainer"]
 course = 1
 layout_mode = 2
 size_flags_stretch_ratio = 11.76
@@ -256,7 +256,7 @@ text = "Web Dev Fundamentals"
 [node name="Return" type="ReturnButton" parent="CourseSelection/VBoxContainer" node_paths=PackedStringArray("prev")]
 prev = NodePath("../../../MainMenu")
 layout_mode = 2
-focus_neighbor_top = NodePath("../Wed Dev Fundamentals")
+focus_neighbor_top = NodePath("../Web Dev Fundamentals")
 focus_neighbor_bottom = NodePath("../AI Modules")
 focus_next = NodePath("../AI Modules")
 focus_previous = NodePath("../AI Modules")

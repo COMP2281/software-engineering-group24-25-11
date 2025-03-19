@@ -20,7 +20,7 @@ You must also have the new powershell installed which can be done with `winget i
 
 ### Other platforms
 For linux use your package manager (ensure `just` is a compatible version), you can also add binaries to `.local/bin` if the required versions are not in your package manager.
-For macos, we recommend install your dependencies using homebrew.
+For macos, install your dependencies using homebrew. (NOTE: homebrew is required for `just setup` on macos)
 
 > [!NOTE]
 > `just` is not required to build the project, however it handles setting environment variables and adding dependencies to PATH. If you wish you may install the dependencies manually and run the build commands (which can be found in the `justfile`) manually.
