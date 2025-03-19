@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://d0ib61j4007ft"]
+[gd_scene load_steps=22 format=3 uid="uid://d0ib61j4007ft"]
 
 [ext_resource type="Texture2D" uid="uid://bhos422jd8qde" path="res://assets/skybox.webp" id="1_13ukm"]
 [ext_resource type="Theme" uid="uid://dos5qkbbul75v" path="res://assets/general_button.tres" id="2_bmn1k"]
@@ -12,19 +12,23 @@
 font = ExtResource("5_sfhh4")
 font_size = 24
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqdtx"]
-bg_color = Color(0, 0, 0, 0.784314)
-
-[sub_resource type="Theme" id="Theme_mypj0"]
-PanelContainer/styles/panel = ExtResource("6_5pq1v")
-
-[sub_resource type="LabelSettings" id="LabelSettings_gxfi0"]
+[sub_resource type="LabelSettings" id="LabelSettings_sfhh4"]
 font = ExtResource("5_sfhh4")
 font_size = 24
 
-[sub_resource type="LabelSettings" id="LabelSettings_j1024"]
-font = ExtResource("7_fs8pb")
-font_size = 18
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hgjbh"]
+bg_color = Color(0, 0.9, 1, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="Theme" id="Theme_5pq1v"]
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_hgjbh")
+
+[sub_resource type="LabelSettings" id="LabelSettings_fs8pb"]
+font = ExtResource("5_sfhh4")
+font_size = 24
 
 [sub_resource type="LabelSettings" id="LabelSettings_jwf5l"]
 font = ExtResource("5_sfhh4")
@@ -99,6 +103,20 @@ Button/styles/hover = SubResource("StyleBoxFlat_3lugv")
 Button/styles/normal = SubResource("StyleBoxFlat_qubns")
 Button/styles/pressed = SubResource("StyleBoxFlat_wcuhn")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wqdtx"]
+bg_color = Color(0, 0, 0, 0.784314)
+
+[sub_resource type="Theme" id="Theme_mypj0"]
+PanelContainer/styles/panel = ExtResource("6_5pq1v")
+
+[sub_resource type="LabelSettings" id="LabelSettings_gxfi0"]
+font = ExtResource("5_sfhh4")
+font_size = 24
+
+[sub_resource type="LabelSettings" id="LabelSettings_j1024"]
+font = ExtResource("7_fs8pb")
+font_size = 18
+
 [node name="TitleScreen" type="TitleScreen"]
 anchors_preset = 15
 anchor_right = 1.0
@@ -152,11 +170,11 @@ text = "Play (VR)"
 action = 1
 layout_mode = 2
 focus_neighbor_top = NodePath("../PlayVR")
-focus_neighbor_bottom = NodePath("../Tutorial")
+focus_neighbor_bottom = NodePath("../Leaderboard")
 theme = ExtResource("2_bmn1k")
 text = "Play (3D)"
 
-[node name="Tutorial" type="MainMenuButton" parent="MainMenu/VBoxContainer"]
+[node name="Leaderboard" type="MainMenuButton" parent="MainMenu/VBoxContainer"]
 action = 3
 layout_mode = 2
 focus_neighbor_top = NodePath("../Play3D")
@@ -167,7 +185,7 @@ text = "Leaderboard"
 [node name="Options" type="MainMenuButton" parent="MainMenu/VBoxContainer"]
 action = 2
 layout_mode = 2
-focus_neighbor_top = NodePath("../Tutorial")
+focus_neighbor_top = NodePath("../Leaderboard")
 focus_neighbor_bottom = NodePath("../Credits")
 theme = ExtResource("2_bmn1k")
 text = "Options"
@@ -263,6 +281,198 @@ focus_previous = NodePath("../AI Modules")
 theme = ExtResource("3_6s72b")
 text = "RETURN"
 
+[node name="Options" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Options"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.35
+anchor_right = 0.7
+anchor_bottom = 0.75
+offset_left = 0.319977
+offset_top = -0.160004
+offset_right = 0.0799561
+offset_bottom = 0.23999
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Options/MarginContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="Label" parent="Options/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_jwf5l")
+text = "SETTINGS"
+label_settings = SubResource("LabelSettings_sfhh4")
+horizontal_alignment = 1
+
+[node name="HSeparator4" type="HSeparator" parent="Options/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator6" type="HSeparator" parent="Options/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel2" type="Label" parent="Options/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_bmn1k")
+text = "VOLUME"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="HSlider" type="HSlider" parent="Options/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_5pq1v")
+min_value = -30.0
+max_value = 0.0
+
+[node name="HSeparator2" type="HSeparator" parent="Options/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator3" type="HSeparator" parent="Options/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ReturnButton" type="ReturnButton" parent="Options/MarginContainer/VBoxContainer" node_paths=PackedStringArray("prev")]
+prev = NodePath("../../../../MainMenu")
+layout_mode = 2
+theme = ExtResource("3_6s72b")
+text = "RETURN"
+
+[node name="Credits" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Credits"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Credits/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="Alex" type="Label" parent="Credits/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+text = "Alexandre Pinheiro Dias"
+label_settings = SubResource("LabelSettings_fs8pb")
+horizontal_alignment = 1
+
+[node name="Keane" type="Label" parent="Credits/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+text = "Jing Lei Wong"
+label_settings = SubResource("LabelSettings_fs8pb")
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Credits/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 64
+alignment = 1
+
+[node name="Rohab" type="Label" parent="Credits/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+text = "Rohab Kashif"
+label_settings = SubResource("LabelSettings_fs8pb")
+horizontal_alignment = 1
+
+[node name="Ivan" type="Label" parent="Credits/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+text = "Siang Wei Law"
+label_settings = SubResource("LabelSettings_fs8pb")
+horizontal_alignment = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Credits/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Rafay" type="Label" parent="Credits/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Muhammad Rafay Abbas"
+label_settings = SubResource("LabelSettings_fs8pb")
+
+[node name="ReturnButton" type="ReturnButton" parent="Credits/VBoxContainer" node_paths=PackedStringArray("prev")]
+prev = NodePath("../../../MainMenu")
+layout_mode = 2
+theme = ExtResource("3_6s72b")
+text = "RETURN"
+
+[node name="Leaderboard" type="Leaderboard" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Leaderboard"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -192.0
+offset_right = 128.0
+offset_bottom = 192.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Leaderbord" type="Label" parent="Leaderboard/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_jwf5l")
+theme_override_font_sizes/font_size = 25
+text = "LEADERBOARD"
+label_settings = SubResource("LabelSettings_jwf5l")
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Leaderboard/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Leaderboard/VBoxContainer/ScrollContainer"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+
+[node name="Exit" type="ReturnButton" parent="Leaderboard/VBoxContainer" node_paths=PackedStringArray("prev")]
+prev = NodePath("../../../MainMenu")
+layout_mode = 2
+theme = SubResource("Theme_sfhh4")
+text = "RETURN"
+
 [node name="MessageBox" type="Panel" parent="."]
 visible = false
 layout_mode = 1
@@ -319,53 +529,3 @@ prev = NodePath("../../../../../../MainMenu")
 layout_mode = 2
 theme = ExtResource("2_bmn1k")
 text = "CLOSE"
-
-[node name="Leaderboard" type="Leaderboard" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Leaderboard"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -128.0
-offset_top = -192.0
-offset_right = 128.0
-offset_bottom = 192.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 16
-alignment = 1
-
-[node name="Leaderbord" type="Label" parent="Leaderboard/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("4_jwf5l")
-theme_override_font_sizes/font_size = 25
-text = "LEADERBOARD"
-label_settings = SubResource("LabelSettings_jwf5l")
-horizontal_alignment = 1
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Leaderboard/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-horizontal_scroll_mode = 0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Leaderboard/VBoxContainer/ScrollContainer"]
-clip_contents = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 0
-
-[node name="Exit" type="ReturnButton" parent="Leaderboard/VBoxContainer" node_paths=PackedStringArray("prev")]
-prev = NodePath("../../../MainMenu")
-layout_mode = 2
-theme = SubResource("Theme_sfhh4")
-text = "RETURN"

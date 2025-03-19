@@ -17,7 +17,6 @@ enum MainMenuAction {
     Leaderboard,
     Credits,
     Quit,
-    Unknown,
 }
 
 #[derive(GodotClass)]
@@ -66,16 +65,14 @@ impl IButton for MainMenuButton {
                 scene_manager.set_input_mode(InputMode::Normal);
                 title_screen.show_course_selection();
             }
-            MainMenuAction::Options => {}
+            MainMenuAction::Options => title_screen.show_options_menu(),
+            MainMenuAction::Credits => title_screen.show_credits_menu(),
             MainMenuAction::Leaderboard => {
                 title_screen.show_leaderboard();
             }
             MainMenuAction::Quit => {
                 let mut scene_tree = self.base().get_tree().expect("able to get the scene tree");
                 scene_tree.quit();
-            }
-            _ => {
-                godot_print!("called unimplemented main menu button");
             }
         }
     }
@@ -109,15 +106,20 @@ impl TitleScreen {
     }
 
     #[func]
+    pub fn show_options_menu(&self) {
+        self.swap_to(self.base().get_node_as::<Control>("Options"));
+    }
+
+    #[func]
+    pub fn show_credits_menu(&self) {
+        self.swap_to(self.base().get_node_as::<Control>("Credits"));
+    }
+
+    #[func]
     pub fn show_leaderboard(&self) {
         let leaderboard = self.base().get_node_as::<Leaderboard>("Leaderboard");
         leaderboard.bind().update();
         self.swap_to(leaderboard.upcast());
-    }
-
-    #[func]
-    pub fn return_to_main_menu(&self) {
-        self.swap_to(self.base().get_node_as::<Control>("MainMenu"));
     }
 
     #[func]
