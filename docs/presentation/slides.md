@@ -67,44 +67,44 @@ layout: center
 
 # Requirements Specification
 ### VR specific features
-- BR1.1 (Look around with VR headset):
+#### BR1.1 (Look around with VR headset):
   - Fully met using WebXR in Godot.
   - Headset movement rotates the view as expected.
-- BR1.2 (Look around with left thumbstick):
+#### BR1.2 (Look around with left thumbstick):
   - Fully met; controller input works smoothly.
   - Tested on Meta Quest 2 and 3.
-- BR1.3 (Move with right thumbstick):
+#### BR1.3 (Move with right thumbstick):
   - Fully met; smooth movement via Godot input.
-BR1.4 (Teleport via VR controller trigger):
+#### BR1.4 (Teleport via VR controller trigger):
   - Not met; unnecessary due to small room sizes.
 
 ---
 
 # Requirements Specification
 ### 3D Mode and Non-VR Experience
-- BR2.1, BR2.2 (Movement Controls): Fully met
+
+#### BR2.1, BR2.2 (Movement Controls): Fully met
   - Keyboard and mouse controls fully functional.
   - Controller controls fully functional.
-- BR3.2 (Non-VR Prompt): Not met
+#### BR3.2 (Non-VR Prompt): Not met
   - Users are not prompted to play in 3D instead when VR is not available.
-- BR3.3 (WASM support check): Not met
+#### BR3.3 (WASM support check): Not met
   - Users are not informed when their browser doesn't support WASM
   - Non priority since all modern browsers support WASM and have it enabled by default
   - Message is logged in devtools console
 
 ---
 
-
 # Requirements Specification
 ### Game Experience
 
-- BR4.3, BR4.4 (Pause and Resume Functions): Fully met
+#### BR4.3, BR4.4 (Pause and Resume Functions): Fully met
   - Easy pausing and resuming via VR controller or keyboard.
-- BR5.1, BR5.3 (Game Session Completes in 15 Minutes, and returns to main menu after completion): Fully met
+#### BR5.1, BR5.3 (Game Session Completes in 15 Minutes, and returns to main menu after completion): Fully met
   - Session is short in length (10-15 minutes) with return to main menu after completion of game
-- BR6.1, BR6.2 (Select, enter course and exit course menu): Fully met
+#### BR6.1, BR6.2 (Select, enter course and exit course menu): Fully met
   - User is able to enter menu, exit menu and select course
-- BR7.1 (Review Incorrect Answers): Fully Met
+#### BR7.1 (Review Incorrect Answers): Fully Met
   - Post-session review shows questions, user answer and actual answer
 
 ---
@@ -112,11 +112,11 @@ BR1.4 (Teleport via VR controller trigger):
 # Requirements Specification
 ### Answering Questions and Leaderboard
 
-- BR8.1, BR8.2, BR8.3 (Points calculation for questions): Fully met
+#### BR8.1, BR8.2, BR8.3 (Points calculation for questions): Fully met
   - Points for correct answer, extra for doing it quickly, no points for wrong answer
-- BR9.1, BR9.2, BR9.3 (Leaderboard): Fully met
+#### BR9.1, BR9.2, BR9.3 (Leaderboard): Fully met
   - Leaderboard system accessible from main menu sorted by score
-- BR10.1, BR10.2, BR10.3 (Adaptive Difficulty): Fully met
+#### BR10.1, BR10.2, BR10.3 (Adaptive Difficulty): Fully met
   - User local difficulty changes based on answering question either correctly or wrongly, also based on question difficulty, which changes based on user answering it correctly or wrongly. Question displayed is based on user local difficulty.
 
 ---
@@ -124,13 +124,13 @@ BR1.4 (Teleport via VR controller trigger):
 # Requirements Specification
 ### Requirements Not Met
 
-- BR4.1, BR4.5 (Save function): Not met
+#### BR4.1, BR4.5 (Save function): Not met
   - Save function not implemented due to short game length
-- BR6.2, BR6.3 (Reccomend and show IBM SkillsBuild Course): Not met
+#### BR6.2, BR6.3 (Reccomend and show IBM SkillsBuild Course): Not met
   - Have not met for now due to time constraints, will revisit later.
-- BR11.1, BR11.3 (Visual and Motor Accessibility Options): Not met
+#### BR11.1, BR11.3 (Visual and Motor Accessibility Options): Not met
   - Implementation more challenging than expected, need more time, not in MVP.
-- BR12.1 (Multiplayer): Not met
+#### BR12.1 (Multiplayer): Not met
   - Needs more time to be fully implemented, advanced stretch feature.
 
 ---
@@ -272,6 +272,7 @@ Instructions on how to setup the workflow were provided in the `DEPLOYMENT.md` f
 </v-click>
 
 ---
+
  
 # Contributing
 
@@ -421,4 +422,3 @@ layout: center
 ---
 
 # Any Questions?
-
