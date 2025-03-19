@@ -6,6 +6,15 @@ on:
       - '*'
 
 jobs:
+  wait-for-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Cache Setup
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          workflow: "cache.yml" # Name of the Cache Setup workflow
+          ref: main  # Reference the `main` branch to ensure cache setup is from `main`
+
   build-and-deploy:
     runs-on: ubuntu-latest
     container:
@@ -19,6 +28,16 @@ jobs:
         run: |
           pacman -Sy --noconfirm just godot git python unzip clang npm github-cli zip
 
+
+    steps:
+      - name: Wait for cache to be built from main
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          check-name: 'Setup cache'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+
       # INFO: Cache information:
       # .deps includes the rust nightly installation at the time of caching, therefore we can also cache the rust builds
       # from ./rust/target reducing time taken for subsequent actions.
@@ -30,31 +49,29 @@ jobs:
             ./.deps
             ./rust/target
             ~/.local/share/godot/export_templates
-          key: setup-cache-${{ runner.os }}-${{ hashFiles('justfile') }}
+          key: cache-${{ runner.os }}-${{ hashFiles('justfile') }}
           restore-keys: |
-            setup-cache-${{ runner.os }}-${{ hashFiles('justfile') }}
+            cache-${{ runner.os }}-${{ hashFiles('justfile') }}
+
+      - name: Check if cache was restored from
+        id: cache-check
+        run: |
+          if [ -d "./.deps" ]; then
+            echo "cache-found=true" >> $GITHUB_ENV
+          else
+            echo "cache-found=false" >> $GITHUB_ENV
+          fi
 
 
       - name: Run setup (if not cached)
-        if: steps.cache-restore.outputs.cache-hit != 'true'
+        if: env.cache-found == 'false'
         run: |
-          [ -d "./.deps" ] && echo "cache was found" || just _setup-ci-cd 
+          just _setup-ci-cd 
 
       - name: Export Web
         run: |
           just release-web
           cp -r web_assets/* target/web
-
-      - name: Save cache (if missing)
-        if: steps.cache-restore.outputs.cache-hit != 'true'
-        id: cache-save
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            ./.deps
-            ./rust/target
-            ~/.local/share/godot/export_templates
-          key: setup-cache-${{ runner.os }}-${{ hashFiles('justfile') }}
 
 
       - name: Install Netlify cli
