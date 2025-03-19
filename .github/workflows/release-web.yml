@@ -74,3 +74,4 @@ jobs:
         continue-on-error: true
         with:
           artifacts: "web-export.zip"
+          tag: ${{ github.sha }}  # Use commit SHA as tag

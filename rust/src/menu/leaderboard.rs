@@ -3,8 +3,8 @@ use std::time::Duration;
 use crate::scene_manager::SceneManager;
 use godot::{
     classes::{
-        file_access::ModeFlags, Button, Control, FileAccess, IButton, IControl, LineEdit, Os,
-        Theme, VBoxContainer,
+        file_access::ModeFlags, Button, Control, FileAccess, IButton, IControl, Label, LineEdit,
+        Os, Theme, VBoxContainer,
     },
     prelude::*,
 };
@@ -50,10 +50,15 @@ impl Leaderboard {
             .get_node_as::<VBoxContainer>("VBoxContainer/ScrollContainer/VBoxContainer");
         let btn_theme = load::<Theme>(crate::resources::themes::GENERAL_BUTTON);
 
-        if !entries.is_empty() {
-            if let Some(empty_node) = container.get_node_or_null("IsEmpty") {
-                container.remove_child(&empty_node);
-            }
+        // clear previous entries added
+        for node in container.get_children().iter_shared() {
+            container.remove_child(&node);
+        }
+
+        if entries.is_empty() {
+            let mut empty_label = Label::new_alloc();
+            empty_label.set_text("Leaderboard is currenty empty");
+            container.add_child(&empty_label);
         }
 
         entries.sort_unstable_by_key(|x| x.score);
